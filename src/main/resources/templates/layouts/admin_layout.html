@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+
+    <!--favicon icon-->
+    <link rel="icon" type="image/png" th:href="@{/admin_assets/img/favicon.html}">
+
+    <title>Home</title>
+    <!--web fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <!--bootstrap styles-->
+    <link th:href="@{/admin_assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!--icon font-->
+    <link th:href="@{/admin_assets/vendor/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/dashlab-icon/dashlab-icon.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/simple-line-icons/css/simple-line-icons.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/themify-icons/css/themify-icons.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/weather-icons/css/weather-icons.min.css}" rel="stylesheet">
+    <!--jquery ui-->
+    <link th:href="@{/admin_assets/vendor/jquery-ui/jquery-ui.min.css}" rel="stylesheet">
+    <!--iCheck-->
+    <link th:href="@{/admin_assets/vendor/icheck/skins/all.css}" rel="stylesheet">
+    <!--custom styles-->
+    <link th:href="@{/admin_assets/css/main.css}" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <script th:src="@{/admin_assets/vendor/html5shiv.js}"></script>
+    <script th:src="@{/admin_assets/vendor/respond.min.js}"></script>
+</head>
+
+<body class="left-sidebar-fixed">
+<!--header start-->
+<header class="app-header">
+    <div class="branding-wrap">
+        <!--left nav toggler start-->
+        <a class="nav-link mt-2 float-left js_left-nav-toggler pos-fixed" href="javaScript:;">
+            <i class=" ti-align-right"></i>
+        </a>
+        <!--left nav toggler end-->
+
+        <!--brand start-->
+        <div class="navbar-brand pos-fixed">
+            <a class="" href="index.html">
+                <img src="admin_assets/img/logo.png" srcset="admin_assets/img/logo@2x.jpg 2x" alt="CodeLab">
+            </a>
+        </div>
+        <!--brand end-->
+    </div>
+
+    <!--header rightside links-->
+    <ul class="header-links hide-arrow navbar">
+        <li class="nav-item search-bar">
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#searchModal">
+                <i class="vl_search"></i>
+            </button>
+        </li>
+        <li class="nav-item dropdown sm-device-none">
+            <a class="nav-link dropdown-toggle mr-lg-3" id="messagesDropdown" href="#" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="vl_chat-bubble"></i>
+                <div class="notification-alarm">
+                    <span class="wave wave-danger"></span>
+                    <span class="dot"></span>
+                </div>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right header-right-dropdown-width pb-0" aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header weight500 ">Messages</h6>
+                <div class="dropdown-divider mb-0"></div>
+                <a class="dropdown-item border-bottom msg-unread" href="#">
+                    <div class="float-left notificaton-thumb">
+                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar4.jpg" alt=""/>
+                    </div>
+                    <span class="weight500">Andrew Flinton</span>
+                    <span class="small float-right text-muted">08:30 AM</span>
+
+                    <div class="dropdown-message">
+                        I hope that you will be there in time. See you then
+                    </div>
+                </a>
+
+                <a class="dropdown-item border-bottom msg-unread" href="#">
+                    <div class="float-left notificaton-thumb">
+                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=""/>
+                    </div>
+                    <span class="weight500">John Doe</span>
+                    <span class="small float-right text-muted">10:28 AM</span>
+
+                    <div class="dropdown-message">
+                        Hello this is an example message. Just want to show how it looks
+                    </div>
+                </a>
+
+                <a class="dropdown-item border-bottom" href="#">
+                    <div class="float-left notificaton-thumb">
+                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar3.jpg" alt=""/>
+                    </div>
+                    <span class="weight500">Dash Don</span>
+                    <span class="small float-right text-muted">07:12 PM</span>
+
+                    <div class="dropdown-message">
+                        Hi, This is Dash Don form usa. I'm looking for someone who really good at design and frontend like mosaddek
+                    </div>
+                </a>
+
+                <a class="dropdown-item border-bottom" href="#">
+                    <div class="float-left notificaton-thumb">
+                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar1.jpg" alt=""/>
+                    </div>
+                    <span class="weight500">dkmosa</span>
+                    <span class="small float-right text-muted">12:10 PM</span>
+
+                    <div class="dropdown-message">
+                        We build a beautiful dashboard admin panel for professional
+                    </div>
+                </a>
+                <a class="dropdown-item small" href="#">View all messages</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle mr-lg-3" id="alertsDropdown" href="#" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="vl_bell"></i>
+                <div class="notification-alarm">
+                    <span class="wave wave-warning"></span>
+                    <span class="dot bg-warning"></span>
+                </div>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right header-right-dropdown-width pb-0" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header weight500">Notification</h6>
+
+                <div class="dropdown-divider mb-0"></div>
+                <a class="dropdown-item border-bottom" href="#">
+                            <span class="text-primary">
+                            <span class="weight500">
+                                <i class="vl_bell weight600 pr-2"></i>Weekly Update</span>
+                            </span>
+                    <span class="small float-right text-muted">03:14 AM</span>
+
+                    <div class="dropdown-message f12">
+                        This week project update report generated. All team members are requested to check the updates
+                    </div>
+                </a>
+
+                <a class="dropdown-item border-bottom" href="#">
+                            <span class="text-danger">
+                            <span class="weight500">
+                                <i class="vl_Download-circle weight600 pr-2"></i>Server Error</span>
+                            </span>
+                    <span class="small float-right text-muted">10:34 AM</span>
+
+                    <div class="dropdown-message f12">
+                        Unexpectedly server response stop. Responsible members are requested to fix it soon
+                    </div>
+                </a>
+
+                <a class="dropdown-item border-bottom" href="#">
+                            <span class="text-success">
+                            <span class="weight500">
+                                <i class="vl_screen weight600 pr-2"></i>Monthly Meeting</span>
+                            </span>
+                    <span class="small float-right text-muted">12:30 AM</span>
+
+                    <div class="dropdown-message f12">
+                        Our monthly meeting will be held on tomorrow sharp 12:30. All members are requested to attend this meeting.
+                    </div>
+                </a>
+
+                <a class="dropdown-item small" href="#">View all notification</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" id="userNav" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="user-thumb">
+                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=""/>
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userNav">
+                <div class="dropdown-item- px-3 py-2">
+                    <img class="rounded-circle mr-2" src="admin_assets/img/avatar/avatar2.jpg" width="35" alt=""/>
+                    <span class="text-muted">Jhon Doe</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">My Profile</a>
+                <a class="dropdown-item" href="#">Account Settings</a>
+                <a class="dropdown-item" href="#">Inbox <span class="badge badge-primary">3</span></a>
+                <a class="dropdown-item" href="#">Message <span class="badge badge-success">5</span></a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="login.html">Sign Out</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:;" class="nav-link right_side_toggle">
+                <i class="icon-options-vertical"> </i>
+            </a>
+        </li>
+    </ul>
+    <!--/header rightside links-->
+</header>
+<!--search modal start-->
+<div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="text" class="form-control" placeholder="Search...">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--search modal start-->
+<!--header end-->
+
+<div class="app-body">
+    <!--left sidebar start-->
+    <div class="left-nav-wrap">
+        <div class="left-sidebar">
+            <nav class="sidebar-menu">
+                <ul id="nav-accordion">
+                    <li class="sub-menu">
+                        <a href="javascript:;" class="active">
+                            <i class=" ti-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="active"><a  href="index.html">Dashboard</a></li>
+                            <li><a  href="dashboard-2.html">Dashboard 2</a></li>
+                            <li><a  href="dashboard-3.html">Dashboard 3</a></li>
+                            <li><a  href="dashboard-4.html">Dashboard 4</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-title">
+                        <h5 class="text-uppercase">Components</h5>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;" >
+                            <i class=" icon-speech"></i>
+                            <span>Forms</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="sub-menu">
+                                <a  href="#">Form Control</a>
+                                <ul class="sub">
+                                    <li><a  href="form-basic.html">Basic Input</a></li>
+                                    <li><a  href="form-input-group.html">Input Group</a></li>
+                                    <li><a  href="form-checkbox-radio.html">Checkbox & Radio</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="sub-menu">
+                                <a  href="#">Pickers</a>
+                                <ul class="sub">
+                                    <li><a  href="date-picker.html">Date Picker</a></li>
+                                    <li><a  href="datetime-picker.html">Datetime & Time Picker</a></li>
+                                    <li><a  href="color-picker.html">Color Picker</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="sub-menu">
+                                <a  href="#">Advanced Form</a>
+                                <ul class="sub">
+                                    <li><a  href="form-touchspin.html">Touchpin</a></li>
+                                    <li><a  href="form-select2.html">Select2</a></li>
+                                    <li><a  href="form-input-mask.html">Input Mask</a></li>
+                                    <li><a  href="form-multi-select.html"> Multiple Select</a></li>
+                                    <li><a  href="form-dropzone.html"> Dropzone</a></li>
+                                    <li><a  href="form-ion-range-slider.html"> Ion Range Slider</a></li>
+                                    <li><a  href="form-switch.html"> Switchery </a></li>
+                                </ul>
+                            </li>
+
+                            <li class="sub-menu">
+                                <a  href="#">Editos</a>
+                                <ul class="sub">
+                                    <li><a  href="editor-summernote.html">Summernote</a></li>
+                                    <li><a  href="editor-markdown.html">Markdown</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="sub-menu">
+                                <a  href="#">Form Validation</a>
+                                <ul class="sub">
+                                    <li><a  href="form-validation.html">Basic Validation</a></li>
+                                    <li><a  href="form-validation-jquery.html">jQuery Validation</a></li>
+                                    <li><a  href="form-wizard.html">Form Wizard</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" icon-grid"></i>
+                            <span>Data Tables</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="table-basic.html">Basic Table</a></li>
+                            <li><a  href="table-datatable.html">Data Table</a></li>
+                            <li><a  href="table-ajax-datatable.html">Ajax Data Table</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" ti-pie-chart"></i>
+                            <span>Charts</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="chartjs.html">Chartjs</a></li>
+                            <li><a  href="echarts.html">eCharts</a></li>
+                            <li><a  href="amcharts.html">amCharts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="icon-calendar"></i>
+                            <span>Calendar </span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="calendar-basic.html">Basic Calendar</a></li>
+                            <li><a  href="calendar-external-events.html">External Events Calendar</a></li>
+                            <li><a  href="calendar-list.html">List Calendar</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" ti-blackboard"></i>
+                            <span>Widgets </span> <span class="badge badge-danger ml-2">2</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="widget-basic.html">Widgets Base</a></li>
+                            <li><a  href="widget-chart.html">Widgets Chart</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" ti-pencil-alt"></i>
+                            <span>Icons</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="icon-fontawesome.html">Fontawesome Icons</a></li>
+                            <li><a  href="icon-themify.html">Themify Icons</a></li>
+                            <li><a  href="icon-simple-line.html">Simple line Icons</a></li>
+                            <li><a  href="icon-weather.html">Weather Icons</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" ti-layers"></i>
+                            <span>BS Elements</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="alert.html">Alerts</a></li>
+                            <li><a  href="buttons.html">Buttons</a></li>
+                            <li><a  href="dropdown.html">Dropdowns</a></li>
+                            <li><a  href="modals.html">Modals</a></li>
+                            <li><a  href="progress.html">Progress</a></li>
+                            <li><a  href="popover-tooltips.html">Popover & Tooltips</a></li>
+                            <li><a  href="tabs-accordion.html">Tabs & Accordion</a></li>
+                            <li><a  href="toastr-notification.html">Toastr Notification</a></li>
+                            <li><a  href="typography.html">Typography</a></li>
+                            <li><a  href="tree.html">Tree</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;" >
+                            <i class=" icon-equalizer"></i>
+                            <span>Extra Pages</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="profile.html">Profile</a></li>
+                            <li><a  href="invoice.html">Invoice</a></li>
+                            <li><a  href="lock-screen.html">Lock Screen</a></li>
+                            <li><a  href="login.html">Login</a></li>
+                            <li><a  href="registration.html">Registration</a></li>
+                            <li><a  href="404.html">404 Error</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-title">
+                        <h5 class="text-uppercase">Layouts & Multi Level Menu</h5>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class=" ti-layout"></i>
+                            <span>Layouts</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="layout-blank.html">Blank Default</a></li>
+                            <li><a  href="layout-fixed-header.html">Fixed Header</a></li>
+                            <li><a  href="layout-header-color.html">Colorful Header</a></li>
+                            <li><a  href="layout-leftnav-color.html">Left Nav Color</a></li>
+                            <li><a  href="layout-leftnav-white.html">Left Nav White</a></li>
+                            <li><a  href="layout-leftnav-collapsed.html">Collapsed Left Nav</a></li>
+                            <li><a  href="layout-top-nav.html">Top Nav</a></li>
+                        </ul>
+                    </li>
+
+                    <!--multi level menu start-->
+                    <li class="sub-menu">
+                        <a href="javascript:;" >
+                            <i class=" ti-paint-bucket"></i>
+                            <span>Multi level Menu</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a  href="javascript:;">Menu Item 1</a></li>
+                            <li class="sub-menu">
+                                <a  href="#">Menu Item 2</a>
+                                <ul class="sub">
+                                    <li><a  href="javascript:;">Menu Item 2.1</a></li>
+                                    <li class="sub-menu">
+                                        <a  href="javascript:;">Menu Item 3</a>
+                                        <ul class="sub">
+                                            <li><a  href="javascript:;">Menu Item 3.1</a></li>
+                                            <li><a  href="javascript:;">Menu Item 3.2</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--multi level menu end-->
+
+                    <li class="nav-title">
+                        <h5 class="text-uppercase">Others</h5>
+                    </li>
+
+                    <li>
+                        <a href="mail-inbox.html" target="_blank">
+                            <i class="fa fa-circle-o text-danger"></i>
+                            <span>Mail Inbox</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="email-template/index.html" target="_blank">
+                            <i class="fa fa-circle-o text-success"></i>
+                            <span>Email Template</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-circle-o text-warning"></i>
+                            <span>Support</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--left sidebar end-->
+
+    <!--main content wrapper-->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div layout:fragment="content">
+
+            </div>
+        </div>
+        <!--footer-->
+        <footer class="sticky-footer">
+            <div class="container">
+                <div class="text-center">
+                    <small>Copyright &copy; VectorLab 2018</small>
+                </div>
+            </div>
+        </footer>
+        <!--/footer-->
+    </div>
+    <!--main content wrapper end-->
+
+    <!--right sidebar-->
+    <div class="right-sidebar" id="right_side_bar">
+        <div class="card border-0">
+            <div class="card-body pb-0">
+                <!--close toggle-->
+                <a href="javascript:;" class="right_side_toggle float-right close-sidebar-icon">
+                    <i class=" ti-shift-right"> </i>
+                </a>
+                <!--/close toggle-->
+            </div>
+            <div class="card-body pt-2">
+
+                <div class="right-widget">
+                    <div class="custom-title-wrap bar-primary mb-4">
+                        <div class="custom-title">Today's Activity</div>
+                    </div>
+
+                    <ul class="list-unstyled base-timeline">
+                        <li class="time-dot-primary">
+                            <div class="base-timeline-info">
+                                <a href="#">John123</a> Successfully purchased item#26
+                            </div>
+                            <small class="text-muted">
+                                28 mins ago
+                            </small>
+                        </li>
+                        <li class="time-dot-danger">
+                            <div class="base-timeline-info">
+                                <a href="#" class="text-danger">Farnandez</a> placed the order for accessories
+                            </div>
+                            <small class="text-muted">
+                                2 days ago
+                            </small>
+                        </li>
+                        <li class="time-dot-purple">
+                            <div class="base-timeline-info">
+                                User <a href="#" class="text-purple">Lisa Maria</a> checked out from the market
+                            </div>
+                            <small class="text-muted">
+                                12 mins ago
+                            </small>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="right-widget">
+                    <div class="custom-title-wrap bar-danger mb-4">
+                        <div class="custom-title">Active Users</div>
+                    </div>
+
+                    <ul class="list-unstyled mb-0 list-widget">
+                        <li class="cursor">
+                            <div class="media mb-4">
+                                <div class="st-alphabet mr-3">
+                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar1.jpg" alt=" ">
+                                    <span class="status bg-success"></span>
+                                </div>
+                                <div class="media-body ">
+                                    <div class="float-left">
+                                        <h6 class="text-uppercase mb-0">shirley hoe</h6>
+                                        <span class="text-muted">Online</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="cursor">
+                            <div class="media mb-4">
+                                <div class="st-alphabet mr-3">
+                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=" ">
+                                    <span class="status bg-warning"></span>
+                                </div>
+                                <div class="media-body ">
+                                    <div class="float-left">
+                                        <h6 class="text-uppercase mb-0">james alexender</h6>
+                                        <span class="text-muted">Screaming...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="cursor">
+                            <div class="media mb-4">
+                                <div class="st-alphabet mr-3">
+                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar3.jpg" alt=" ">
+                                    <span class="status bg-info"></span>
+                                </div>
+                                <div class="media-body">
+                                    <div class="float-left">
+                                        <h6 class="text-uppercase mb-0">ursula sitorus</h6>
+                                        <span class="text-muted">Start Exploring</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="cursor">
+                            <div class="media mb-3">
+                                <div class="st-alphabet mr-3">
+                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar4.jpg" alt=" ">
+                                    <span class="status bg-danger"></span>
+                                </div>
+                                <div class="media-body">
+                                    <div class="float-left">
+                                        <h6 class="text-uppercase mb-0">jonna pinedda</h6>
+                                        <span class="text-muted">Busy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="right-widget">
+
+                    <div class="custom-title-wrap bar-success mb-4">
+                        <div class="custom-title">Notification</div>
+                    </div>
+
+                    <div >
+                        <a class="nav-link border-bottom px-0 py-3" href="#">
+                                <span class="text-primary">
+                                <span class="weight700 f12">
+                                    <i class="vl_bell weight600 pr-2"></i>Weekly Update</span>
+                                </span>
+                            <span class="small float-right text-muted">03:14 AM</span>
+
+                            <div class="text-dark f12">
+                                This week project update report generated. All team members are requested to check the updates
+                            </div>
+                        </a>
+
+                        <a class="nav-link border-bottom px-0 py-3" href="#">
+                                <span class="text-danger">
+                                <span class="weight700 f12">
+                                    <i class="vl_Download-circle weight600 pr-2"></i>Server Error</span>
+                                </span>
+                            <span class="small float-right text-muted">10:34 AM</span>
+
+                            <div class="text-dark f12">
+                                Unexpectedly server response stop. Responsible members are requested to fix it soon
+                            </div>
+                        </a>
+
+                        <a class="nav-link border-bottom px-0 py-3" href="#">
+                                <span class="text-success">
+                                <span class="weight700 f12">
+                                    <i class="vl_screen weight600 pr-2"></i>Monthly Meeting</span>
+                                </span>
+                            <span class="small float-right text-muted">12:30 AM</span>
+
+                            <div class="text-dark f12">
+                                Our monthly meeting will be held on tomorrow sharp 12:30. All members are requested to attend this meeting.
+                            </div>
+                        </a>
+
+                        <div class="text-center mt-3">
+                            <a class="nav-link px-0" href="#">View all notification</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--right sidebar end-->
+</div>
+
+<!--basic scripts-->
+<script th:src="@{/admin_assets/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/popper.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery.dcjqaccordion.2.7.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery.nicescroll.min.js}"></script>
+
+<!--chartjs-->
+<script th:src="@{/admin_assets/vendor/chartjs/Chart.bundle.min.js}"></script>
+<!--chartjs initialization-->
+<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-sales-overview-chart.js}"></script>
+<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-area-chart.js}"></script>
+<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-line-chart.js}"></script>
+
+<script th:src="@{/admin_assets/vendor/modernizr.js}"></script>
+
+<!--basic scripts initialization-->
+<script th:src="@{/admin_assets/js/scripts.js}"></script>
+</body>
+</html>
+
