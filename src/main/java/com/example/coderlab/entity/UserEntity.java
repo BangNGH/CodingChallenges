@@ -21,6 +21,7 @@ import java.util.Set;
 @Table(name = "users")
 public class UserEntity {
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -37,7 +38,11 @@ public class UserEntity {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "is_active")
+    private boolean isActive = false;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -48,4 +53,5 @@ public class UserEntity {
    @OneToMany(mappedBy = "lecturer")
     @JsonIgnore
     private List<Assignment> assignments;
+
 }
