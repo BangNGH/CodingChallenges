@@ -1,4 +1,4 @@
-<!doctype html>
+    <!doctype html>
 <html class="no-js" lang="zxx"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
@@ -30,16 +30,16 @@
 <!-- Add your site or application content here -->
 
 <!-- pre loader area start -->
-<div id="loading">
-    <div id="loading-center">
-        <div id="loading-center-absolute">
-            <div class="loading-content-2 text-center">
-                <img class="loading-logo-icon-2" th:src="@{/client_assets/img/logo/logo-icon.png}" alt="">
-                <img class="loading-logo-text-2" th:src="@{/client_assets/img/logo/logo-text-2.png}" alt="">
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div id="loading">-->
+<!--    <div id="loading-center">-->
+<!--        <div id="loading-center-absolute">-->
+<!--            <div class="loading-content-2 text-center">-->
+<!--                <img class="loading-logo-icon-2" th:src="@{/client_assets/img/logo/logo-icon.png}" alt="">-->
+<!--                <img class="loading-logo-text-2" th:src="@{/client_assets/img/logo/logo-text-2.png}" alt="">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <!-- pre loader area end -->
 
 <!-- back to top start -->
@@ -58,8 +58,8 @@
                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-2 col-sm-4 col-6">
                     <div class="header__left d-flex">
                         <div class="logo">
-                            <a href="index.html">
-                                <img src="client_assets/img/logo/logo.png" alt="logo">
+                            <a href="/">
+                                <img th:src="@{/client_assets/img/logo/logo.png}" alt="logo">
                             </a>
                         </div>
                         <div class="header__category d-none d-lg-block">
@@ -87,11 +87,10 @@
                                             <span>Category</span>
                                         </a>
                                         <ul class="cat-submenu">
+                                            <li><a th:href="@{/onlineCompiler}">Online compiler</a></li>
                                             <li><a href="course-details.html">English Learning</a></li>
                                             <li><a href="course-details.html">Web Development</a></li>
                                             <li><a href="course-details.html">Logo Design</a></li>
-                                            <li><a href="course-details.html">Motion Graphics</a></li>
-                                            <li><a href="course-details.html">Video Edition</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -104,13 +103,8 @@
                         <div class="main-menu main-menu-2">
                             <nav id="mobile-menu">
                                 <ul>
-                                    <li class="has-dropdown">
-                                        <a href="index.html">Home</a>
-                                        <ul class="submenu">
-                                            <li><a href="index.html">Home Style 1</a></li>
-                                            <li><a href="index-2.html">Home Style 2</a></li>
-                                            <li><a href="index-3.html">Home Style 3</a></li>
-                                        </ul>
+                                    <li>
+                                        <a href="/">Home</a>
                                     </li>
                                     <li class="has-dropdown">
                                         <a href="course-grid.html">Courses</a>
@@ -119,28 +113,6 @@
                                             <li><a href="course-list.html">Course List</a></li>
                                             <li><a href="course-sidebar.html">Course sidebar</a></li>
                                             <li><a href="course-details.html">Course Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="has-dropdown">
-                                        <a href="blog.html">Blog</a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="has-dropdown">
-                                        <a href="course-grid.html">Pages</a>
-                                        <ul class="submenu">
-                                            <li><a href="about.html">About</a></li>
-                                            <li><a href="instructor.html">Instructor</a></li>
-                                            <li><a href="instructor-details.html">Instructor Details</a></li>
-                                            <li><a href="event-details.html">Event Details</a></li>
-                                            <li><a href="cart.html">My Cart</a></li>
-                                            <li><a href="wishlist.html">My Wishlist</a></li>
-                                            <li><a href="checkout.html">checkout</a></li>
-                                            <li><a href="sign-in.html">Sign In</a></li>
-                                            <li><a href="/register-access-account">Đăng ký</a></li>
-                                            <li><a href="error.html">Error</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="contact.html">Contact</a></li>

@@ -12,13 +12,13 @@
    <!-- sign up area start -->
    <section class="signup__area po-rel-z1 pt-100 pb-145">
       <div class="sign__shape">
-         <img class="man-1" src="client_assets/img/icon/sign/man-3.png" alt="">
-         <img class="man-2 man-22" src="client_assets/img/icon/sign/man-2.png" alt="">
-         <img class="circle" src="client_assets/img/icon/sign/circle.png" alt="">
-         <img class="zigzag" src="client_assets/img/icon/sign/zigzag.png" alt="">
-         <img class="dot" src="client_assets/img/icon/sign/dot.png" alt="">
-         <img class="bg" src="client_assets/img/icon/sign/sign-up.png" alt="">
-         <img class="flower" src="client_assets/img/icon/sign/flower.png" alt="">
+         <img class="man-1" th:src="@{/client_assets/img/icon/sign/man-3.png}" alt="">
+         <img class="man-2 man-22" th:src="@{/client_assets/img/icon/sign/man-2.png}" alt="">
+         <img class="circle" th:src="@{/client_assets/img/icon/sign/circle.png}" alt="">
+         <img class="zigzag" th:src="@{/client_assets/img/icon/sign/zigzag.png}" alt="">
+         <img class="dot" th:src="@{/client_assets/img/icon/sign/dot.png}" alt="">
+         <img class="bg" th:src="@{/client_assets/img/icon/sign/sign-up.png}" alt="">
+         <img class="flower" th:src="@{/client_assets/img/icon/sign/flower.png}" alt="">
       </div>
       <div class="container">
          <div class="row">
@@ -44,7 +44,7 @@
                         <div th:if="${errorMessage}" class="alert alert-danger">
                            <p th:text="${errorMessage}"></p>
                         </div>
-                        <div th:if="${successMessage}" class="alert alert-success" style="display: flex; justify-content: center;">
+                        <div th:if="${successMessage}" class="alert alert-success" style="display: flex; justify-content: center; background-color: #0f5132">
                            <p style="color: white;" th:text="${successMessage}"></p>
                         </div>
                         <div class="sign__input-wrapper mb-25">

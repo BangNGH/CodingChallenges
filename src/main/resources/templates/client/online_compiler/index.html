@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/client_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online compiler</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/client_assets/css/loading.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/lib/codemirror.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/3024-day.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/bespin.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/dracula.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/night.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
+
+    <style>
+        .CodeMirror {
+            border: 1px solid #eee;
+        }
+
+        .dd-selected-image,
+        .dd-option-image {
+            width: 30px;
+            max-height: 30px;
+        }
+
+        .dd-selected-text,
+        .dd-option-text {
+            line-height: 30px !important;
+            color: #000;
+        }
+
+        .dd-selected {
+            cursor: pointer;
+            padding: 4px !important;
+        }
+
+        #input, #output {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- page title area start -->
+    <section class="page__title-area pt-120 pb-30">
+        <div class="page__title-shape">
+            <img class="page-title-shape-5 d-none d-sm-block" th:src="@{/client_assets/img/page-title/page-title-shape-1.png}" alt="">
+            <img class="page-title-shape-6" th:src="@{/client_assets/img/page-title/page-title-shape-6.png}" alt="">
+            <img class="page-title-shape-7" th:src="@{/client_assets/img/page-title/page-title-shape-4.png}" alt="">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                    <div class="course__wrapper">
+                        <div class="page__title-content mb-25">
+                            <div class="page__title-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+<!--                                        <li class="breadcrumb-item"><a href="course-grid.html">Courses</a></li>-->
+                                        <li class="breadcrumb-item active" aria-current="page">Online compiler</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <span class="page__title-pre">Development</span>
+                            <h5 class="page__title-3">Online Compiler</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="margin-bottom: 70px !important;" class="row m-3">
+        <div class="col">
+            <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
+                <div>
+                    <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                    <select style="cursor: pointer;" class="form-select" id="inlineFormSelectPref">
+                        <option data-imagesrc="/client_assets/lang-icon/cpp.png" selected value="cpp">Cpp</option>
+                        <option data-imagesrc="/client_assets/lang-icon/java.png" value="java">Java</option>
+                        <option data-imagesrc="/client_assets/lang-icon/python.png" value="py">Python</option>
+                        <option data-imagesrc="/client_assets/lang-icon/csharp.png" value="cs">C#</option>
+                    </select>
+                </div>
+                <div>
+                    <!-- <label style="color: #fff;" for="theme">Theme</label> -->
+                    <select style="cursor: pointer; width: 120%;" class="form-select" id="theme">
+                        <option selected value="Dark">Dracula</option>
+                        <option value="Light">Light</option>
+                        <option value="Night">Night</option>
+                        <option value="Idea">Idea</option>
+                        <option value="Ocenaic">Ocenaic</option>
+
+                    </select>
+                </div>
+                <button style="cursor: pointer;" type="button" id="run" class="btn btn-success">Run<i
+                        style="margin-left: 10px; font-size: 17px;" class="bi bi-play-fill"></i></button>
+            </div>
+            <div style="border-color: #eee; border-style: solid; border-width: 5px;">
+                <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
+            </div>
+        </div>
+        <div class="col d-flex flex-column rounded bg-dark px-4">
+            <div class="h-50">
+                <label for="Input" class="text-light mt-4 mb-2">Input</label>
+                <textarea type="text" id="input" class="form-control h-75" aria-label="Last name"></textarea>
+            </div>
+            <div style="position: relative;" class="h-50">
+                <label for="Output" class="text-light mb-2">Output</label>
+                <textarea type="text" id="output" class="form-control h-75" aria-label="Last name"></textarea>
+                <div id="water-loading" class="water-cup"></div>
+            </div>
+        </div>
+    </div>
+    <!-- page title area end -->
+
+
+    <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/addon/edit/closebrackets.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
+    <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
+    <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
+    <script th:inline="javascript">
+        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            mode: "text/x-c++src",
+            theme: "dracula",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+        })
+
+        var width = window.innerWidth
+        editor.setSize(0.7 * width, "550")
+        var option;
+        $("#inlineFormSelectPref").ddslick({
+            onSelected: function (selectedData) {
+                if (selectedData.selectedData.value === "java") {
+                    editor.setOption("mode", "text/x-java")
+                    editor.setOption("value", "import java.util.*;\nimport java.io.*;\n\npublic class HelloWorld {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}")
+                }
+                if (selectedData.selectedData.value === "cpp") {
+                    editor.setOption("mode", "text/x-c++src")
+                    editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                }
+                if (selectedData.selectedData.value === "py") {
+                    editor.setOption("mode", "text/x-python")
+                    editor.setOption("value", "print('Hello world!')")
+                }
+                if (selectedData.selectedData.value === "cs") {
+                    editor.setOption("mode", "text/x-csharp");
+                    editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
+                }
+                option = selectedData.selectedData.value;
+            }
+        });
+    </script>
+    <script type="module" th:src="@{/client_assets/compiler/compiler.js}"></script>
+</div>
+</body>
+</html>
