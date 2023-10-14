@@ -49,31 +49,107 @@ import {MY_API_KEY} from "./config.js"
 run.addEventListener("click", async function () {
     output.value = "running...";
     loading.style.display = "block";
-    const url = 'https://codex7.p.rapidapi.com/';
+    const postURL = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*';
     const options = {
         method: 'POST',
         headers: {
-            'content-type': 'application/x-www-form-urlencoded',
             'X-RapidAPI-Key': MY_API_KEY,
-            'X-RapidAPI-Host': 'codex7.p.rapidapi.com'
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
         },
         body: new URLSearchParams({
-            code: editor.getValue() ,
-            language: option,
-            input : input.value
+            language_id: option,
+            source_code: editor.getValue(),
+            stdin: input.value
         })
     };
 
     try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        if(result.error !== ""){
-            output.value = result.error;
+        const response = await fetch(postURL, options);
+        const postResult = await response.json();
+        console.log(postResult);
+        console.log(editor.getValue());
+
+        const checkStatus = async () => {
+            const getURL = 'https://judge0-ce.p.rapidapi.com/submissions/'+postResult.token+'/?base64_encoded=false&fields=*';
+            const getOptions = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': MY_API_KEY,
+                    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+                }
+            };
+
+            const getResult = await fetch(getURL, getOptions);
+            const result = await getResult.json();
+            console.log(result);
+            console.log( input.value);
+
+            if (result.status && result.status.id <= 2) {
+                // Nếu trạng thái là "In Queue" hoặc "Processing", thì tiếp tục kiểm tra
+                setTimeout(checkStatus, 1000); // Kiểm tra lại sau 1 giây
+            } else if (result.status && result.status.id === 3) {
+                // Nếu trạng thái là "Accepted", hiển thị output
+                if(result.stdout === null){
+                    output.value = result.compile_output;
+                } else {
+                    output.value = result.stdout;
+                }
+                loading.style.display = "none";
+            } else {
+                // Nếu trạng thái không rõ ràng, hiển thị thông báo lỗi
+                output.value = "Error occurred while processing the code.";
+                loading.style.display = "none";
+            }
+        };
+
+        // Bắt đầu kiểm tra trạng thái
+        checkStatus();
+    } catch (error) {
+        console.error(error);
+        loading.style.display = "none";
+    }
+
+/*    const settings = {
+        async: true,
+        crossDomain: true,
+        url: 'https://judge0-ce.p.rapidapi.com/submissions/'+postResult.token+'/?base64_encoded=false&fields=*',
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': MY_API_KEY,
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+        }
+    };
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+     /!*   if(result.stdout === null){
+            output.value = result.compile_output;
         }else{
-            output.value = result.output
+            output.value = result.stdout
+        }*!/
+        loading.style.display = "none";
+    });*/
+
+  /*  const getURL = 'https://judge0-ce.p.rapidapi.com/submissions/'+postResult.token+'/?base64_encoded=false&fields=*';
+    const getOptions = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': MY_API_KEY,
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await fetch(getURL, getOptions);
+        const result = await response.json();
+        console.log(result);
+        if(result.stdout === null){
+            output.value = result.compile_output;
+        }else{
+            output.value = result.stdout
         }
         loading.style.display = "none";
     } catch (error) {
         console.error(error);
-    }
+    }*/
 })
