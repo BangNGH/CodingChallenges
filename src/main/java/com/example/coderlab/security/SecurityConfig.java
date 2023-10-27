@@ -27,7 +27,8 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/client_assets/images/**","client_assets/shop_assets/**")
+                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/client_assets/images/**","client_assets/shop_assets/**"
+                        ,"/webjars/jquery/3.6.4/jquery.min.js", "/assignment-images/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAnyAuthority("ADMIN")

@@ -98,6 +98,7 @@ run.addEventListener("click", async function () {
             } else {
                 // Nếu trạng thái không rõ ràng, hiển thị thông báo lỗi
                 output.value = "Error occurred while processing the code.";
+                output.value = result.compile_output;
                 loading.style.display = "none";
             }
         };

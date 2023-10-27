@@ -27,11 +27,12 @@
     <link th:href="@{/admin_assets/vendor/jquery-ui/jquery-ui.min.css}" rel="stylesheet">
     <!--iCheck-->
     <link th:href="@{/admin_assets/vendor/icheck/skins/all.css}" rel="stylesheet">
+    <!--toastr-->
+    <link th:href="@{/admin_assets/vendor/toastr-master/toastr.css}" rel="stylesheet">
+    <!--multistepform-->
+<!--    <link rel="stylesheet" th:href="@{/admin_assets/css/multi-step-form.css}">-->
     <!--custom styles-->
     <link th:href="@{/admin_assets/css/main.css}" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <script th:src="@{/admin_assets/vendor/html5shiv.js}"></script>
-    <script th:src="@{/admin_assets/vendor/respond.min.js}"></script>
 </head>
 
 <body class="left-sidebar-fixed">
@@ -47,7 +48,7 @@
         <!--brand start-->
         <div class="navbar-brand pos-fixed">
             <a class="" href="index.html">
-                <img src="admin_assets/img/logo.png" srcset="admin_assets/img/logo@2x.jpg 2x" alt="CodeLab">
+                <img th:src="@{/admin_assets/img/logo.png}" th:attr="srcset=@{/admin_assets/img/logo.jpg 2x}" alt="CodeLab">
             </a>
         </div>
         <!--brand end-->
@@ -75,7 +76,7 @@
                 <div class="dropdown-divider mb-0"></div>
                 <a class="dropdown-item border-bottom msg-unread" href="#">
                     <div class="float-left notificaton-thumb">
-                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar4.jpg" alt=""/>
+                        <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar4.jpg}" alt=""/>
                     </div>
                     <span class="weight500">Andrew Flinton</span>
                     <span class="small float-right text-muted">08:30 AM</span>
@@ -87,7 +88,7 @@
 
                 <a class="dropdown-item border-bottom msg-unread" href="#">
                     <div class="float-left notificaton-thumb">
-                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=""/>
+                        <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" alt=""/>
                     </div>
                     <span class="weight500">John Doe</span>
                     <span class="small float-right text-muted">10:28 AM</span>
@@ -99,7 +100,7 @@
 
                 <a class="dropdown-item border-bottom" href="#">
                     <div class="float-left notificaton-thumb">
-                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar3.jpg" alt=""/>
+                        <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar3.jpg}" alt=""/>
                     </div>
                     <span class="weight500">Dash Don</span>
                     <span class="small float-right text-muted">07:12 PM</span>
@@ -111,7 +112,7 @@
 
                 <a class="dropdown-item border-bottom" href="#">
                     <div class="float-left notificaton-thumb">
-                        <img class="rounded-circle" src="admin_assets/img/avatar/avatar1.jpg" alt=""/>
+                        <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar1.jpg}" alt=""/>
                     </div>
                     <span class="weight500">dkmosa</span>
                     <span class="small float-right text-muted">12:10 PM</span>
@@ -179,12 +180,12 @@
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" id="userNav" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="user-thumb">
-                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=""/>
+                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" alt=""/>
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userNav">
                 <div class="dropdown-item- px-3 py-2">
-                    <img class="rounded-circle mr-2" src="admin_assets/img/avatar/avatar2.jpg" width="35" alt=""/>
+                    <img class="rounded-circle mr-2" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" width="35" alt=""/>
                     <span class="text-muted">Jhon Doe</span>
                 </div>
                 <div class="dropdown-divider"></div>
@@ -227,16 +228,10 @@
             <nav class="sidebar-menu">
                 <ul id="nav-accordion">
                     <li class="sub-menu">
-                        <a href="javascript:;" class="active">
+                        <a th:href="@{/admin}" class="active">
                             <i class=" ti-home"></i>
                             <span>Dashboard</span>
                         </a>
-                        <ul class="sub">
-                            <li class="active"><a  href="index.html">Dashboard</a></li>
-                            <li><a  href="dashboard-2.html">Dashboard 2</a></li>
-                            <li><a  href="dashboard-3.html">Dashboard 3</a></li>
-                            <li><a  href="dashboard-4.html">Dashboard 4</a></li>
-                        </ul>
                     </li>
 
                     <li class="nav-title">
@@ -244,59 +239,10 @@
                     </li>
 
                     <li class="sub-menu">
-                        <a href="javascript:;" >
+                        <a href="/admin/assignment" >
                             <i class=" icon-speech"></i>
-                            <span>Forms</span>
+                            <span>Coding question</span>
                         </a>
-                        <ul class="sub">
-                            <li class="sub-menu">
-                                <a  href="#">Form Control</a>
-                                <ul class="sub">
-                                    <li><a  href="form-basic.html">Basic Input</a></li>
-                                    <li><a  href="form-input-group.html">Input Group</a></li>
-                                    <li><a  href="form-checkbox-radio.html">Checkbox & Radio</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="sub-menu">
-                                <a  href="#">Pickers</a>
-                                <ul class="sub">
-                                    <li><a  href="date-picker.html">Date Picker</a></li>
-                                    <li><a  href="datetime-picker.html">Datetime & Time Picker</a></li>
-                                    <li><a  href="color-picker.html">Color Picker</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="sub-menu">
-                                <a  href="#">Advanced Form</a>
-                                <ul class="sub">
-                                    <li><a  href="form-touchspin.html">Touchpin</a></li>
-                                    <li><a  href="form-select2.html">Select2</a></li>
-                                    <li><a  href="form-input-mask.html">Input Mask</a></li>
-                                    <li><a  href="form-multi-select.html"> Multiple Select</a></li>
-                                    <li><a  href="form-dropzone.html"> Dropzone</a></li>
-                                    <li><a  href="form-ion-range-slider.html"> Ion Range Slider</a></li>
-                                    <li><a  href="form-switch.html"> Switchery </a></li>
-                                </ul>
-                            </li>
-
-                            <li class="sub-menu">
-                                <a  href="#">Editos</a>
-                                <ul class="sub">
-                                    <li><a  href="editor-summernote.html">Summernote</a></li>
-                                    <li><a  href="editor-markdown.html">Markdown</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="sub-menu">
-                                <a  href="#">Form Validation</a>
-                                <ul class="sub">
-                                    <li><a  href="form-validation.html">Basic Validation</a></li>
-                                    <li><a  href="form-validation-jquery.html">jQuery Validation</a></li>
-                                    <li><a  href="form-wizard.html">Form Wizard</a></li>
-                                </ul>
-                            </li>
-                        </ul>
                     </li>
 
                     <li class="sub-menu">
@@ -469,10 +415,10 @@
 
     <!--main content wrapper-->
     <div class="content-wrapper">
-        <div class="container-fluid">
-            <div layout:fragment="content">
+        <div layout:fragment="content" class="container-fluid">
+<!--            <div layout:fragment="content">-->
 
-            </div>
+<!--            </div>-->
         </div>
         <!--footer-->
         <footer class="sticky-footer">
@@ -540,7 +486,7 @@
                         <li class="cursor">
                             <div class="media mb-4">
                                 <div class="st-alphabet mr-3">
-                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar1.jpg" alt=" ">
+                                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar1.jpg}" alt=" ">
                                     <span class="status bg-success"></span>
                                 </div>
                                 <div class="media-body ">
@@ -554,7 +500,7 @@
                         <li class="cursor">
                             <div class="media mb-4">
                                 <div class="st-alphabet mr-3">
-                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar2.jpg" alt=" ">
+                                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" alt=" ">
                                     <span class="status bg-warning"></span>
                                 </div>
                                 <div class="media-body ">
@@ -568,7 +514,7 @@
                         <li class="cursor">
                             <div class="media mb-4">
                                 <div class="st-alphabet mr-3">
-                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar3.jpg" alt=" ">
+                                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar3.jpg}" alt=" ">
                                     <span class="status bg-info"></span>
                                 </div>
                                 <div class="media-body">
@@ -582,7 +528,7 @@
                         <li class="cursor">
                             <div class="media mb-3">
                                 <div class="st-alphabet mr-3">
-                                    <img class="rounded-circle" src="admin_assets/img/avatar/avatar4.jpg" alt=" ">
+                                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar4.jpg}" alt=" ">
                                     <span class="status bg-danger"></span>
                                 </div>
                                 <div class="media-body">
@@ -660,17 +606,20 @@
 <script th:src="@{/admin_assets/vendor/jquery.dcjqaccordion.2.7.js}"></script>
 <script th:src="@{/admin_assets/vendor/jquery.nicescroll.min.js}"></script>
 
-<!--chartjs-->
-<script th:src="@{/admin_assets/vendor/chartjs/Chart.bundle.min.js}"></script>
-<!--chartjs initialization-->
-<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-sales-overview-chart.js}"></script>
-<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-area-chart.js}"></script>
-<script th:src="@{/admin_assets/vendor/js-init/chartjs/init-line-chart.js}"></script>
-
-<script th:src="@{/admin_assets/vendor/modernizr.js}"></script>
-
+<!--summernote-->
+<script th:src="@{/admin_assets/vendor/summernote/summernote-bs4.min.js}"></script>
+<!--init-->
+<script th:src="@{/admin_assets/vendor/js-init/init-summernote.js}"></script>
+<!--toastr-->
+<script th:src="@{/admin_assets/vendor/toastr-master/toastr.js}"></script>
+<!--init toastr-->
+<script th:src="@{/admin_assets/vendor/js-init/init-toastr.js}"></script>
+<!--validation-->
+<script type="text/javascript" th:src="@{/admin_assets/js/validate.js}"></script>
+<script type="text/javascript" th:src="@{/admin_assets/js/additional-methods.js}"></script>
 <!--basic scripts initialization-->
 <script th:src="@{/admin_assets/js/scripts.js}"></script>
+
 </body>
 </html>
 

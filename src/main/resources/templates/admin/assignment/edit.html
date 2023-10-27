@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit assignment</title>
+  <style>
+    .textarea {
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      border-radius: 5px;
+    }
+    .textarea::-webkit-scrollbar{
+      width: 0px;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+        <p style="font-size: 20px" class="mb-sm-0 font-size-18">Add Assignment</p>
+
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a th:href="@{/admin/assignment}">Assignment</a></li>
+            <li class="breadcrumb-item active">Add Assigment</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-body">
+            <form th:action="@{/admin/assignment/edit}" th:object="${assignment}"
+                  enctype="multipart/form-data" method="post">
+              <div class="row">
+                <input type="hidden" th:field="*{id}">
+                <div class="col-sm-6">
+                  <div class="mb-3">
+                    <label for="productname">Title</label>
+                    <input required style="font-size: 14px" placeholder="Title here..." th:field="*{title}" id="productname" name="productname" type="text" class="form-control">
+                    <div style="text-align: left; margin-top: 13px">
+                      <span class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="img">Image (Optional)</label>
+                    <input style="font-size: 14px" id="img" name="img" type="file" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="mb-3">
+                    <label for="productdesc">Description</label>
+                    <textarea style="height: 350px" placeholder="Description here..." th:field="*{description}" class="form-control textarea" id="productdesc"
+                              rows="5"></textarea>
+                    <div style="text-align: left; margin-top: 13px">
+                      <span class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <input type="submit" value="Save Changes" class="btn btn-primary waves-effect waves-light">
+                <a style="margin-left: 10px" th:href="@{/admin/assignment}" type="button"
+                   class="btn btn-secondary waves-effect waves-light">Cancel</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end row -->
+  </div>
+  <script th:inline="javascript">
+    const textarea = document.querySelector("textarea");
+    textarea.addEventListener("keyup", e =>{
+      textarea.style.height = "300px";
+      let scHeight = e.target.scrollHeight;
+      textarea.style.height = `${scHeight}px`;
+    })
+  </script>
+</div>
+</body>
+</html>
