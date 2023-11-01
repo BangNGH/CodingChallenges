@@ -1,4 +1,6 @@
 package com.example.coderlab.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +19,8 @@ public class TestCase {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "assignment_id")
+    @JoinColumn(name = "assignment_id", referencedColumnName = "id")
+   @JsonIgnore
     private Assignment assignment;
 
     private String name; // Tên testcase
@@ -30,6 +33,8 @@ public class TestCase {
 
     private boolean markSampleTestCase; // đánh dấu là test case mẫu
     // Các trường và phương thức getter/setter khác
+
+
 }
 
 

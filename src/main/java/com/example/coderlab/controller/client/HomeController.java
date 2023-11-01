@@ -1,17 +1,29 @@
 package com.example.coderlab.controller.client;
 
+import com.example.coderlab.entity.Assignment;
+import com.example.coderlab.entity.TestCase;
+import com.example.coderlab.service.AssignmentService;
 import com.example.coderlab.service.RegistrationRequest;
 import com.example.coderlab.service.RoleService;
+import com.example.coderlab.service.TestCaseService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor    
 public class HomeController {
     private final RoleService roleService;
+    private final AssignmentService assignmentService;
+    private final TestCaseService testCaseService;
     @GetMapping("/")
     public String home(){
         return "client/home/index";
@@ -41,6 +53,15 @@ public class HomeController {
     public String login(){
         roleService.addRole();
         return "sign-in";
+    }
+    @GetMapping("/practice/{challengeID}")
+    public String practice(@PathVariable("challengeID")Long challengeID, Model model) throws JsonProcessingException {
+        Assignment foundChallenge = assignmentService.getAssignmentById(challengeID);
+        List<TestCase> sampleTestCase = foundChallenge.getTestCases().stream().filter(testCase -> testCase.isMarkSampleTestCase() == true).toList();
+        model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
+        model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));
+        model.addAttribute("challenge", foundChallenge);
+        return "client/practice/practice";
     }
     @GetMapping("/company-register")
     public String companyRegistrationForm(Model model) {

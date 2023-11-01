@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Luyện Tập</title>
+   <link rel="stylesheet" th:href="@{/client_assets/css/loading.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/lib/codemirror.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/3024-day.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/bespin.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/dracula.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/night.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
+   <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+   <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+   <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+   <style>
+      /* CSS */
+      .col {
+         display: flex;
+         flex-direction: column;
+      }
+
+      textarea#editor {
+         width: 100%;
+         flex: 1;
+         padding: 0; /* Loại bỏ padding mặc định */
+         margin: 0; /* Loại bỏ margin mặc định */
+      }
+
+      .course__description,
+      .col {
+         flex: 1;
+         padding: 20px;
+         height: 100vh;
+         overflow: auto;
+         box-sizing: border-box;
+      }
+      .course__description {
+         background-color: #fcfcfc; /* Màu nền cho challenge_description */
+         border-radius: 10px;
+
+      }
+
+      .col {
+         background-color: #fcfcfc; /* Màu nền cho challenge_description */
+         border-radius: 10px;
+
+      }
+      .d-flex {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+      }
+
+   </style>
+</head>
+<body>
+<div layout:fragment="content">
+   <!-- page title area start -->
+   <section class="page__title-area pt-120 pb-90">
+      <div class="page__title-shape">
+         <img class="page-title-shape-5 d-none d-sm-block" src="client_assets/img/page-title/page-title-shape-1.png" alt="">
+         <img class="page-title-shape-6" src="client_assets/img/page-title/page-title-shape-6.png" alt="">
+         <img class="page-title-shape-7" src="client_assets/img/page-title/page-title-shape-4.png" alt="">
+      </div>
+      <div class="container">
+         <div class="row">
+            <div>
+               <div class="course__wrapper">
+                  <div class="page__title-content mb-25">
+                     <div class="page__title-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                           <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                              <li class="breadcrumb-item"><a href="course-grid.html">Courses</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">The business Intelligence analyst Course 2022</li>
+                           </ol>
+                        </nav>
+                     </div>
+                     <span class="page__title-pre">Development</span>
+                     <h5 class="page__title-3" th:text="${challenge.title}"></h5>
+                  </div>
+                  <div class="course__meta-2 d-sm-flex mb-30">
+                     <div class="course__teacher-3 d-flex align-items-center mr-70 mb-30">
+                        <div class="course__teacher-thumb-3 mr-15">
+                           <img src="client_assets/img/course/teacher/teacher-1.jpg" alt="">
+                        </div>
+                        <div class="course__teacher-info-3">
+                           <h5>Teacher</h5>
+                           <p><a href="#">Elon Gated</a></p>
+                        </div>
+                     </div>
+                     <div class="course__update mr-80 mb-30">
+                        <h5>Last Update:</h5>
+                        <p>July 24, 2022</p>
+                     </div>
+                     <div class="course__rating-2 mb-30">
+                        <h5>Review:</h5>
+                        <div class="course__rating-inner d-flex align-items-center">
+                           <ul>
+                              <li><a href="#"> <i class="icon_star"></i> </a></li>
+                              <li><a href="#"> <i class="icon_star"></i> </a></li>
+                              <li><a href="#"> <i class="icon_star"></i> </a></li>
+                              <li><a href="#"> <i class="icon_star"></i> </a></li>
+                              <li><a href="#"> <i class="icon_star"></i> </a></li>
+                           </ul>
+                           <p>4.5</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="course__tab-2 mb-45">
+                     <ul class="nav nav-tabs" id="courseTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true"> <i class="icon_ribbon_alt"></i> <span>Discription</span> </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link " id="curriculum-tab" data-bs-toggle="tab" data-bs-target="#curriculum" type="button" role="tab" aria-controls="curriculum" aria-selected="false"> <i class="icon_book_alt"></i> <span>Curriculum</span> </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="review" aria-selected="false"> <i class="icon_star_alt"></i> <span>Thảo luận</span> </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab" aria-controls="member" aria-selected="false"> <i class="fal fa-user"></i> <span>Members</span> </button>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="course__tab-content mb-95">
+                     <div class="tab-content" id="courseTabContent">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                           <input type="hidden" id="testCases" th:data-test-cases="${test_cases_json}">
+                           <input type="hidden" id="allTestCase" th:data-test-cases="${all_test_cases_json}">
+                           <div class="d-flex">
+                             <div class="course__description">
+                              <h3>Mô tả yêu cầu</h3>
+                                <p th:text="${challenge.description}"></p>
+
+                             </div>
+                            <div class="col">
+                              <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
+                                 <div>
+                                    <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                                    <select style="cursor: pointer;" class="form-select" id="inlineFormSelectPref">
+                                       <option data-imagesrc="" selected value="cpp">C++</option>
+                                       <option data-imagesrc="" value="java">Java</option>
+                                       <option data-imagesrc="" value="cs">C#</option>
+                                    </select>
+                                 </div>
+                                 <div>
+                                    <!-- <label style="color: #fff;" for="theme">Theme</label> -->
+                                    <select style="cursor: pointer; width: 120%;" class="form-select" id="theme">
+                                       <option selected value="Dark">Dracula</option>
+                                       <option value="Light">Light</option>
+                                       <option value="Night">Night</option>
+                                       <option value="Idea">Idea</option>
+                                       <option value="Ocenaic">Ocenaic</option>
+
+                                    </select>
+                                 </div>
+                                 <button style="margin-left: 20px;cursor: pointer;background-color: initial;color: white" type="button" id="run" class="btn btn-success">Run<i
+                                         style="margin-left: 10px; font-size: 17px;" class="bi bi-play-fill"></i></button>
+                                 <button style="cursor: pointer;background-color: #00751f" type="button" id="submit" class="btn btn-success">Submit<i
+                                         style="margin-left: 10px; font-size: 17px;" class="bi bi-play-fill"></i></button>
+                              </div>
+                              <div style="border-color: #eee; border-style: solid; border-width: 5px;">
+                                 <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
+                              </div>
+                           </div>
+                          </div>
+                           <section id="excuting" style="display: none" class="events__area pt-115 pb-120 p-relative">
+                           <div class="container">
+                              <div class="row">
+                                 <div class="col-xxl-4 offset-xxl-4">
+                                    <div class="section__title-wrapper mb-60 text-center">
+                                       <h2 class="section__title">Đang <span class="yellow-bg yellow-bg-big"> thực thi...<img src="client_assets/img/shape/yellow-bg.png" alt=""></span></h2>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           </section>
+                           <!-- events area start -->
+                           <section id="result" style="display: none" class="events__area pt-115 pb-120 p-relative">
+                              <div class="events__shape">
+                                 <img class="events-1-shape" alt="">
+                              </div>
+                              <div class="container">
+                                 <div class="row" id="test-cases-container">
+                                 </div>
+                              </div>
+                           </section>
+                           <!-- events area end -->
+                        </div>
+
+                        <div class="tab-pane fade" id="curriculum" role="tabpanel" aria-labelledby="curriculum-tab">
+                           <div class="course__curriculum">
+                              <div class="accordion" id="course__accordion">
+                                 <div class="accordion-item mb-50">
+                                    <h2 class="accordion-header" id="week-01">
+                                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#week-01-content" aria-expanded="true" aria-controls="week-01-content">
+                                          Week 01
+                                       </button>
+                                    </h2>
+                                    <div id="week-01-content" class="accordion-collapse collapse show" aria-labelledby="week-01" data-bs-parent="#course__accordion">
+                                       <div class="accordion-body">
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg class="document" viewBox="0 0 24 24">
+                                                   <path class="st0" d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z"/>
+                                                   <polyline class="st0" points="14,2 14,8 20,8 "/>
+                                                   <line class="st0" x1="16" y1="13" x2="8" y2="13"/>
+                                                   <line class="st0" x1="16" y1="17" x2="8" y2="17"/>
+                                                   <polyline class="st0" points="10,9 9,9 8,9 "/>
+                                                </svg>
+                                                <h3> <span>Reading:</span> Ut enim ad minim veniam</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 14 minutes</span>
+                                                <span class="question">2 questions</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg viewBox="0 0 24 24">
+                                                   <polygon class="st0" points="23,7 16,12 23,17 "/>
+                                                   <path class="st0" d="M3,5h11c1.1,0,2,0.9,2,2v10c0,1.1-0.9,2-2,2H3c-1.1,0-2-0.9-2-2V7C1,5.9,1.9,5,3,5z"/>
+                                                </svg>
+                                                <h3> <span>Video: </span> Greetings and introduction</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 15 minutes</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg viewBox="0 0 16 16">
+
+                                                   <path class="st0" d="M2,12V8c0-3.3,2.9-6,6.4-6s6.4,2.7,6.4,6v4"/>
+                                                   <path class="st0" d="M14.8,12.7c0,0.7-0.6,1.3-1.4,1.3h-0.7c-0.8,0-1.4-0.6-1.4-1.3v-2c0-0.7,0.6-1.3,1.4-1.3h2.1V12.7z M2,12.7  C2,13.4,2.6,14,3.3,14H4c0.7,0,1.3-0.6,1.3-1.3v-2c0-0.7-0.6-1.3-1.3-1.3H2V12.7z"/>
+                                                </svg>
+                                                <h3> <span>Audio:</span> Interactive lesson</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 7 minutes</span>
+                                                <span class="question">3 questions</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg class="document" viewBox="0 0 24 24">
+                                                   <path class="st0" d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z"/>
+                                                   <polyline class="st0" points="14,2 14,8 20,8 "/>
+                                                   <line class="st0" x1="16" y1="13" x2="8" y2="13"/>
+                                                   <line class="st0" x1="16" y1="17" x2="8" y2="17"/>
+                                                   <polyline class="st0" points="10,9 9,9 8,9 "/>
+                                                </svg>
+                                                <h3> <span>Reading: </span> Ut enim ad minim veniam</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 22 minutes</span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="accordion" id="course__accordion-2">
+                                 <div class="accordion-item mb-50">
+                                    <h2 class="accordion-header" id="week-02">
+                                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#week-02-content" aria-expanded="true" aria-controls="week-02-content">
+                                          Week 02
+                                       </button>
+                                    </h2>
+                                    <div id="week-02-content" class="accordion-collapse  collapse show" aria-labelledby="week-02" data-bs-parent="#course__accordion-2">
+                                       <div class="accordion-body">
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg class="document" viewBox="0 0 24 24">
+                                                   <path class="st0" d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z"/>
+                                                   <polyline class="st0" points="14,2 14,8 20,8 "/>
+                                                   <line class="st0" x1="16" y1="13" x2="8" y2="13"/>
+                                                   <line class="st0" x1="16" y1="17" x2="8" y2="17"/>
+                                                   <polyline class="st0" points="10,9 9,9 8,9 "/>
+                                                </svg>
+                                                <h3> <span>Reading:</span> Ut enim ad minim veniam</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 14 minutes</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg viewBox="0 0 24 24">
+                                                   <polygon class="st0" points="23,7 16,12 23,17 "/>
+                                                   <path class="st0" d="M3,5h11c1.1,0,2,0.9,2,2v10c0,1.1-0.9,2-2,2H3c-1.1,0-2-0.9-2-2V7C1,5.9,1.9,5,3,5z"/>
+                                                </svg>
+                                                <h3> <span>Video: </span> Greetings and introduction</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 15 minutes</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg viewBox="0 0 16 16">
+                                                   <path class="st0" d="M2,12V8c0-3.3,2.9-6,6.4-6s6.4,2.7,6.4,6v4"/>
+                                                   <path class="st0" d="M14.8,12.7c0,0.7-0.6,1.3-1.4,1.3h-0.7c-0.8,0-1.4-0.6-1.4-1.3v-2c0-0.7,0.6-1.3,1.4-1.3h2.1V12.7z M2,12.7  C2,13.4,2.6,14,3.3,14H4c0.7,0,1.3-0.6,1.3-1.3v-2c0-0.7-0.6-1.3-1.3-1.3H2V12.7z"/>
+                                                </svg>
+                                                <h3> <span>Audio:</span> Interactive lesson</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 7 minutes</span>
+                                                <span class="question">2 questions</span>
+                                             </div>
+                                          </div>
+                                          <div class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                             <div class="course__curriculum-info">
+                                                <svg class="document" viewBox="0 0 24 24">
+                                                   <path class="st0" d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z"/>
+                                                   <polyline class="st0" points="14,2 14,8 20,8 "/>
+                                                   <line class="st0" x1="16" y1="13" x2="8" y2="13"/>
+                                                   <line class="st0" x1="16" y1="17" x2="8" y2="17"/>
+                                                   <polyline class="st0" points="10,9 9,9 8,9 "/>
+                                                </svg>
+                                                <h3> <span>Reading: </span> Ut enim ad minim veniam</h3>
+                                             </div>
+                                             <div class="course__curriculum-meta">
+                                                <span class="time"> <i class="icon_clock_alt"></i> 22 minutes</span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                           <div class="course__review">
+                              <div class="course__comment mb-75">
+                                 <h3>2 Comments</h3>
+                                 <ul>
+                                    <li>
+                                       <div class="course__comment-box ">
+                                          <div class="course__comment-thumb float-start">
+                                             <img src="client_assets/img/course/comment/course-comment-1.jpg">
+                                          </div>
+                                          <div class="course__comment-content">
+                                             <div class="course__comment-wrapper ml-70 fix">
+                                                <div class="course__comment-info float-start">
+                                                   <h4>Eleanor Fant</h4>
+                                                   <span>July 14, 2022</span>
+                                                </div>
+                                             </div>
+                                             <div class="course__comment-text ml-70">
+                                                <md-block>
+
+                                                      #### Tiny header
+                                                      ```javascript
+                                                      function square(number) {
+                                                      return number * number;
+                                                      }
+                                                      ```
+                                                </md-block>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <div class="course__comment-box ">
+                                          <div class="course__comment-thumb float-start">
+                                             <img src="client_assets/img/course/comment/course-comment-2.jpg" alt="">
+                                          </div>
+                                          <div class="course__comment-content">
+                                             <div class="course__comment-wrapper ml-70 fix">
+                                                <div class="course__comment-info float-start">
+                                                   <h4>Shahnewaz Sakil</h4>
+                                                   <span>July 17, 2022</span>
+                                                </div>
+                                             </div>
+                                             <div class="course__comment-text ml-70">
+                                                <p>David blatant have it, standard A bit of how's your father my lady absolutely.</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <h3>Thêm bình luận</h3>
+                              <div class="course__form-inner">
+                                 <form action="#" >
+                                    <div class="row">
+                                       <div class="col-xxl-12">
+                                          <div class="course__form-input">
+                                             <textarea id="discuss" cols="10" rows="10" placeholder="Review Summary"></textarea>
+
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="row">
+                                       <div class="col-xxl-12">
+                                          <div style="float: right" class="course__form-btn mt-10 mb-55">
+                                             <button type="submit" class="e-btn">Đăng</button>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </form>
+                                 <script>
+                                    var simplemde = new SimpleMDE({ element: document.getElementById("discuss") });
+                                 </script>
+
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane fade" id="member" role="tabpanel" aria-labelledby="member-tab">
+                           <div class="course__member mb-45">
+                              <div class="course__member-item">
+                                 <div class="row align-items-center">
+                                    <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                                       <div class="course__member-thumb d-flex align-items-center">
+                                          <img src="client_assets/img/course/instructor/course-instructor-1.jpg" alt="">
+                                          <div class="course__member-name ml-20">
+                                             <h5>Shahnewaz Sakil</h5>
+                                             <span>Engineer</span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-45">
+                                          <h5>07</h5>
+                                          <span>Courses</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-70">
+                                          <h5>05</h5>
+                                          <span>Reviw</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-85">
+                                          <h5>3.00</h5>
+                                          <span>Rating</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="course__member-item">
+                                 <div class="row align-items-center">
+                                    <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                                       <div class="course__member-thumb d-flex align-items-center">
+                                          <img src="client_assets/img/course/instructor/course-instructor-2.jpg" alt="">
+                                          <div class="course__member-name ml-20">
+                                             <h5>Lauren Stamps</h5>
+                                             <span>Teacher</span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-45">
+                                          <h5>05</h5>
+                                          <span>Courses</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-70">
+                                          <h5>03</h5>
+                                          <span>Reviw</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-85">
+                                          <h5>3.00</h5>
+                                          <span>Rating</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="course__member-item">
+                                 <div class="row align-items-center">
+                                    <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6 ">
+                                       <div class="course__member-thumb d-flex align-items-center">
+                                          <img src="client_assets/img/course/instructor/course-instructor-3.jpg" alt="">
+                                          <div class="course__member-name ml-20">
+                                             <h5>Jonquil Von</h5>
+                                             <span>Associate</span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-45">
+                                          <h5>09</h5>
+                                          <span>Courses</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-70">
+                                          <h5>07</h5>
+                                          <span>Reviw</span>
+                                       </div>
+                                    </div>
+                                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-4">
+                                       <div class="course__member-info pl-85">
+                                          <h5>4.00</h5>
+                                          <span>Rating</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <!-- page title area end -->
+
+   <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
+   <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
+   <script th:src="@{/client_assets/codemirror-5.65.15/addon/edit/closebrackets.js}"></script>
+   <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
+   <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
+   <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
+   <script th:inline="javascript">
+      var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+         mode: "text/x-c++src",
+         theme: "dracula",
+         lineNumbers: true,
+         autoCloseBrackets: true,
+      })
+      var width = window.innerWidth
+      editor.setSize("initial", "100vh")
+      var option;
+      $("#inlineFormSelectPref").ddslick({
+         onSelected: function (selectedData) {
+            if (selectedData.selectedData.value === "java") {
+               editor.setOption("mode", "text/x-java")
+               editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
+               option = 91;
+            }
+            if (selectedData.selectedData.value === "cpp") {
+               editor.setOption("mode", "text/x-c++src")
+               editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+               option = 54;
+            }
+            if (selectedData.selectedData.value === "cs") {
+               editor.setOption("mode", "text/x-csharp");
+               editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
+               option = 51;
+            }
+            if (selectedData.selectedData.value === "c") {
+               editor.setOption("mode", "text/x-c")
+               editor.setOption("value", "#include<stdio.h>\n\nint main() {\n  printf(\"Hello World!\"); \n\n  return 0;\n}")
+               option = 50;
+            }
+         }
+      });
+   </script>
+   <script type="module" th:src="@{/client_assets/compiler/practice.js}"></script>
+
+</div>
+</body>
+</html>

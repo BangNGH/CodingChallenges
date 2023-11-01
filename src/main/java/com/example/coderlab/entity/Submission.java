@@ -21,11 +21,11 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id")
     private UserEntity student;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
@@ -34,6 +34,6 @@ public class Submission {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime submittedAt;
 
-    @OneToMany(mappedBy = "submission")
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
     private List<Assessment> assessments;
 }

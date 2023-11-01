@@ -1,6 +1,7 @@
 package com.example.coderlab.service;
 
 import com.example.coderlab.entity.Assignment;
+import com.example.coderlab.entity.TestCase;
 import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.repository.AssignmentRepository;
 import com.example.coderlab.utils.FileUploadUtil;
@@ -20,6 +21,8 @@ public class AssignmentService {
     @Autowired
     private AssignmentRepository assignmentRepository;
     @Autowired
+    private TestCaseService testCaseService;
+    @Autowired
     private UserServices userServices;
     public List<Assignment> getAllAssignments(){
         return assignmentRepository.findAll();
@@ -32,7 +35,12 @@ public class AssignmentService {
         String email = authentication.getName();
         UserEntity user = userServices.findByEmail(email).orElseThrow();
         assignment.setLecturer(user);
-        assignmentRepository.save(assignment);
+        Assignment savedAssignment = assignmentRepository.save(assignment);
+        for (TestCase testCase :savedAssignment.getTestCases()
+             ) {
+            testCase.setAssignment(assignment);
+            testCaseService.saveTestCase(testCase);
+        }
     }
     public void updateAssignment(Assignment assignment){
         Assignment existingAssignment = assignmentRepository.findById(assignment.getId()).orElse(null);

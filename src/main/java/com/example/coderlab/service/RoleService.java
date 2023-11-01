@@ -1,10 +1,7 @@
 package com.example.coderlab.service;
 
 import com.example.coderlab.entity.Role;
-import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.repository.RoleRepository;
-import com.example.coderlab.repository.UserRepository;
-import com.example.coderlab.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

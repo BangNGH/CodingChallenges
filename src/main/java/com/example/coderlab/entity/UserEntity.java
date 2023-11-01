@@ -50,7 +50,7 @@ public class UserEntity {
     )
     private Set<Role> roles = new HashSet<>();
 
-   @OneToMany(mappedBy = "lecturer")
+   @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Assignment> assignments;
 

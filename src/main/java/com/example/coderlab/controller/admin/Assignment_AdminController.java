@@ -3,6 +3,7 @@ package com.example.coderlab.controller.admin;
 import com.example.coderlab.entity.Assignment;
 import com.example.coderlab.entity.TestCase;
 import com.example.coderlab.service.AssignmentService;
+import com.example.coderlab.service.TestCaseService;
 import com.example.coderlab.service.UserServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,7 @@ import java.util.List;
 public class Assignment_AdminController {
     @Autowired
     private AssignmentService assignmentService;
-    @Autowired
-    private UserServices userServices;
+
     @GetMapping()
     public String index(Model model){
         if(model.containsAttribute("message")){
@@ -63,6 +63,7 @@ public class Assignment_AdminController {
         }
         assignment.setTestCases(testCases);
         assignmentService.addAssignment(assignment);
+
         redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }

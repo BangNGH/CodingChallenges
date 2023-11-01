@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,15 +39,16 @@ public class Assignment {
 //        return "/assignment-images/" + id + "/" + image;
 //    }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")
+    @JsonIgnore
     private UserEntity lecturer;
 
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Submission> submissions;
 
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<TestCase> testCases;
+    private List<TestCase> testCases= new ArrayList<>();;
 }
