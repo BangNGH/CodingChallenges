@@ -132,6 +132,7 @@
                         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                            <input type="hidden" id="testCases" th:data-test-cases="${test_cases_json}">
                            <input type="hidden" id="allTestCase" th:data-test-cases="${all_test_cases_json}">
+                           <input type="hidden" id="assignment_id" th:data-assignment_id="${challenge.id}">
                            <div class="d-flex">
                              <div class="course__description">
                               <h3>Mô tả yêu cầu</h3>
@@ -534,28 +535,28 @@
       var width = window.innerWidth
       editor.setSize("initial", "100vh")
       var option;
+      var langague_name;
       $("#inlineFormSelectPref").ddslick({
          onSelected: function (selectedData) {
-            if (selectedData.selectedData.value === "java") {
-               editor.setOption("mode", "text/x-java")
-               editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
-               option = 91;
-            }
             if (selectedData.selectedData.value === "cpp") {
                editor.setOption("mode", "text/x-c++src")
                editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                option = 54;
+               langague_name = 'C++';
+            }
+            if (selectedData.selectedData.value === "java") {
+               editor.setOption("mode", "text/x-java")
+               editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
+               option = 91;
+               langague_name = 'java';
             }
             if (selectedData.selectedData.value === "cs") {
                editor.setOption("mode", "text/x-csharp");
                editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                option = 51;
+               langague_name = 'C#';
             }
-            if (selectedData.selectedData.value === "c") {
-               editor.setOption("mode", "text/x-c")
-               editor.setOption("value", "#include<stdio.h>\n\nint main() {\n  printf(\"Hello World!\"); \n\n  return 0;\n}")
-               option = 50;
-            }
+
          }
       });
    </script>

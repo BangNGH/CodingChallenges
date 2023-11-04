@@ -67,7 +67,6 @@ public class RegisterController {
 
     @GetMapping("/verifyEmail")
     public String verifyEmail(@RequestParam("token") String token, Model model) {
-        System.out.println("TOKEN: " + token);
         String url = applicationUrl(servletRequest)+"/register/resend-verification-token?token="+token;
         VerificationToken theToken = tokenRepository.findByToken(token);
         if (theToken==null) {

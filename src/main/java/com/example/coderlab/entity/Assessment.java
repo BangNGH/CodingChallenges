@@ -24,15 +24,10 @@ public class Assessment {
     @JoinColumn(name = "submission_id")
     private Submission submission;
 
-    private double score; // Điểm số cho bài tập
+    private double executionTime;
+    private double memoryUsed;
+    private String my_output;
+    private Boolean ispassed;
 
-    private double executionTime; // Thời gian thực hiện
 
-    private double memoryUsed; // Bộ nhớ sử dụng
-
-    private int codeSize; // Kích thước mã nguồn
-
-    private Boolean passed;
-
-    // Các trường và phương thức getter/setter khác
 }

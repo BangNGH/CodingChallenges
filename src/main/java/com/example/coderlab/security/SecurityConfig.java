@@ -4,6 +4,7 @@ package com.example.coderlab.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,8 +27,9 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/practice/**","/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/client_assets/images/**","client_assets/shop_assets/**"
+                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/client_assets/images/**","client_assets/shop_assets/**"
                         ,"/webjars/jquery/3.6.4/jquery.min.js", "/assignment-images/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
@@ -36,10 +38,11 @@ public class SecurityConfig{
                         .hasAnyAuthority("ADMIN", "DEVELOPER", "COMPANY")
                         .requestMatchers("/api/**")
                         .permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/submissions/**").permitAll()
                         .anyRequest().authenticated()
                 ).logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login-access-account")
+                        .logoutSuccessUrl("/login-access-account?message=logout")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
@@ -52,8 +55,7 @@ public class SecurityConfig{
                 )
                 .rememberMe(rememberMe -> rememberMe
                         .key("hutech")
-                        .rememberMeCookieName("hutech")
-                        .tokenValiditySeconds(24 * 60 * 60)
+                        .rememberMeCookieName("hutech").tokenValiditySeconds(86400)
                         // .userDetailsService(userDetailsService())
                 ).exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/403")
@@ -77,4 +79,5 @@ public class SecurityConfig{
             response.sendRedirect("/");
         };
     }
+
 }

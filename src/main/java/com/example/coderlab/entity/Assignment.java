@@ -31,8 +31,6 @@ public class Assignment {
     @Column(length = 2000)
     private String description;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime deadline;
 //    private String image;
 //    public String getImagesPath(){
 //        if(image == null || id == null) return null;

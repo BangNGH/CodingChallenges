@@ -1,9 +1,12 @@
 package com.example.coderlab.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -25,15 +28,21 @@ public class Submission {
     @JoinColumn(name = "student_id")
     private UserEntity student;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assignment_id")
-    private Assignment assignment;
+    private String language;
+    private String source_code;
+    private Boolean is_success;
 
-    private String code;
-
+    @Column(name = "submited_at")
+    @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime submittedAt;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Assessment> assessments;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assignment_id")
+    private Assignment assignment;
+
 }

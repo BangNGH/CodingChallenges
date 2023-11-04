@@ -17,8 +17,6 @@ public class RoleService {
     }
 
     public Role getRoleByName(String name){
-        System.out.println(" name: " + name);
-
         if (roleRepository.findByName(name).isPresent()){
             return roleRepository.findByName(name).get();
         }
