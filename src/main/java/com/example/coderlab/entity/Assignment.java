@@ -31,6 +31,11 @@ public class Assignment {
     @Column(length = 2000)
     private String description;
 
+    //s
+    private int timeLimit;
+    //MB
+    private int memoryLimit;
+
 //    private String image;
 //    public String getImagesPath(){
 //        if(image == null || id == null) return null;
