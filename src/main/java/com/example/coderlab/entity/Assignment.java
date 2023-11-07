@@ -53,5 +53,9 @@ public class Assignment {
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<TestCase> testCases= new ArrayList<>();;
+    private List<TestCase> testCases= new ArrayList<>();
+
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Comment> comments= new ArrayList<>();
 }

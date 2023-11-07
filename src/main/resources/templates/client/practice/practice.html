@@ -16,6 +16,8 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
    <style>
       /* CSS */
       .col {
@@ -132,7 +134,7 @@
                         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                            <input type="hidden" id="testCases" th:data-test-cases="${test_cases_json}">
                            <input type="hidden" id="allTestCase" th:data-test-cases="${all_test_cases_json}">
-                           <input type="hidden" id="assignment_id" th:data-assignment_id="${challenge.id}">
+                           <input type="hidden" id="assignment_id" th:value="${challenge.id}" th:data-assignment_id="${challenge.id}">
                            <div class="d-flex">
                              <div class="course__description">
                               <h3>Mô tả yêu cầu</h3>
@@ -339,8 +341,8 @@
                         <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                            <div class="course__review">
                               <div class="course__comment mb-75">
-                                 <h3>2 Comments</h3>
-                                 <ul>
+                                 <h3>[[${comments.size()}]] Comments</h3>
+                                 <ul id="comment_container" th:each="comment :${comments}">
                                     <li>
                                        <div class="course__comment-box ">
                                           <div class="course__comment-thumb float-start">
@@ -349,38 +351,14 @@
                                           <div class="course__comment-content">
                                              <div class="course__comment-wrapper ml-70 fix">
                                                 <div class="course__comment-info float-start">
-                                                   <h4>Eleanor Fant</h4>
-                                                   <span>July 14, 2022</span>
+                                                   <h4 th:text="${comment.user.fullName}"></h4>
+                                                   <span th:text="${comment.commented_at}"></span>
                                                 </div>
                                              </div>
                                              <div class="course__comment-text ml-70">
-                                                <md-block>
+                                                <md-block th:text="${comment.comment}">
 
-                                                      #### Tiny header
-                                                      ```javascript
-                                                      function square(number) {
-                                                      return number * number;
-                                                      }
-                                                      ```
                                                 </md-block>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </li>
-                                    <li>
-                                       <div class="course__comment-box ">
-                                          <div class="course__comment-thumb float-start">
-                                             <img src="client_assets/img/course/comment/course-comment-2.jpg" alt="">
-                                          </div>
-                                          <div class="course__comment-content">
-                                             <div class="course__comment-wrapper ml-70 fix">
-                                                <div class="course__comment-info float-start">
-                                                   <h4>Shahnewaz Sakil</h4>
-                                                   <span>July 17, 2022</span>
-                                                </div>
-                                             </div>
-                                             <div class="course__comment-text ml-70">
-                                                <p>David blatant have it, standard A bit of how's your father my lady absolutely.</p>
                                              </div>
                                           </div>
                                        </div>
@@ -389,11 +367,10 @@
                               </div>
                               <h3>Thêm bình luận</h3>
                               <div class="course__form-inner">
-                                 <form action="#" >
                                     <div class="row">
                                        <div class="col-xxl-12">
                                           <div class="course__form-input">
-                                             <textarea id="discuss" cols="10" rows="10" placeholder="Review Summary"></textarea>
+                                             <textarea id="comment" cols="10" rows="10" placeholder="Review Summary"></textarea>
 
                                           </div>
                                        </div>
@@ -401,13 +378,62 @@
                                     <div class="row">
                                        <div class="col-xxl-12">
                                           <div style="float: right" class="course__form-btn mt-10 mb-55">
-                                             <button type="submit" class="e-btn">Đăng</button>
+                                             <button onclick="commentPost()" class="e-btn">Đăng</button>
                                           </div>
                                        </div>
                                     </div>
-                                 </form>
+
                                  <script>
-                                    var simplemde = new SimpleMDE({ element: document.getElementById("discuss") });
+                                    const assignment_idElement = document.getElementById('assignment_id');
+                                    const assignment_id = assignment_idElement.getAttribute('data-assignment_id');
+                                    var simplemde = new SimpleMDE({ element: document.getElementById("comment") });
+                                    function commentPost() {
+                                       if (simplemde.value() === "") {
+                                          alert("Vui lòng nhập bình luận trước khi gửi.");
+                                          return; // Không thực hiện AJAX request nếu textarea trống
+                                       }
+                                       $.ajax({
+                                          url: '/api/submissions/comment',
+                                          type: 'GET',
+                                          data: {comment: simplemde.value(), assignment_id: assignment_id},
+                                          success: function (comment) {
+                                             const container = document.querySelector('#comment_container');
+                                             const commentNode = document.createElement('li');
+                                             commentNode.innerHTML  = `
+
+                                       <div class="course__comment-box ">
+                                          <div class="course__comment-thumb float-start">
+                                             <img src="client_assets/img/course/comment/course-comment-1.jpg">
+                                          </div>
+                                          <div class="course__comment-content">
+                                             <div class="course__comment-wrapper ml-70 fix">
+                                                <div class="course__comment-info float-start">
+                                                   <h4>${comment.user.fullName}</h4>
+                                                   <span>${comment.commented_at}</span>
+                                                </div>
+                                             </div>
+                                             <div class="course__comment-text ml-70">
+                                                <md-block>
+                                                ${comment.comment}
+                                                </md-block>
+                                             </div>
+                                          </div>
+                                       </div>
+
+            `;
+                                             container.insertBefore(commentNode, container.firstChild);
+
+                                             simplemde.value =(" ");
+                                             const topComment = document.getElementById('review');
+                                             topComment.scrollIntoView({ behavior: 'smooth' });
+
+
+                                          },
+                                          error: function (error) {
+                                             console.log('Error:', error);
+                                          }
+                                       });
+                                    }
                                  </script>
 
                               </div>
@@ -561,7 +587,6 @@
       });
    </script>
    <script type="module" th:src="@{/client_assets/compiler/practice.js}"></script>
-
 </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.example.coderlab.controller.client;
 
 import com.example.coderlab.entity.Assignment;
+import com.example.coderlab.entity.Comment;
 import com.example.coderlab.entity.TestCase;
 import com.example.coderlab.service.AssignmentService;
 import com.example.coderlab.service.RegistrationRequest;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -61,6 +64,9 @@ public class HomeController {
         model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
         model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));
         model.addAttribute("challenge", foundChallenge);
+
+        List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
+        model.addAttribute("comments", comments);
         return "client/practice/practice";
     }
     @GetMapping("/company-register")
@@ -68,5 +74,6 @@ public class HomeController {
         model.addAttribute("registrationRequest", new RegistrationRequest("COMPANY", "", "", ""));
         return "sign-up";
     }
+
 
 }
