@@ -1,7 +1,8 @@
     <!doctype html>
 <html class="no-js" lang="zxx"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="utf-8">
@@ -24,6 +25,17 @@
     <link rel="stylesheet" th:href="@{/client_assets/css/elegantFont.css}">
     <link rel="stylesheet" th:href="@{/client_assets/css/default.css}">
     <link rel="stylesheet" th:href="@{/client_assets/css/style.css}">
+    <!--toastr-->
+    <link th:href="@{/admin_assets/vendor/toastr-master/toastr.css}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .bx-icon {
+            font-size: 20px;
+            position: absolute;
+            line-height: 41px;
+            margin-left: 15px;
+        }
+    </style>
 </head>
 <body>
 
@@ -120,8 +132,24 @@
                             </nav>
                         </div>
                         <div class="header__btn header__btn-2 ml-50 d-none d-sm-block">
-                           <a href="/register-access-account" class="e-btn">Đăng ký</a>
-                           <a href="/login" class="e-btn" style="background-color: #e8e8e8;color: black">Đăng nhập</a>
+                            <div sec:authorize="!isAuthenticated()">
+                                <a href="/register-access-account" class="e-btn">Đăng ký</a>
+                                <a href="/login" class="e-btn" style="background-color: #e8e8e8;color: black">Đăng nhập</a>
+                            </div>
+                            <div class="dropdown" sec:authorize="isAuthenticated()">
+                                <i style="font-size: 20px; position: absolute; line-height: 41px; margin-left: 15px; color: #0e1133" class='bx bxs-user'></i>
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="color: #0e1133; font-weight: 500; position: relative; cursor: pointer" th:inline="text">
+                                    <span th:remove="tag"
+                                        th:text="${#authentication.principal.getFullName()}"></span>
+<!--                                    <i class='bx bxs-chevron-down'></i>-->
+                                </a>
+                                <ul class="dropdown-menu" style="padding: unset">
+                                    <li style="position: relative"><i class='bx bx-cog bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/user/settings"><span></span> Settings</a></li>
+                                    <li style="position: relative"><i class='bx bx-user bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="#">Profile</a></li>
+                                    <li style="position: relative"><i class='bx bx-lock-alt bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/user/changePassword">Change Password</a></li>
+                                    <li style="position: relative"><i class='bx bx-power-off bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="sidebar__menu d-xl-none">
                             <div class="sidebar-toggle-btn ml-30" id="sidebar-toggle">
@@ -380,6 +408,10 @@
 </footer>
 <!-- footer area end -->
 <!-- JS here -->
+<!--toastr-->
+<script th:src="@{/admin_assets/vendor/toastr-master/toastr.js}"></script>
+<!--init toastr-->
+<script th:src="@{/admin_assets/vendor/js-init/init-toastr.js}"></script>
 <script th:src="@{/client_assets/js/vendor/jquery-3.5.1.min.js}"></script>
 <script th:src="@{/client_assets/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/client_assets/js/bootstrap.bundle.min.js}"></script>
@@ -394,6 +426,9 @@
 <script th:src="@{/client_assets/js/ajax-form.js}"></script>
 <script th:src="@{/client_assets/js/wow.min.js}"></script>
 <script th:src="@{/client_assets/js/imagesloaded.pkgd.min.js}"></script>
+<!--validation-->
+<script type="text/javascript" th:src="@{/admin_assets/js/validate.js}"></script>
+<script type="text/javascript" th:src="@{/admin_assets/js/additional-methods.js}"></script>
 <script th:src="@{/client_assets/js/main.js}"></script>
 </body>
 </html>

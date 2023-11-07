@@ -50,7 +50,7 @@
                         <div class="sign__input-wrapper mb-25">
                            <h5>Họ tên</h5>
                            <div class="sign__input">
-                              <input type="text" id="fullName" class="form-control" required name="fullName"
+                              <input placeholder="Full name" type="text" id="fullName" class="form-control" required name="fullName"
                                      th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
                                      th:field="*{fullName}">
                               <div class="invalid-feedback" th:errors="*{fullName}"></div>
@@ -60,7 +60,7 @@
                         <div class="sign__input-wrapper mb-25">
                            <h5>Work email</h5>
                            <div class="sign__input">
-                              <input type="email" id="email-id-column" required class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" th:field="*{email}">
+                              <input placeholder="Email" type="email" id="email-id-column" required class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" th:field="*{email}">
                               <div class="invalid-feedback" th:errors="*{email}"></div>
                               <i class="fal fa-envelope"></i>
                            </div>
@@ -68,7 +68,7 @@
                         <div class="sign__input-wrapper mb-25">
                            <h5>Password</h5>
                            <div class="sign__input">
-                              <input type="password" id="password-column" required minlength="6" maxlength="20" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" th:field="*{password}">
+                              <input placeholder="Password" type="password" id="password-column" required minlength="6" maxlength="20" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" th:field="*{password}">
                               <div class="invalid-feedback" th:errors="*{password}"></div>
                               <i class="fal fa-lock"></i>
                            </div>

@@ -25,6 +25,14 @@
   <link rel="stylesheet" th:href="@{/client_assets/css/elegantFont.css}">
   <link rel="stylesheet" th:href="@{/client_assets/css/default.css}">
   <link rel="stylesheet" th:href="@{/client_assets/css/style.css}">
+  <style>
+    .bx-icon {
+      font-size: 20px;
+      position: absolute;
+      line-height: 41px !important;
+      margin-left: 15px;
+    }
+  </style>
 </head>
 <body>
 
@@ -100,7 +108,9 @@
                       <li><a href="course-details.html">Course Details</a></li>
                     </ul>
                   </li>
-                  <li><a href="/logout" style="color: #b55252;">Đăng xuất</a></li>
+                  <li>
+                    <a href="">Contact</a>
+                  </li>
                 </ul>
               </nav>
             </div>
@@ -109,12 +119,18 @@
                 <a href="/register-access-account" class="e-btn">Đăng ký</a>
                 <a href="/login" class="e-btn" style="background-color: #e8e8e8;color: black">Đăng nhập</a>
               </div>
-              <div sec:authorize="isAuthenticated()">
-                <a class="e-btn" th:inline="text" style="background-color: #e8e8e8;color: black">
-                  Xin chào, <span style="font-weight: bold"
-                                  th:remove="tag"
-                                  th:text="${#authentication.principal.getFullName()}"></span>
+              <div class="dropdown" sec:authorize="isAuthenticated()">
+                <i style="font-size: 20px; position: absolute; line-height: 41px; margin-left: 15px; color: #0e1133" class='bx bxs-user'></i>
+                <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="color: #0e1133; font-weight: 500; position: relative; cursor: pointer" th:inline="text">
+                                    <span th:remove="tag"
+                                          th:text="${#authentication.principal.getFullName()}"></span>
                 </a>
+                <ul class="dropdown-menu" style="padding: unset">
+                  <li style="position: relative"><i class='bx bx-cog bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/user/settings"><span></span> Settings</a></li>
+                  <li style="position: relative"><i class='bx bx-user bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="#">Profile</a></li>
+                  <li style="position: relative"><i class='bx bx-lock-alt bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/user/changePassword">Change Password</a></li>
+                  <li style="position: relative"><i class='bx bx-power-off bx-icon'></i><a style="font-size: 15px;border-bottom: 1px solid #eee;" class="dropdown-item" href="/logout">Logout</a></li>
+                </ul>
               </div>
             </div>
             <div class="sidebar__menu d-xl-none">

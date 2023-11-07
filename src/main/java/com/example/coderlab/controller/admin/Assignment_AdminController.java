@@ -40,55 +40,32 @@ public class Assignment_AdminController {
     }
     @PostMapping("/add")
     public String addAssignment(@RequestParam("title") String title,@RequestParam("description") String description,
+                                @RequestParam("timeLimit") int timeLimit, @RequestParam("memoryLimit") int memoryLimit,
                                 RedirectAttributes redirectAttributes, @RequestParam("TSName[]") List<String> TestCaseNames,
                                 @RequestParam("TSScore[]") List<Integer> TestCaseScores, @RequestParam("TSInput[]") List<String> TestCaseInputs,
                                 @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples) throws IOException {
-        Assignment assignment = new Assignment();
-        assignment.setTitle(title);
-        assignment.setDescription(description);
 
-        List<TestCase> testCases = new ArrayList<>();
-        for (int i = 0; i < TestCaseNames.size(); i++) {
-            TestCase testCase = new TestCase();
-            testCase.setName(TestCaseNames.get(i));
-            testCase.setScore(TestCaseScores.get(i));
-            testCase.setInput(TestCaseInputs.get(i));
-            testCase.setExpectedOutput(TestCaseOutputs.get(i));
-            if (MaskSamples != null && i < MaskSamples.size()) {
-                testCase.setMarkSampleTestCase(MaskSamples.get(i));
-            } else {
-                testCase.setMarkSampleTestCase(false);
-            }
-            testCases.add(testCase);
-        }
-        assignment.setTestCases(testCases);
-        assignmentService.addAssignment(assignment);
-
+        assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples);
         redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model){
         Assignment assignment = assignmentService.getAssignmentById(id);
-        model.addAttribute(assignment);
+        model.addAttribute("assignment",assignment);
+        model.addAttribute("number_testcase", assignment.getTestCases().size() - 1);
+        var test = assignment.getTestCases();
         return "admin/assignment/edit";
     }
     @PostMapping("/edit")
-    public String edit(@Valid @ModelAttribute("assignment") Assignment updateAssignment,
-                       BindingResult bindingResult, Model model,
-                       @RequestParam("img") MultipartFile multipartFile,
-                       RedirectAttributes redirectAttributes) throws IOException {
+    public String edit(@ModelAttribute("assignment") Assignment updateAssignment,
+                       @RequestParam("description") String description,
+                       @RequestParam("TSName[]") List<String> TestCaseNames,
+                       @RequestParam("TSScore[]") List<Integer> TestCaseScores, @RequestParam("TSInput[]") List<String> TestCaseInputs,
+                       @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples,
+                       RedirectAttributes redirectAttributes) {
 
-        if (bindingResult.hasErrors()) {
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                model.addAttribute(error.getField() + "_error",
-                        error.getDefaultMessage());
-            }
-            model.addAttribute("assignment",updateAssignment);
-            return "admin/assignment/edit";
-        }
-        assignmentService.updateAssignment(updateAssignment);
+        assignmentService.updateAssignment(updateAssignment, description,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples);
         redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }

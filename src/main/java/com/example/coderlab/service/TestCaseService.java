@@ -17,7 +17,9 @@ public class TestCaseService {
     public void saveTestCase(TestCase testCase) {
         testCaseRepository.save(testCase);
     }
-
+    public void deleteAllTestCase(Long id){
+        testCaseRepository.deleteAllTestCaseById(id);
+    }
     public List<TestCase> getTestCases() {
         return testCaseRepository.findAll();
     }
