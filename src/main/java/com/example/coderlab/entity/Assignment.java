@@ -33,14 +33,9 @@ public class Assignment {
 
     //s
     private int timeLimit;
+
     //MB
     private int memoryLimit;
-
-//    private String image;
-//    public String getImagesPath(){
-//        if(image == null || id == null) return null;
-//        return "/assignment-images/" + id + "/" + image;
-//    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")

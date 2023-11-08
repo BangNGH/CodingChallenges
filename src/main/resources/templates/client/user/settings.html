@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/client_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings | Coder'sLab</title>
+    <link rel="stylesheet" th:href="@{/client_assets/css/account-settings.css}">
+    <style>
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+        .has-error{
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <form id="changeInfo" th:action="@{/user/settings}" th:object="${user}" enctype="multipart/form-data" method="post" style="margin-top: 130px; margin-bottom: 50px" class="container light-style flex-grow-1 container-p-y">
+        <span class="d-none" id="messageSuccess" th:text="${message}"></span>
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-9" style="width: 100%">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account-general">
+                            <div class="card-body media align-items-center">
+                                <h3 style="margin-bottom: 0px" class="font-weight-bold py-3 mb-4">
+                                    Account settings
+                                </h3>
+                                <img th:if="${user.avatarUrl} == null" th:id="selectedAvatar" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="example placeholder"
+                                     style="width: 150px !important; height: 150px; object-fit: cover;" class="d-block ui-w-80 rounded-circle">
+                                <img th:if="${user.avatarUrl} != null" th:id="selectedAvatar" th:src="@{${user.imagesPath}}" alt="example placeholder"
+                                     style="width: 150px !important; height: 150px; object-fit: cover;" class="d-block ui-w-80 rounded-circle">
+                                <label style="margin-top: 10px" class="btn btn-outline-primary">
+                                    Upload new photo
+                                    <input name="image" type="file" class="account-settings-fileinput"
+                                           id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')">
+                                </label>
+                                <div class="media-body ml-4">&nbsp;
+                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                </div>
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="card-body">
+                                <input th:field="*{id}" type="hidden">
+                                <div class="form-group">
+                                    <label style="color: #000" class="form-label">Name: </label>
+                                    <input required name="Name" th:field="*{fullName}" type="text" class="form-control mb-1 form-validate" placeholder="Enter name">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: #000" class="form-label">Email:</label>
+                                    <input th:field="*{email}" readonly type="text" class="form-control" placeholder="Enter email">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-bottom: 30px; padding-right: 16px" class="text-right mt-3">
+                            <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var message = $('#messageSuccess').text();
+            toastr.options = {
+                "closeButton": true,
+            }
+            if (message !== '') {
+                toastr.success(message);
+            }
+        });
+        function displaySelectedImage(event, elementId) {
+            const selectedImage = document.getElementById(elementId);
+            const fileInput = event.target;
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    selectedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

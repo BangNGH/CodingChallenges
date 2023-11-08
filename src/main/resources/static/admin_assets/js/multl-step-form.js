@@ -40,6 +40,14 @@ $(document).ready(function(){
                 },
                 "TSOutput[]": {
                     required: true,
+                },
+                timeLimit:{
+                    number: true,
+                    required: true,
+                },
+                memoryLimit: {
+                    number: true,
+                    required: true,
                 }
             },
             messages: {
@@ -58,6 +66,14 @@ $(document).ready(function(){
                 },
                 name: {
                     required: "Test case name required"
+                },
+                timeLimit: {
+                    required: "Time limit required",
+                    number: "Please enter a valid number for the time limit",
+                },
+                memoryLimit: {
+                    required: "Memory limit required",
+                    number: "Please enter a valid number for the memory limit",
                 },
                 "TSName[]": {
                     required: "Question name required",
@@ -138,11 +154,17 @@ $(document).ready(function(){
         return false;
     })
     var nextedu = 0;
+    var number_testcase = parseInt($('#number_testcase').val());
+    if(!isNaN(number_testcase)){
+        nextedu = number_testcase;
+    }
+    debugger
     $("#add-more").click(function (e) {
         e.preventDefault();
         var addto = "#field" + nextedu;
         var addRemove = "#field" + (nextedu);
         nextedu = nextedu + 1;
+        debugger
         var newIn = ' <div id="field' + nextedu + '">\n' +
             '                                            <div class="form-group row">\n' +
             '                                                <div class="col">\n' +
@@ -171,7 +193,7 @@ $(document).ready(function(){
             '                                        </div>';
         var newInput = $(newIn);
 
-        var removeBtn = '<button style="margin-bottom: 20px" id="remove' + (nextedu-1) + '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="field">';
+        var removeBtn = '<button style="margin-bottom: 20px" id="remove' + (nextedu-1) + '" class="btn btn-danger remove-me" >Remove</button>';
         var removeButton = $(removeBtn);
         $(addto).after(newInput);
         $(addRemove).after(removeButton);

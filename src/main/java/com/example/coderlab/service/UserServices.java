@@ -1,25 +1,24 @@
 package com.example.coderlab.service;
 
-import com.example.coderlab.entity.Role;
-import com.example.coderlab.entity.UserEntity;
-import com.example.coderlab.entity.UserRole;
-import com.example.coderlab.entity.VerificationToken;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.exception.AlreadyExistsException;
 import com.example.coderlab.exception.ResourceNotFoundException;
 import com.example.coderlab.repository.RoleRepository;
 import com.example.coderlab.repository.UserRepository;
 import com.example.coderlab.repository.UserRoleRepository;
 import com.example.coderlab.repository.VerificationTokenRepository;
+import com.example.coderlab.utils.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.parser.Entity;
+import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,25 @@ public class UserServices {
             }
         }
     }
-
+    public void updateUser(UserEntity user, MultipartFile multipartFile) throws IOException {
+        UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow();
+        existingUser.setFullName(user.getFullName());
+        if(multipartFile != null && !multipartFile.isEmpty()){
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            existingUser.setAvatarUrl(fileName);
+            String upLoadDir = "avt-images/" + user.getId();
+            FileUploadUtil.saveFile(upLoadDir, fileName, multipartFile);
+        }
+        userRepository.save(existingUser);
+    }
+    public void updatePassword(UserEntity user, String newPassword){
+        UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow();
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(existingUser);
+    }
+    public boolean checkPassword(UserEntity user, String password){
+        return passwordEncoder.matches(password, user.getPassword());
+    }
     public void delete(Long id) {
         Long count = userRepository.countById(id);
         if (count == null || count == 0) {
@@ -126,6 +143,4 @@ public class UserServices {
         verificationToken.setExpirationTime(verificationTokenTime.getTokenExpirationTime());
         return tokenRepository.save(verificationToken);
     }
-
-
 }

@@ -20,7 +20,7 @@ public class TestCase {
 
     @ManyToOne
     @JoinColumn(name = "assignment_id", referencedColumnName = "id")
-   @JsonIgnore
+    @JsonIgnore
     private Assignment assignment;
 
     private String name; // Tên testcase

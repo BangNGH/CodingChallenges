@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,23 +31,57 @@ public class AssignmentService {
     public Assignment getAssignmentById(Long id){
         return assignmentRepository.findById(id).orElseThrow();
     }
-    public void addAssignment(Assignment assignment) {
+    public void addAssignment(String title, String description, int timeLimit, int memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         UserEntity user = userServices.findByEmail(email).orElseThrow();
+
+        Assignment assignment = new Assignment();
+        assignment.setTitle(title);
+        assignment.setDescription(description);
+        assignment.setTimeLimit(timeLimit);
+        assignment.setMemoryLimit(memoryLimit);
         assignment.setLecturer(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        for (TestCase testCase :savedAssignment.getTestCases()
-             ) {
-            testCase.setAssignment(assignment);
+
+        for (int i = 0; i < testCaseNames.size(); i++) {
+            TestCase testCase = new TestCase();
+            testCase.setName(testCaseNames.get(i));
+            testCase.setScore(testCaseScores.get(i));
+            testCase.setInput(testCaseInputs.get(i));
+            testCase.setExpectedOutput(testCaseOutPuts.get(i));
+            if (maskSamples != null && i < maskSamples.size()) {
+                testCase.setMarkSampleTestCase(maskSamples.get(i));
+            } else {
+                testCase.setMarkSampleTestCase(false);
+            }
+            testCase.setAssignment(savedAssignment);
             testCaseService.saveTestCase(testCase);
         }
     }
-    public void updateAssignment(Assignment assignment){
+    public void updateAssignment(Assignment assignment, String description,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples){
         Assignment existingAssignment = assignmentRepository.findById(assignment.getId()).orElse(null);
         existingAssignment.setTitle(assignment.getTitle());
-        existingAssignment.setDescription(assignment.getDescription());
+        existingAssignment.setDescription(description);
+        existingAssignment.setMemoryLimit(assignment.getMemoryLimit());
+        existingAssignment.setTimeLimit(assignment.getTimeLimit());
         assignmentRepository.save(existingAssignment);
+
+        testCaseService.deleteAllTestCase(existingAssignment.getId());
+        for (int i = 0; i < testCaseNames.size(); i++) {
+            TestCase testCase = new TestCase();
+            testCase.setName(testCaseNames.get(i));
+            testCase.setScore(testCaseScores.get(i));
+            testCase.setInput(testCaseInputs.get(i));
+            testCase.setExpectedOutput(testCaseOutPuts.get(i));
+            if (maskSamples != null && i < maskSamples.size()) {
+                testCase.setMarkSampleTestCase(maskSamples.get(i));
+            } else {
+                testCase.setMarkSampleTestCase(false);
+            }
+            testCase.setAssignment(existingAssignment);
+            testCaseService.saveTestCase(testCase);
+        }
     }
     public void deleteAssignmentById(Long id){
         assignmentRepository.deleteById(id);

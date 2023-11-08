@@ -116,22 +116,6 @@
                 toastr.success(message);
             }
         });
-        document.addEventListener("DOMContentLoaded", function() {
-            var fullDescription = document.querySelector(".full-desc");
-            var shortDescription = document.querySelector(".short-desc");
-            debugger
-            var descriptionText = fullDescription.textContent;
-            var maxChar = 250;
-            if (descriptionText.length > maxChar) {
-                var shortText = descriptionText.substring(0, maxChar) + "...";
-                fullDescription.style.display = "none";
-                shortDescription.textContent = shortText;
-            } else {
-                debugger
-                shortDescription.style.display = "none";
-            }
-        });
-
     </script>
 </div>
 </body>

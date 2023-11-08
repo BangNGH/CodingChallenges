@@ -35,6 +35,7 @@ public class UserEntity {
     private String fullName;
     @Column(name = "password")
     private String password;
+
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -50,11 +51,15 @@ public class UserEntity {
     )
     private Set<Role> roles = new HashSet<>();
 
-   @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Assignment> assignments;
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments;
 
+    public String getImagesPath(){
+        if(avatarUrl == null || id == null) return null;
+        return "/avt-images/" + id + "/" + avatarUrl;
+    }
 }

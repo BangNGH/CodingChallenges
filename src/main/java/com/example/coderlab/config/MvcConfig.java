@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        exposeDirectory("assignment-images", registry);
+        exposeDirectory("avt-images", registry);
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
