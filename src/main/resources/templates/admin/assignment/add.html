@@ -36,7 +36,7 @@
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a th:href="@{/admin/assignment}">Coding question</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/templates/admin/assignment}">Coding question</a></li>
                         <li class="breadcrumb-item active">Creating coding question</li>
                     </ol>
                 </div>
@@ -63,12 +63,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Time limit: <span class="text-danger">*</span>(Second)</p>
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Time limit/s: (Optional)</p>
                                             <input style="margin-bottom: unset" name="timeLimit" class="form-validate" placeholder="Time limit">
                                         </div>
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Memory limit: <span class="text-danger">*</span>(MB)</p>
-                                            <input style="margin-bottom: unset" name="memoryLimit" class="form-validate" placeholder="Memory limit">
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px" >Memory limit/KB: (Optional)</p>
+                                            <input style="margin-bottom: unset" name="memoryLimit" min="2048" class="form-validate" placeholder="Memory limit">
                                         </div>
                                     </div>
                                     <div class="row">

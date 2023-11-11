@@ -29,6 +29,8 @@ public class Submission {
     private UserEntity student;
 
     private String language;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String source_code;
     private Boolean is_success;
 
@@ -44,5 +46,10 @@ public class Submission {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assignment_kit_id")
+    @JsonIgnore
+    private AssignmentKit assignment_kit;
 
 }

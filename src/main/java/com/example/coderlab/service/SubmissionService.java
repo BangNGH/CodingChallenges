@@ -36,6 +36,10 @@ public class SubmissionService {
         submission.setAssignment(foundChallenge);
         List<Assessment> assessments = new ArrayList<>();
         int my_score = 0;
+        int totalScore = foundChallenge.getTestCases().stream()
+                .mapToInt(TestCase::getScore)
+                .sum();
+
         for (TestCaseListDTO testCaseListDTO :submission_sent_form_client.getTestCaseListDTOS()
              ) {
             Assessment assessment = new Assessment();
@@ -57,7 +61,8 @@ public class SubmissionService {
             }else assessment.setIspassed(false);
             assessments.add(assessment);
         }
-        if (my_score==100){
+
+        if (my_score==totalScore){
             submission.setIs_success(true);
         }else submission.setIs_success(false);
         submission.setAssessments(assessments);

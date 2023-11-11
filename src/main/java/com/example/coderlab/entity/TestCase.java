@@ -24,9 +24,11 @@ public class TestCase {
     private Assignment assignment;
 
     private String name; // Tên testcase
-
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String input; // Dữ liệu vào của test case
-
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String expectedOutput; // Kết quả mong đợi từ test case
 
     private int score; // Điểm số của test case

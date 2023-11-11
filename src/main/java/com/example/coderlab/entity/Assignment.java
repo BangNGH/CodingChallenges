@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,19 +29,24 @@ public class Assignment {
     private String title;
 
     @NotBlank(message = "Description is required")
-    @Column(length = 2000)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     //s
     private int timeLimit;
 
-    //MB
+    //KB
     private int memoryLimit;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")
     @JsonIgnore
     private UserEntity lecturer;
+
+    @ManyToMany(mappedBy = "assignments", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<AssignmentKit> assignmentKits;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore

@@ -26,6 +26,8 @@ public class Assessment {
 
     private double executionTime;
     private double memoryUsed;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String my_output;
     private Boolean ispassed;
 

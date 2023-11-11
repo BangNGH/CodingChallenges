@@ -26,7 +26,6 @@ import java.util.List;
 public class HomeController {
     private final RoleService roleService;
     private final AssignmentService assignmentService;
-    private final TestCaseService testCaseService;
     @GetMapping("/")
     public String home(){
         return "client/home/index";

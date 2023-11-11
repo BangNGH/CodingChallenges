@@ -2574,9 +2574,7 @@ p {
   }
 }
 .course__tag {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+
 }
 .course__tag a {
   display: inline-block;
@@ -3926,10 +3924,8 @@ p {
 .pre-tags {
   background-color: #f7f7f7;
   border-radius: 7px;
-  text-align: center;
   padding: 4px;
   color: black;
-  font-size:21px;
   margin: 10px 70px;
   font-weight: bold;
 }

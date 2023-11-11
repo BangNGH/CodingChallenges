@@ -43,11 +43,11 @@ $(document).ready(function(){
                 },
                 timeLimit:{
                     number: true,
-                    required: true,
+                    required: false,
                 },
                 memoryLimit: {
                     number: true,
-                    required: true,
+                    required: false,
                 }
             },
             messages: {
@@ -68,12 +68,10 @@ $(document).ready(function(){
                     required: "Test case name required"
                 },
                 timeLimit: {
-                    required: "Time limit required",
                     number: "Please enter a valid number for the time limit",
                 },
                 memoryLimit: {
-                    required: "Memory limit required",
-                    number: "Please enter a valid number for the memory limit",
+                    number: "Please enter a valid number for the memory limit and greater than 2048",
                 },
                 "TSName[]": {
                     required: "Question name required",
@@ -158,13 +156,13 @@ $(document).ready(function(){
     if(!isNaN(number_testcase)){
         nextedu = number_testcase;
     }
-    debugger
+
     $("#add-more").click(function (e) {
         e.preventDefault();
         var addto = "#field" + nextedu;
         var addRemove = "#field" + (nextedu);
         nextedu = nextedu + 1;
-        debugger
+
         var newIn = ' <div id="field' + nextedu + '">\n' +
             '                                            <div class="form-group row">\n' +
             '                                                <div class="col">\n' +
@@ -206,7 +204,7 @@ $(document).ready(function(){
             var fieldID = "#field" + fieldNum;
             $(this).remove();
             $(fieldID).remove();
-            debugger
+
         });
     });
 });

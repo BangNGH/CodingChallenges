@@ -31,6 +31,9 @@
     <link th:href="@{/admin_assets/vendor/toastr-master/toastr.css}" rel="stylesheet">
     <!--custom styles-->
     <link th:href="@{/admin_assets/css/main.css}" rel="stylesheet">
+
+    <!--multiple select-->
+    <link th:href="@{/admin_assets/vendor/multi-select/css/multi-select.css}" rel="stylesheet">
 </head>
 
 <body class="left-sidebar-fixed">
@@ -240,6 +243,12 @@
                         <a href="/admin/assignment" >
                             <i class=" icon-speech"></i>
                             <span>Coding question</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="/admin/assignment-kit" >
+                            <i class=" icon-speech"></i>
+                            <span>Question kit</span>
                         </a>
                     </li>
 
@@ -615,8 +624,16 @@
 <!--validation-->
 <script type="text/javascript" th:src="@{/admin_assets/js/validate.js}"></script>
 <script type="text/javascript" th:src="@{/admin_assets/js/additional-methods.js}"></script>
+
+<!--multiple select-->
+<script th:src="@{/admin_assets/vendor/multi-select/js/jquery.multi-select.js}"></script>
+<script th:src="@{/admin_assets/vendor/multi-select/js/jquery.quicksearch.js}"></script>
+<!--init multiple select-->
+<script th:src="@{/admin_assets/vendor/js-init/init-multiple-select.js}"></script>
+
 <!--basic scripts initialization-->
 <script th:src="@{/admin_assets/js/scripts.js}"></script>
+
 
 </body>
 </html>

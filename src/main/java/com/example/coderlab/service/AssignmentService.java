@@ -28,10 +28,13 @@ public class AssignmentService {
     public List<Assignment> getAllAssignments(){
         return assignmentRepository.findAll();
     }
+    public void save(Assignment assignment){
+        assignmentRepository.save(assignment);
+    }
     public Assignment getAssignmentById(Long id){
         return assignmentRepository.findById(id).orElseThrow();
     }
-    public void addAssignment(String title, String description, int timeLimit, int memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples) {
+    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         UserEntity user = userServices.findByEmail(email).orElseThrow();
@@ -39,8 +42,12 @@ public class AssignmentService {
         Assignment assignment = new Assignment();
         assignment.setTitle(title);
         assignment.setDescription(description);
-        assignment.setTimeLimit(timeLimit);
-        assignment.setMemoryLimit(memoryLimit);
+        if (timeLimit!=null) {
+            assignment.setTimeLimit(timeLimit);
+        }else assignment.setTimeLimit(0);
+        if (memoryLimit!=null) {
+            assignment.setMemoryLimit(memoryLimit);
+        }else assignment.setMemoryLimit(0);
         assignment.setLecturer(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
 

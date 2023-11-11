@@ -13,15 +13,30 @@
    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/night.css}">
    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+   <link rel="stylesheet" th:href="@{/admin_assets/vendor/markdown/simplemde.min.css}">
    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
    <style>
-      /* CSS */
-      .col {
+     @keyframes slide {
+        0% {
+           transform: translateY(0);
+        }
+        50% {
+           transform: translateY(-10px);
+        }
+        100% {
+           transform: translateY(0);
+        }
+     }
+
+     #loadingText {
+        animation: slide 1.5s infinite;
+     }
+
+     .col {
          display: flex;
          flex-direction: column;
       }
@@ -35,20 +50,19 @@
 
       .course__description,
       .col {
-         flex: 1;
          padding: 20px;
-         height: 100vh;
          overflow: auto;
          box-sizing: border-box;
+         box-shadow: 0 6px 16px 0 rgba(0,0,0,.2);
       }
       .course__description {
-         background-color: #fcfcfc; /* Màu nền cho challenge_description */
+         background-color: #fcfcfc;
          border-radius: 10px;
-
+         margin-bottom: 60px;
       }
 
       .col {
-         background-color: #fcfcfc; /* Màu nền cho challenge_description */
+         background-color: #fcfcfc;
          border-radius: 10px;
 
       }
@@ -136,13 +150,15 @@
                            <input type="hidden" id="testCases" th:data-test-cases="${test_cases_json}">
                            <input type="hidden" id="allTestCase" th:data-test-cases="${all_test_cases_json}">
                            <input type="hidden" id="assignment_id" th:value="${challenge.id}" th:data-assignment_id="${challenge.id}">
-                           <div class="d-flex">
-                             <div class="course__description">
+                           <input type="hidden" id="assignment_time_limit" th:value="${challenge.timeLimit}">
+                           <input type="hidden" id="assignment_memory_limit" th:value="${challenge.memoryLimit}">
+
+                           <div class="course__description">
                               <h3>Mô tả yêu cầu</h3>
                                 <p th:utext="${challenge.description}"></p>
                              </div>
                             <div class="col">
-                              <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
+                              <div style="background-color: #f3f7f7" class="d-flex justify-content-between mb-2 rounded p-2">
                                  <div>
                                     <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
                                     <select style="cursor: pointer;" class="form-select" id="inlineFormSelectPref">
@@ -163,7 +179,7 @@
 
                                     </select>
                                  </div>
-                                 <button style="margin-left: 20px;cursor: pointer;background-color: initial;color: white" type="button" id="run" class="btn btn-success">Run
+                                 <button style="margin-left: 20px;cursor: pointer;background-color: #f3f7f7;color: black" type="button" id="run" class="btn btn-success">Run
                                     <i style="margin-left: 10px; font-size: 17px;" class="bx bx-play"></i></button>
                                  <button style="cursor: pointer;background-color: #00751f" type="button" id="submit" class="btn btn-success">Submit<i
                                          style="margin-left: 10px; font-size: 17px;" class="bi bi-play-fill"></i></button>
@@ -172,17 +188,19 @@
                                  <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
                               </div>
                            </div>
-                          </div>
+
                            <section id="excuting" style="display: none" class="events__area pt-115 pb-120 p-relative">
-                           <div class="container">
-                              <div class="row">
-                                 <div class="col-xxl-4 offset-xxl-4">
-                                    <div class="section__title-wrapper mb-60 text-center">
-                                       <h2 class="section__title">Đang <span class="yellow-bg yellow-bg-big"> thực thi...<img src="client_assets/img/shape/yellow-bg.png" alt=""></span></h2>
+                              <div class="container">
+                                 <div class="row">
+                                    <div class="col-xxl-4 offset-xxl-4">
+                                       <div class="section__title-wrapper mb-60 text-center">
+                                          <h2 class="section__title" id="loadingText">
+                                             <span style="color: #002795" class="yellow-bg yellow-bg-big"> đang thực thi...</span>
+                                          </h2>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
-                           </div>
                            </section>
                            <!-- events area start -->
                            <section id="result" style="display: none" class="events__area pt-115 pb-120 p-relative">
@@ -560,7 +578,7 @@
          autoCloseBrackets: true,
       })
       var width = window.innerWidth
-      editor.setSize("initial", "100vh")
+      editor.setSize("initial", "")
       var option;
       var langague_name;
       $("#inlineFormSelectPref").ddslick({
