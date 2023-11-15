@@ -27,7 +27,7 @@ public class SubmissionService {
        return this.submissionRepository.findById(submissionId);
     }
 
-    public void saveSubmissions(SubmissionInfoSendDTO submission_sent_form_client, UserEntity current_user) {
+    public Long saveSubmissions(SubmissionInfoSendDTO submission_sent_form_client, UserEntity current_user) {
         Assignment foundChallenge = assignmentService.getAssignmentById(submission_sent_form_client.getAssignment_id());
         Submission submission = new Submission();
         submission.setLanguage(submission_sent_form_client.getLanguage());
@@ -72,6 +72,6 @@ public class SubmissionService {
             assessment.setSubmission(savedSubmission);
             assesmentService.save(assessment);
         }
-
+        return submission.getId();
     }
 }

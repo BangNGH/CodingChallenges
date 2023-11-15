@@ -39,10 +39,6 @@ public class AssignmentKit {
     @JsonIgnore
     private UserEntity user_added;
 
-    @OneToMany(mappedBy = "assignment_kit", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Submission> submissions;
-
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "assignment_kit_assignments",
@@ -50,4 +46,7 @@ public class AssignmentKit {
             inverseJoinColumns = @JoinColumn(name = "assignment_id"))
     private Set<Assignment> assignments;
 
+    @OneToMany(mappedBy = "assignment_kit", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<AssignmentKitSubmission> assignmentKitSubmissions;
 }

@@ -75,7 +75,7 @@
                                              <span><i class="far fa-book-alt"></i>43 minutes</span>
                                           </div>
                                           <div class="course__rating">
-                                             <span th:text="${assignment_kit.getSubmissions().size()}+' join'"></span>
+                                             <span th:text="${assignment_kit.getAssignmentKitSubmissions().size()}+' join'"></span>
                                           </div>
                                        </div>
                                        <h3 style="margin-bottom: 0px" class="course__title"><a th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" th:text="${assignment_kit.title}"></a></h3>

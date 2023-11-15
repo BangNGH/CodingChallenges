@@ -39,6 +39,7 @@ public class SecurityConfig{
                         .requestMatchers("/api/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/submissions/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/submissions/**").permitAll()
                         .anyRequest().authenticated()
                 ).logout(logout -> logout
                         .logoutUrl("/logout")

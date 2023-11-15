@@ -38,14 +38,19 @@
                               <p><a href="#">Take the HackerRank Certification Test and showcase your knowledge as a HackerRank verified developer.</a></p>
                            </div>
                         </div>
-
-                     </div>
-                     <div class="course__img w-img mb-30">
-                        <img th:src="@{client_assets/img/course/details/course-details-1.jpg}" alt="">
                      </div>
                      <div class="course__tab-content mb-95">
                         <div class="tab-content" id="courseTabContent">
                            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                              <div class="course__description-list mb-45">
+                                 <h4>Instructions</h4>
+                                 <ol>
+                                    <li>1. This is a timed test. Please make sure you are not interrupted during the test, as the timer cannot be paused once started.</li>
+                                    <li>2. Please ensure you have a stable internet connection.</li>
+                                    <li>3. We recommend you to try the sample test for a couple of minutes, before taking the main test.</li>
+                                    <li>4. Before taking the test, please go through the FAQs to resolve your queries related to the test or the HackerRank platform.</li>
+                                 </ol>
+                              </div>
                               <div class="course__description-list mb-45">
                                  <h4>Skill over pedigree</h4>
                                  <ul>
@@ -140,7 +145,7 @@
                               </ul>
                            </div>
                            <div class="course__enroll-btn">
-                              <a href="contact.html" class="e-btn e-btn-7 w-100">Take the test <i class="far fa-arrow-right"></i></a>
+                              <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Take the test <i class="far fa-arrow-right"></i></a>
                            </div>
                         </div>
                      </div>

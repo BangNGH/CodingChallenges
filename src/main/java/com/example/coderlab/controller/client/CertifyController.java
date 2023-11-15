@@ -38,5 +38,17 @@ public class CertifyController {
         return "redirect:/skills-verification";
 
     }
+    @GetMapping("/test/{id}")
+    public String test(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+        Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
+        if (found_kit_by_id.isPresent()) {
+            model.addAttribute("assignment_kit", found_kit_by_id.get());
+
+            return "client/certify/certify";
+        }
+        redirectAttributes.addFlashAttribute("message", "Not found certify with ID: " + id);
+        return "redirect:/skills-verification";
+
+    }
 
 }
