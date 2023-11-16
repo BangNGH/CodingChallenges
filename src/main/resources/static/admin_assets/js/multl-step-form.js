@@ -177,11 +177,11 @@ $(document).ready(function(){
             '                                            <div class="form-group row">\n' +
             '                                                <div class="col">\n' +
             '                                                    <label>Input:<span class="text-danger">*</span></label>\n' +
-            '                                                    <textarea style="margin-bottom: unset; height: 140px" name="TSInput[]" class="form-validate">Input...</textarea>\n' +
+            '                                                    <textarea style="margin-bottom: unset; height: 140px" name="TSInput[]" class="form-validate" placeholder="Input..."></textarea>\n' +
             '                                                </div>\n' +
             '                                                <div class="col">\n' +
             '                                                    <label>Ouput:<span class="text-danger">*</span></label>\n' +
-            '                                                    <textarea style="margin-bottom: unset; height: 140px" name="TSOutput[]" class="form-validate">Output...</textarea>\n' +
+            '                                                    <textarea style="margin-bottom: unset; height: 140px" name="TSOutput[]" class="form-validate" placeholder="Output..."></textarea>\n' +
             '                                                </div>\n' +
             '                                            </div>\n' +
             '                                            <div class="form-group">\n' +

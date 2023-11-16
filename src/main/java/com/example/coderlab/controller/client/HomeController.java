@@ -56,18 +56,18 @@ public class HomeController {
         roleService.addRole();
         return "sign-in";
     }
-    @GetMapping("/practice/{challengeID}")
-    public String practice(@PathVariable("challengeID")Long challengeID, Model model) throws JsonProcessingException {
-        Assignment foundChallenge = assignmentService.getAssignmentById(challengeID);
-        List<TestCase> sampleTestCase = foundChallenge.getTestCases().stream().filter(testCase -> testCase.isMarkSampleTestCase() == true).toList();
-        model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
-        model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));
-        model.addAttribute("challenge", foundChallenge);
-
-        List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
-        model.addAttribute("comments", comments);
-        return "client/practice/practice";
-    }
+//    @GetMapping("/practice/{challengeID}")
+//    public String practice(@PathVariable("challengeID")Long challengeID, Model model) throws JsonProcessingException {
+//        Assignment foundChallenge = assignmentService.getAssignmentById(challengeID);
+//        List<TestCase> sampleTestCase = foundChallenge.getTestCases().stream().filter(testCase -> testCase.isMarkSampleTestCase() == true).toList();
+//        model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
+//        model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));
+//        model.addAttribute("challenge", foundChallenge);
+//
+//        List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
+//        model.addAttribute("comments", comments);
+//        return "client/practice/practice";
+//    }
     @GetMapping("/company-register")
     public String companyRegistrationForm(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest("COMPANY", "", "", ""));

@@ -44,6 +44,11 @@ public class Assignment {
     @JsonIgnore
     private UserEntity lecturer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "level_id")
+    @JsonIgnore
+    private Level level;
+
     @ManyToMany(mappedBy = "assignments", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AssignmentKit> assignmentKits;

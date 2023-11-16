@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/client_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solve Algorithms | Coder'sLab</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- page title area start -->
+    <section class="page__title-area page__title-height page__title-overlay d-flex align-items-center" th:attr="data-background=@{/client_assets/img/background.png}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="page__title-wrapper mt-110">
+                        <h3 class="page__title">Problem Solving</h3>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Problem Solving</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- page title area end -->
+
+    <!-- course area start -->
+    <section class="course__area pt-120 pb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                    <div class="course__tab-conent">
+                        <div class="tab-content" id="courseTabContent">
+                            <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+                                <div class="row">
+                                    <div th:each="assignment : ${assignments}" class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="course__thumb w-img p-relative fix">
+                                                <a th:href="@{problemSolving/{id}(id=${assignment.id})}">
+<!--                                                    <img th:src="@{/client_assets/img/course/course-1.jpg}" alt="">-->
+                                                </a>
+                                                <div class="course__tag">
+                                                    <a class="yellow" href="#">Algorithm</a>
+                                                </div>
+                                            </div>
+                                            <div class="course__content">
+                                                <div class="course__meta d-flex align-items-center justify-content-between">
+                                                    <div class="course__lesson">
+                                                        <span><i class="far fa-book-alt"></i>43 Lesson</span>
+                                                    </div>
+                                                    <div class="course__rating">
+                                                        <span><i class="icon_star"></i>4.5 (44)</span>
+                                                    </div>
+                                                </div>
+                                                <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.title}"></a></h3>
+                                                <div class="course__teacher d-flex align-items-center">
+                                                    <div class="course__teacher-thumb mr-15">
+                                                        <img th:if="${assignment.getLecturer().avatarUrl == null}" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                                        <img th:if="${assignment.getLecturer().avatarUrl != null}" th:src="@{${assignment.getLecturer().getImagesPath()}}" alt="">
+                                                    </div>
+                                                    <h6><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.getLecturer().getFullName()}"></a></h6>
+                                                </div>
+                                            </div>
+                                            <div class="course__more d-flex justify-content-between align-items-center">
+                                                <div th:if="${assignment.level.id != null}" class="course__status">
+                                                    <span class="green" th:if="${assignment.level.id == 1}" th:text="${assignment.level.name}"></span>
+                                                    <span class="blue" th:if="${assignment.level.id == 2}" th:text="${assignment.level.name}"></span>
+                                                    <span class="blue-2" th:if="${assignment.level.id == 3}" th:text="${assignment.level.name}"></span>
+
+                                                </div>
+                                                <div class="course__btn">
+                                                    <a th:href="@{problemSolving/{id}(id=${assignment.id})}" class="link-btn">
+                                                        Solve Challenge
+                                                        <i class="far fa-arrow-right"></i>
+                                                        <i class="far fa-arrow-right"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                                <div class="row">
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-1.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>43 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>4.5 (44)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">Become a product Manager learn the skills & job.</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-1.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Jim Séchen</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status">
+                                                                <span>Free</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-2.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#" class="sky-blue">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>72 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>4.5 (44)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">Fundamentals of music theory Learn new.</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-2.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Barry Tone</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status d-flex align-items-center">
+                                                                <span class="sky-blue">$32.00</span>
+                                                                <span class="old-price">$68.00</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-3.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#" class="blue-2">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>14 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>3.5 (32)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">Strategy law and organization Foundation</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-3.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Elon Gated</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status d-flex align-items-center">
+                                                                <span class="blue-2">$46.00</span>
+                                                                <span class="old-price">$68.00</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-4.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#" class="green">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>14 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>3.5 (32)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">The business Intelligence analyst Course 2022</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-4.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Eleanor Fant</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status d-flex align-items-center">
+                                                                <span class="green">$46.00</span>
+                                                                <span class="old-price">$68.00</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-5.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#" class="blue">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>14 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>3.5 (32)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">Build your media and Public presence</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-5.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Pelican Steve</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status d-flex align-items-center">
+                                                                <span class="blue">$62.00</span>
+                                                                <span class="old-price">$97.00</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-12">
+                                        <div class="course__item white-bg mb-30 fix">
+                                            <div class="row gx-0">
+                                                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                                                    <div class="course__thumb course__thumb-list w-img p-relative fix">
+                                                        <a href="course-details.html">
+                                                            <img src="client_assets/img/course/list/course-6.jpg" alt="">
+                                                        </a>
+                                                        <div class="course__tag">
+                                                            <a href="#" class="yellow">Art & Design</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                                                    <div class="course__right">
+                                                        <div class="course__content course__content-4">
+                                                            <div class="course__meta d-flex align-items-center">
+                                                                <div class="course__lesson mr-20">
+                                                                    <span><i class="far fa-book-alt"></i>33 Lesson</span>
+                                                                </div>
+                                                                <div class="course__rating">
+                                                                    <span><i class="icon_star"></i>3.5 (72)</span>
+                                                                </div>
+                                                            </div>
+                                                            <h3 class="course__title">
+                                                                <a href="course-details.html">Creative writing through Storytelling</a>
+                                                            </h3>
+                                                            <div class="course__teacher d-flex align-items-center">
+                                                                <div class="course__teacher-thumb mr-15">
+                                                                    <img src="client_assets/img/course/teacher/teacher-6.jpg" alt="">
+                                                                </div>
+                                                                <h6><a href="instructor-details.html">Elon Gated</a></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="course__more course__more-2 course__more-3 d-flex justify-content-between align-items-center">
+                                                            <div class="course__status d-flex align-items-center">
+                                                                <span class="yellow">$62.00</span>
+                                                                <span class="old-price">$97.00</span>
+                                                            </div>
+                                                            <div class="course__btn">
+                                                                <a href="course-details.html" class="link-btn">
+                                                                    Know Details
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                    <i class="far fa-arrow-right"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${totalPages > 1}" class="row">
+                            <div class="col-xxl-12">
+                                <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
+                                    <ul class="d-flex align-items-center">
+                                        <li class="prev">
+                                            <a th:if="${currentPage > 1}"
+                                               th:href="@{'/problemSolving/page/' + ${currentPage - 1}}" class="link-btn link-prev">
+                                                Prev
+                                                <i class="arrow_left"></i>
+                                                <i class="arrow_left"></i>
+                                            </a>
+                                        </li>
+<!--                                        <li class="active">-->
+<!--                                            <a href="course-grid.html">-->
+<!--                                                <span>2</span>-->
+<!--                                            </a>-->
+<!--                                        </li>-->
+                                        <li th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                            <a th:if="${currentPage != i}"
+                                               th:href="@{'/problemSolving/page/' + ${i}}">[[${i}]]</a>
+                                            <span th:unless="${currentPage != i}"><a style=" color: #ffffff;background: #2b4eff; border-color: #2b4eff;">[[${i}]]</a></span>
+                                        </li>
+                                        <li class="next">
+                                            <a th:if="${currentPage < totalPages}"
+                                               th:href="@{'/problemSolving/page/' + ${currentPage + 1}}" class="link-btn">
+                                                Next
+                                                <i class="arrow_right"></i>
+                                                <i class="arrow_right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                    <div class="course__sidebar pl-70">
+                        <div class="course__sidebar-search mb-50">
+                            <form action="#">
+                                <input type="text" placeholder="Search for courses...">
+                                <button type="submit">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 584.4 584.4" style="enable-background:new 0 0 584.4 584.4;" xml:space="preserve">
+                                    <g>
+                                       <g>
+                                          <path class="st0" d="M565.7,474.9l-61.1-61.1c-3.8-3.8-8.8-5.9-13.9-5.9c-6.3,0-12.1,3-15.9,8.3c-16.3,22.4-36,42.1-58.4,58.4    c-4.8,3.5-7.8,8.8-8.3,14.5c-0.4,5.6,1.7,11.3,5.8,15.4l61.1,61.1c12.1,12.1,28.2,18.8,45.4,18.8c17.1,0,33.3-6.7,45.4-18.8    C590.7,540.6,590.7,499.9,565.7,474.9z"/>
+                                           <path class="st1" d="M254.6,509.1c140.4,0,254.5-114.2,254.5-254.5C509.1,114.2,394.9,0,254.6,0C114.2,0,0,114.2,0,254.5    C0,394.9,114.2,509.1,254.6,509.1z M254.6,76.4c98.2,0,178.1,79.9,178.1,178.1s-79.9,178.1-178.1,178.1S76.4,352.8,76.4,254.5    S156.3,76.4,254.6,76.4z"/>
+                                       </g>
+                                    </g>
+                                 </svg>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="course__sidebar-widget grey-bg">
+                            <div class="course__sidebar-info">
+                                <h3 class="course__sidebar-title">Categories</h3>
+                                <ul>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-eng">
+                                            <label class="m-check-label" for="m-eng">English  (6)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-edu">
+                                            <label class="m-check-label" for="m-edu">Education  (8)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-bus">
+                                            <label class="m-check-label" for="m-bus">Business  (5)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-design">
+                                            <label class="m-check-label" for="m-design">UX Design  (3)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-math">
+                                            <label class="m-check-label" for="m-math">Mathematics  (3)</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="course__sidebar-widget grey-bg">
+                            <div class="course__sidebar-info">
+                                <h3 class="course__sidebar-title">Language</h3>
+                                <ul>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-all">
+                                            <label class="m-check-label" for="m-all">All Language</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-eng-2">
+                                            <label class="m-check-label" for="m-eng-2">English</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-russ">
+                                            <label class="m-check-label" for="m-russ">Russian</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="course__sidebar-widget grey-bg">
+                            <div class="course__sidebar-info">
+                                <h3 class="course__sidebar-title">Price Filter</h3>
+                                <ul>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-all-course">
+                                            <label class="m-check-label" for="m-all-course">All  (204)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-free">
+                                            <label class="m-check-label" for="m-free">Free Courses  (36)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-premium">
+                                            <label class="m-check-label" for="m-premium">Premium Courses  (184)</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="course__sidebar-widget grey-bg">
+                            <div class="course__sidebar-info">
+                                <h3 class="course__sidebar-title">Skill level</h3>
+                                <ul>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-level">
+                                            <label class="m-check-label" for="m-level">All Levels  (50)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-beginner">
+                                            <label class="m-check-label" for="m-beginner">Beginner  (32)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-intermediate">
+                                            <label class="m-check-label" for="m-intermediate">Intermediate  (17)</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="m-expert">
+                                            <label class="m-check-label" for="m-expert">Expert  (2)</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- course area end -->
+
+    <!-- cta area start -->
+    <section class="cta__area mb--120">
+        <div class="container">
+            <div class="cta__inner blue-bg fix">
+                <div class="cta__shape">
+                    <img th:src="@{/client_assets/img/cta/cta-shape.png}" alt="">
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-xxl-7 col-xl-7 col-lg-8 col-md-8">
+                        <div class="cta__content">
+                            <h3 class="cta__title">You can be your own Guiding star with our help</h3>
+                        </div>
+                    </div>
+                    <div class="col-xxl-5 col-xl-5 col-lg-4 col-md-4">
+                        <div class="cta__more d-md-flex justify-content-end p-relative z-index-1">
+                            <a href="#" class="e-btn e-btn-white">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- cta area end -->
+</div>
+</body>
+</html>

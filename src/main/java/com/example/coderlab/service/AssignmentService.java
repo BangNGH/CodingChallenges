@@ -7,6 +7,9 @@ import com.example.coderlab.repository.AssignmentRepository;
 import com.example.coderlab.utils.FileUploadUtil;
 import org.codehaus.groovy.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class AssignmentService {
     @Autowired
     private TestCaseService testCaseService;
     @Autowired
+    private LevelService levelService;
+    @Autowired
     private UserServices userServices;
     public List<Assignment> getAllAssignments(){
         return assignmentRepository.findAll();
@@ -34,7 +39,7 @@ public class AssignmentService {
     public Assignment getAssignmentById(Long id){
         return assignmentRepository.findById(id).orElseThrow();
     }
-    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples) {
+    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples, Long level) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         UserEntity user = userServices.findByEmail(email).orElseThrow();
@@ -42,6 +47,7 @@ public class AssignmentService {
         Assignment assignment = new Assignment();
         assignment.setTitle(title);
         assignment.setDescription(description);
+        assignment.setLevel(levelService.getLevelById(level));
         if (timeLimit!=null) {
             assignment.setTimeLimit(timeLimit);
         }else assignment.setTimeLimit(0);
@@ -72,6 +78,7 @@ public class AssignmentService {
         existingAssignment.setDescription(description);
         existingAssignment.setMemoryLimit(assignment.getMemoryLimit());
         existingAssignment.setTimeLimit(assignment.getTimeLimit());
+        existingAssignment.setLevel(assignment.getLevel());
         assignmentRepository.save(existingAssignment);
 
         testCaseService.deleteAllTestCase(existingAssignment.getId());
@@ -92,5 +99,9 @@ public class AssignmentService {
     }
     public void deleteAssignmentById(Long id){
         assignmentRepository.deleteById(id);
+    }
+    public Page<Assignment> findPaginated(int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.assignmentRepository.findAll(pageable);
     }
 }

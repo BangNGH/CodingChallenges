@@ -4,7 +4,7 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Creating coding question</title>
+    <title>Coding Question | Coder'sLab</title>
     <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">-->
@@ -61,7 +61,7 @@
                                     <div style="margin-bottom: 25px">
                                         <input required class="form-validate" name="title" id="title" style="font-family: 'Montserrat'; margin-bottom: unset" type="text" placeholder="Sample question name"/>
                                     </div>
-                                    <div class="row">
+                                    <div style="margin-bottom: 25px" class="row">
                                         <div class="col">
                                             <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Time limit/s: (Optional)</p>
                                             <input style="margin-bottom: unset" name="timeLimit" class="form-validate" placeholder="Time limit">
@@ -69,6 +69,15 @@
                                         <div class="col">
                                             <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px" >Memory limit/KB: (Optional)</p>
                                             <input style="margin-bottom: unset" name="memoryLimit" min="2048" class="form-validate" placeholder="Memory limit">
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 25px" class="row">
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Difficulty</p>
+                                            <select style="height: 45px; cursor: pointer; font-size: 15px" class="form-control select2" name="level">
+                                                <option th:each="level: ${levels}" th:value="${level.id}"
+                                                        th:text="${level.name}"></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -110,11 +119,11 @@
                                             <div class="form-group row">
                                                 <div class="col">
                                                     <label>Input:<span class="text-danger">*</span></label>
-                                                    <textarea id="input" style="margin-bottom: unset; height: 140px" name="TSInput[]" class="form-validate">Input...</textarea>
+                                                    <textarea id="input" style="margin-bottom: unset; height: 140px" name="TSInput[]" class="form-validate" placeholder="Input..."></textarea>
                                                 </div>
                                                 <div class="col">
                                                     <label>Ouput:<span class="text-danger">*</span></label>
-                                                    <textarea id="output" style="margin-bottom: unset; height: 140px" name="TSOutput[]" class="form-validate">Output...</textarea>
+                                                    <textarea id="output" style="margin-bottom: unset; height: 140px" name="TSOutput[]" class="form-validate" placeholder="Output..."></textarea>
                                                 </div>
                                             </div>
                                             <div style="margin-bottom: unset" class="form-group">

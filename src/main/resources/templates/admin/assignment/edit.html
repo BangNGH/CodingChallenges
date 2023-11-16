@@ -62,7 +62,7 @@
                   <div style="margin-bottom: 25px">
                     <input th:field="*{title}" class="form-validate" name="title" id="title" style="font-family: 'Montserrat'; margin-bottom: unset" type="text"/>
                   </div>
-                  <div class="row">
+                  <div style="margin-bottom: 25px" class="row">
                     <div class="col">
                       <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Time limit: <span class="text-danger">*</span>(Second)</p>
                       <input th:field="*{timeLimit}" style="margin-bottom: unset" name="timeLimit" class="form-validate">
@@ -70,6 +70,16 @@
                     <div class="col">
                       <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Memory limit: <span class="text-danger">*</span>(MB)</p>
                       <input th:field="*{memoryLimit}" style="margin-bottom: unset" name="memoryLimit" class="form-validate">
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 25px" class="row">
+                    <div class="col">
+                      <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Difficulty</p>
+                      <select style="height: 45px; cursor: pointer; font-size: 15px" class="form-control select2" name="level">
+                        <option th:each="level: ${levels}" th:value="${level.id}"
+                                th:text="${level.name}"
+                                th:selected="${level.id == assignment.level.id}"></option>
+                      </select>
                     </div>
                   </div>
                   <div class="row">
