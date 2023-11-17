@@ -1,23 +1,15 @@
 package com.example.coderlab.controller.client;
 
-import com.example.coderlab.entity.Assignment;
-import com.example.coderlab.entity.Comment;
-import com.example.coderlab.entity.TestCase;
-import com.example.coderlab.entity.UserEntity;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import com.example.coderlab.utils.SubmissionInfoSendDTO;
+import com.example.coderlab.utils.SubmissionKitInfoSendDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -25,6 +17,9 @@ import java.util.UUID;
 public class AssignmentRestController {
     @Autowired
     private SubmissionService submissionService;
+
+    @Autowired
+    private AssignmentKitSubmissionService submissionKitService;
 
     @Autowired
     private AssignmentService assignmentService;
@@ -48,13 +43,17 @@ public class AssignmentRestController {
     }
 
     @PostMapping("/end-contest")
-    public ResponseEntity<String> endContest(@RequestBody List<Long> submissionIds) {
+    public String endContest(@RequestBody SubmissionKitInfoSendDTO submissions_id, Principal principal) {
         try {
-
-
-            return ResponseEntity.ok("Submissions added successfully.");
+            String email = principal.getName();
+            UserEntity current_user = userServices.findByEmail(email).get();
+           Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
+            if (status){
+                return "passed";
+            }
+            return "failed";
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error when adding submissions: " + e.getMessage());
+            return "Error " + e.getMessage();
         }
     }
 

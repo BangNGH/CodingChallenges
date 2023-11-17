@@ -80,18 +80,13 @@
 <div layout:fragment="content">
     <!-- page title area start -->
     <section class="page__title-area pt-120 pb-90">
-        <div class="page__title-shape">
-            <img class="page-title-shape-5 d-none d-sm-block" src="client_assets/img/page-title/page-title-shape-1.png"
-                 alt="">
-            <img class="page-title-shape-6" src="client_assets/img/page-title/page-title-shape-6.png" alt="">
-            <img class="page-title-shape-7" src="client_assets/img/page-title/page-title-shape-4.png" alt="">
-        </div>
         <div class="container">
             <div class="row">
                 <div>
                     <div class="course__wrapper">
                         <div class="course__tab-content mb-95">
                             <input type="hidden" id="number_of_assignments" th:value="${assignment_kit.getAssignments().size()}">
+                            <input type="hidden" id="assignment_kit_id" th:value="${assignment_kit.getId()}">
 
 
                             <div class="tab-content" id="courseTabContent">
@@ -265,6 +260,11 @@
             }
         });
         function changeTab(element) {
+            var currentTab = document.querySelector('.nav-item.activebutton');
+            var nextTab = currentTab.nextElementSibling;
+            nextTab.classList.add("activebutton");
+            currentTab.classList.remove("activebutton");
+
             if (editor.getValue()!="#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
                 if (confirm('Next tab without saving?')) {
                     editor.setOption("mode", "text/x-c++src")

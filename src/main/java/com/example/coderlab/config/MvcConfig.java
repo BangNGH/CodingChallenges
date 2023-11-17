@@ -11,6 +11,10 @@ import java.nio.file.Paths;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        Path certifyUploadDir = Paths.get("./certify-images");
+        String certifyUploadPath1 = certifyUploadDir.toFile().getAbsolutePath();
+        registry.addResourceHandler("/certify-images/**").addResourceLocations("file:/"+certifyUploadPath1+"/");
+
         exposeDirectory("avt-images", registry);
     }
 
@@ -20,4 +24,5 @@ public class MvcConfig implements WebMvcConfigurer {
         if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
         registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
     }
+
 }

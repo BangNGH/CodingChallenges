@@ -29,7 +29,7 @@ public class SecurityConfig{
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/client_assets/images/**","client_assets/shop_assets/**"
+                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**","/client_assets/img/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/"
                         ,"/webjars/jquery/3.6.4/jquery.min.js", "/assignment-images/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
