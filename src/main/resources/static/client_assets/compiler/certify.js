@@ -7,6 +7,7 @@ const excuting = document.getElementById('excuting');
 const assignment_id = document.getElementById('hidden_input');
 const assignment_kit_idElement = document.getElementById('assignment_kit_id');
 const number_of_assignments = document.getElementById('number_of_assignments');
+const user_id = document.getElementById('user_id');
 let check = 0;
 const submissionValues = [];
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -1042,9 +1043,11 @@ submit.addEventListener("click", async function () {
                                     const result = await response.text();
                                     console.log("Submission_Kit Status: " + (result));
                                     if (result== "passed"){
-
+                                        const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
+                                        window.location.href = url;
                                     }else if (result=="failed"){
-
+                                        const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
+                                        window.location.href = url;
                                     }else{
 
                                     }

@@ -42,20 +42,21 @@ public class AssignmentKitSubmissionService {
                  ) {
                 Submission found_submission = submissionService.getSubmission(Long.parseLong(submission_id)).get();
                 submissions.add(found_submission);
-                System.out.println("ID Sub = " + found_submission.getId()+ " Is_passed = " + found_submission.getIs_success());
                 if (found_submission.getIs_success()==false){
                     is_passed= false;
                 }
             }
             assignmentKitSubmission.setIs_success(is_passed);
+            assignmentKitSubmission.setUser_submited(current_user);
             assignmentKitSubmission.setSubmissions(submissions);
             assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
             assignmentKitSubmissionRepo.save(assignmentKitSubmission);
         }
         if (is_passed) {
+            //absolute path to \client_assets\img\certificate.png"
             String templatePath = "D:\\Hutech\\DACN\\project\\src\\main\\resources\\static\\client_assets\\img\\certificate.png";
             // /certify-images/{user_id}/assignment_id/certify-images.png
-            String outputPath = "./certify-images/" + current_user.getId() + "/certify-image.png";
+            String outputPath = "./certify-images/" + current_user.getId()+ "/certify_"+found_assignment_kit.get().getId()+".png";
             generateCertificate(current_user.getFullName(), found_assignment_kit.get().getTitle(),templatePath, current_user, outputPath);
         }
         return is_passed;
@@ -106,5 +107,10 @@ public class AssignmentKitSubmissionService {
             Files.createDirectories(uploadPath);
         }
         ImageIO.write(image, "png", new File(outputPath));
+    }
+
+    public List<AssignmentKitSubmission> getByAssignmentKit_User_Id(AssignmentKit assignmentKit, UserEntity currentUser) {
+        List<AssignmentKitSubmission> foundAssignmentKitSubmission = assignmentKitSubmissionRepo.getByAssignmentKit_User_Id(assignmentKit.getId(), currentUser.getId());
+        return foundAssignmentKitSubmission;
     }
 }

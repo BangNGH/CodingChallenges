@@ -11,11 +11,6 @@
 
       <!-- page title area start -->
       <section class="page__title-area pt-120 pb-90">
-         <div class="page__title-shape">
-            <img class="page-title-shape-5 d-none d-sm-block" th:src="@{client_assets/img/page-title/page-title-shape-1.png}" alt="">
-            <img class="page-title-shape-6" th:src="@{client_assets/img/page-title/page-title-shape-6.png}" alt="">
-            <img class="page-title-shape-7" th:src="@{client_assets/img/page-title/page-title-shape-4.png}" alt="">
-         </div>
          <div class="container">
             <div class="row">
                <div class="col-xxl-8 col-xl-8 col-lg-8">
@@ -39,8 +34,8 @@
                            </div>
                         </div>
                      </div>
-                     <div class="course__img w-img mb-30">
-                        <img th:src="@{/client_assets/img/course/details/course-details-1.jpg}" alt="">
+                     <div th:if="${already_tested}" class="course__img w-img mb-30">
+                        <img th:if="${is_passed}" th:src="@{'/certify-images/' + ${#authentication.principal.getID()} + '/certify_' + ${assignment_kit.id} + '.png'}" alt="">
                      </div>
                      <div class="course__tab-content mb-95">
                         <div class="tab-content" id="courseTabContent">
@@ -90,17 +85,6 @@
                               <ul>
                                  <li class="d-flex align-items-center">
                                     <div class="course__video-icon">
-                                       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
-                                             <path class="st0" d="M2,6l6-4.7L14,6v7.3c0,0.7-0.6,1.3-1.3,1.3H3.3c-0.7,0-1.3-0.6-1.3-1.3V6z"/>
-                                          <polyline class="st0" points="6,14.7 6,8 10,8 10,14.7 "/>
-                                          </svg>
-                                    </div>
-                                    <div class="course__video-info">
-                                       <h5><span>Instructor :</span> Eleanor Fant</h5>
-                                    </div>
-                                 </li>
-                                 <li class="d-flex align-items-center">
-                                    <div class="course__video-icon">
                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
 
                                              <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
@@ -108,7 +92,7 @@
                                           </svg>
                                     </div>
                                     <div class="course__video-info">
-                                       <h5><span>Lectures :</span>14</h5>
+                                       <h5><span>No. of questions :</span>[[${assignment_kit.assignments.size()}]] questions</h5>
                                     </div>
                                  </li>
                                  <li class="d-flex align-items-center">
@@ -119,7 +103,7 @@
                                           </svg>
                                     </div>
                                     <div class="course__video-info">
-                                       <h5><span>Duration :</span>6 weeks</h5>
+                                       <h5><span>Duration :</span>[[${assignment_kit.time}]] mins</h5>
                                     </div>
                                  </li>
                                  <li class="d-flex align-items-center">
@@ -130,7 +114,7 @@
                                        </svg>
                                     </div>
                                     <div class="course__video-info">
-                                       <h5><span>Enrolled :</span>20 students</h5>
+                                       <h5><span>Enrolled :</span> [[${assignment_kit.assignmentKitSubmissions.size()}]] </h5>
                                     </div>
                                  </li>
                                  <li class="d-flex align-items-center">
@@ -147,9 +131,17 @@
                                  </li>
                               </ul>
                            </div>
-                           <div class="course__enroll-btn">
+
+                           <div th:if="${already_tested}" class="course__enroll-btn">
+                              <a th:if="${is_passed}" style="background-color: #39732f" class="e-btn e-btn-7 w-100">Passed <i class="far fa-check"></i></a>
+                              <a th:unless="${is_passed}" style="background-color: #e07900" class="e-btn e-btn-7 w-100">Retake the test after 30 days <i class="far fa-arrow-right"></i></a>
+                           </div>
+
+                           <div th:unless="${already_tested}" class="course__enroll-btn">
                               <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Take the test <i class="far fa-arrow-right"></i></a>
                            </div>
+
+
                         </div>
                      </div>
                   </div>
