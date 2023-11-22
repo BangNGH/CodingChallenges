@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply | Coder'sLab</title>
+    <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!--summernote-->
+    <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <style>
+        .modal-backdrop {
+            position: unset !important;
+        }
+        .modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+        .has-error{
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <p style="font-size: 23px; font-weight: bold" class="mb-sm-0 font-size-18">Creating Apply</p>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a th:href="@{/templates/admin/appy}">Applies</a></li>
+                        <li class="breadcrumb-item active">Creating apply</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-12">
+            <div style="background-color: #fff" class="card2">
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form style="margin-top: 30px !important;" id="msform" enctype="multipart/form-data" th:action="@{/admin/apply/add}" method="post">
+                            <!--apply -->
+                            <fieldset>
+                                <div class="form-card">
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Job Name: <span class="text-danger">*</span></p>
+                                    <div style="margin-bottom: 25px">
+                                        <input required class="form-validate" name="jobName" id="jobName" style="margin-bottom: unset" type="text" placeholder="Job name"/>
+                                    </div>
+                                    <div style="margin-bottom: 25px" class="row">
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Company Name: <span class="text-danger">*</span></p>
+                                            <input required style="margin-bottom: unset" name="companyName" class="form-validate" placeholder="Company name">
+                                        </div>
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Address: <span class="text-danger">*</span></p>
+                                            <input required style="margin-bottom: unset" name="address" class="form-validate" placeholder="Address">
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 25px" class="row">
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Image</p>
+                                            <input required style="margin-bottom: unset" name="imageURL" class="form-validate" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card card-shadow mb-4">
+                                                <div class="card-header border-0">
+                                                    <div class="custom-title-wrap bar-primary">
+                                                        <div class="custom-title">Description for Job: <span class="text-danger">*</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div id="summernote">Description here ...</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input style="border-radius: 5px; width: 100%" type="submit" class="next action-button" value="SAVE"/>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/admin_assets/vendor/jquery/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            document.getElementById('msform').addEventListener('submit', function (e) {
+                e.preventDefault();
+                debugger
+                var form = $('#msform');
+                form.validate({
+                    errorElement: 'span',
+                    errorClass: 'help-block',
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).closest('.form-validate').addClass("has-error");
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).closest('.form-validate').removeClass("has-error");
+                    },
+                    rules: {
+                        jobName: {
+                            required : true,
+                        },
+                        companyName: {
+                            required: true,
+                        },
+                        address:{
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        jobName: {
+                            required: "Job name required",
+                        },
+                       companyName: {
+                            required: "Company name required",
+                        },
+                        address: {
+                            required: "Address required",
+                        },
+                    }
+                });
+                if (form.valid() === true) {
+                    var description = $('#summernote').summernote('code');
+                    $('<input />').attr('type', 'hidden')
+                        .attr('name', 'description')
+                        .attr('value', description)
+                        .appendTo('#msform');
+                    this.submit();
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

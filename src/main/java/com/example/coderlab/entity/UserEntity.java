@@ -33,6 +33,7 @@ public class UserEntity {
     @NotBlank(message = "Tên không được để trống!")
     @Column(name = "full_name", length = 127)
     private String fullName;
+
     @Column(name = "password")
     private String password;
 
@@ -54,6 +55,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Assignment> assignments;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Apply> applies;
 
     @OneToMany(mappedBy = "user_added", cascade = CascadeType.ALL)
     @JsonIgnore

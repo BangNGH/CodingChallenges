@@ -16,6 +16,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/certify-images/**").addResourceLocations("file:/"+certifyUploadPath1+"/");
 
         exposeDirectory("avt-images", registry);
+        exposeDirectory("company-images", registry);
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
