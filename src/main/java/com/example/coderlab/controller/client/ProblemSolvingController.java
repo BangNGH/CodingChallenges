@@ -1,9 +1,9 @@
 package com.example.coderlab.controller.client;
 
-import com.example.coderlab.entity.Assignment;
-import com.example.coderlab.entity.Comment;
-import com.example.coderlab.entity.TestCase;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.service.AssignmentService;
+import com.example.coderlab.service.SubmissionService;
+import com.example.coderlab.service.UserServices;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("problemSolving")
 public class ProblemSolvingController {
     @Autowired
     private AssignmentService assignmentService;
+    @Autowired
+    private UserServices userServices;
+    @Autowired
+    private SubmissionService submissionService;
     @GetMapping()
     public String index(Model model){
 
@@ -41,13 +47,19 @@ public class ProblemSolvingController {
         return "client/problem/index";
     }
     @GetMapping("/{challengeID}")
-    public String practice(@PathVariable("challengeID")Long challengeID, Model model) throws JsonProcessingException {
+    public String practice(@PathVariable("challengeID")Long challengeID, Model model, Principal principal) throws JsonProcessingException {
         Assignment foundChallenge = assignmentService.getAssignmentById(challengeID);
         List<TestCase> sampleTestCase = foundChallenge.getTestCases().stream().filter(testCase -> testCase.isMarkSampleTestCase() == true).toList();
+        String email = principal.getName();
+        UserEntity current_user = userServices.findByEmail(email).get();
+        List<Submission> submissions = submissionService.getSubmissions(current_user.getId(), foundChallenge.getId());
+
+        if (!submissions.isEmpty()){
+            model.addAttribute("submissions", submissions.stream().sorted(Comparator.comparing(Submission::getSubmittedAt, Comparator.reverseOrder())).collect(Collectors.toList()));
+        }else  model.addAttribute("submissions", false);
         model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
         model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));
         model.addAttribute("challenge", foundChallenge);
-
         List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
         model.addAttribute("comments", comments);
         return "client/problem/practice";

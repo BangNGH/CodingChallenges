@@ -1,0 +1,112 @@
+
+.dd-selected {
+    padding: 5px !important;
+}
+
+.dd-option {
+    padding: 5px !important;
+}
+
+.dd-selected-image, .dd-option-image {
+    float: unset !important;
+    max-width: 30px !important;
+}
+
+.textarea-span {
+    border: 2px solid #f3f4f8;
+    font-size: 15px;
+    background: #f3f4f8;
+    padding: 0 22px;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    resize: both;
+    min-height: 150px;
+    line-height: 30px;
+    outline: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.textarea-span[contenteditable]:empty::before {
+    content: "Add your source here";
+    color: rgba(0, 0, 0, 0.99);
+}
+
+.textarea-span:focus {
+    border-color: #2b4eff;
+    background: #ffffff;
+}
+
+.flexa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.compiler-error-label {
+    flex-grow: 1; /* Đảm bảo các span mở rộng để chiếm hết khoảng trống */
+    margin: 0 5px; /* Điều chỉnh khoảng cách giữa các span */
+}
+
+@keyframes slide {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+#loadingText {
+    animation: slide 1.5s infinite;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea#editor {
+    width: 100%;
+    flex: 1;
+    padding: 0; /* Loại bỏ padding mặc định */
+    margin: 0; /* Loại bỏ margin mặc định */
+}
+
+.course__description,
+.col {
+    padding: 20px;
+    overflow: auto;
+    box-sizing: border-box;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, .2);
+}
+
+.course__description {
+    background-color: #fcfcfc;
+    border-radius: 10px;
+    margin-bottom: 60px;
+}
+
+.col {
+    background-color: #fcfcfc;
+    border-radius: 10px;
+
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-item .nav-link {
+    font-size: 15px !important;
+    height: 50px !important;
+    line-height: 50px !important;
+}

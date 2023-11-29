@@ -7,7 +7,7 @@ const excuting = document.getElementById('excuting');
 const assignment_id = document.getElementById('hidden_input');
 const assignment_kit_idElement = document.getElementById('assignment_kit_id');
 const number_of_assignments = document.getElementById('number_of_assignments');
-const user_id = document.getElementById('user_id');
+const durationElement = document.getElementById('duration');
 let check = 0;
 const submissionValues = [];
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             submit.removeAttribute("disabled");
         }
     });
+
     for (let i = 1; i <= number_of_assignments.value; i++) {
         var input = document.createElement('input');
         input.type = 'hidden';
@@ -35,8 +36,138 @@ document.addEventListener("DOMContentLoaded", (event) => {
         input.id = 'submission_id_' + (i);
         document.body.appendChild(input);
     }
+
+    const testDuration = durationElement.value;
+    const endTime = new Date();
+    const durationParts = testDuration.split(':');
+
+    endTime.setMinutes(endTime.getMinutes() + parseInt(durationParts[0]));
+    endTime.setSeconds(endTime.getSeconds() + parseInt(durationParts[1]));
+    updateTimer();
+
 });
 
+$(document).ready(function() {
+    editor.on('change', function () {
+        saveContent(editor.getValue());
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/api/submissions/get-content',
+        success: function(response) {
+            if (response) {
+
+                console.log("JON session");
+
+                const dataJson = JSON.parse(response);
+                const mode_receive = dataJson.mode;
+                const current_tab_id = dataJson.current_tab_id;
+                const content_receive = dataJson.content;
+                const language_name_receive = dataJson.language_name;
+
+
+                const nextTabButton =document.getElementById(current_tab_id);
+                nextTabButton.click();
+
+
+                const current_input_value = 'input.dd-option-value[value="'+mode_receive+'"]';
+                var input_to_change = document.querySelector(current_input_value);
+                var selectedInput = document.querySelector('a.dd-option-selected');
+                var dSelectedValue = document.querySelector('input.dd-selected-value');
+                var dSelectedText = document.querySelector('label.dd-selected-text');
+
+                if (mode_receive === "text/x-c++src") { 
+                    dSelectedText.innerHTML = "C++";
+                }
+                if (mode_receive === "text/x-java") {
+                    dSelectedText.innerHTML = "Java";
+                }
+                if (mode_receive=== "text/x-csharp") {
+                    dSelectedText.innerHTML = "C#";
+                }
+                if (mode_receive === "text/x-python") {
+                    dSelectedText.innerHTML = "Python";
+                }
+
+                if (input_to_change) {
+                    var parentA = input_to_change.closest('a');
+                    // Kiểm tra xem có thẻ a được tìm thấy không
+                    if (parentA) {
+                        dSelectedValue.value =mode_receive;
+                        selectedInput.classList.remove('dd-option-selected');
+                        // Xoá class "dd-option-selected" khỏi thẻ a
+                        parentA.classList.add('dd-option-selected');
+                        console.log('Đã add class "dd-option-selected" từ thẻ a.');
+                    } else {
+                        console.log('Không tìm thấy thẻ a chứa input.');
+                    }
+                } else {
+                    console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                }
+
+                editor.setOption(mode_receive, language_name_receive)
+                editor.setValue(content_receive)
+                if (mode_receive === "text/x-c++src") {
+                    option = 54;
+                }
+                if (mode_receive === "text/x-java") {
+                    option = 91;
+
+                }
+                if (mode_receive === "text/x-csharp") {
+                    option = 51;
+                }
+                if (mode_receive === "text/x-python") {
+                    option = 71;
+                }
+                langague_name =language_name_receive;
+            }
+        },
+        error: function(error) {
+            console.error('Error getting content:', error);
+        }
+    });
+});
+function saveContent(content) {
+    // Lấy thẻ input đầu tiên có class "dd-option-selected" trong thẻ a
+    var selectedInput = document.querySelector('a.dd-option-selected input.dd-option-value');
+    var current_tab_id =  document.querySelector('button.nav-link.active');
+    $.ajax({
+        type: 'POST',
+        url: '/api/submissions/save-content', // Đổi đường dẫn này thành API của bạn
+        data: {
+            content: content,
+            mode: selectedInput.value,
+            langague_name: langague_name,
+            current_tab_id: current_tab_id.id
+        },
+        success: function(response) {
+            console.log('Content saved successfully!');
+        },
+        error: function(error) {
+            console.error('Error saving content:', error);
+        }
+    });
+}
+function updateTimer() {
+    const cdElement = document.getElementById('countdown');
+    const now = new Date();
+    const remainingTime = new Date(endTime - now);
+
+    const minutes = remainingTime.getMinutes();
+    const seconds = remainingTime.getSeconds();
+
+    const formattedTime = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    cdElement.innerText = 'Test Duration: ' + formattedTime + ' mins';
+
+    if (now < endTime) {
+        requestAnimationFrame(updateTimer);
+    } else {
+        cdElement.innerText = 'Test Time Expired';
+        cdElement.classList.add("text-danger");
+        alert("Time Expired, You need to end test now!");
+    }
+}
 function encode(str) {
     return btoa(unescape(encodeURIComponent(str || "")));
 }
@@ -361,15 +492,6 @@ run.addEventListener("click", async function () {
                                     var description = (submission.status.description);
                                     var output = [message, description].join("\n").trim();
 
-                                    let submission_add_to_list = {
-                                        executionTime: submission.time,
-                                        memory: submission.memory,
-                                        my_output: output,
-                                        expected_output: submission.expected_output,
-                                        stdin: submission.stdin,
-                                        ispassed: false
-                                    };
-                                    submissions_to_send.push(submission_add_to_list);
                                     count = count + 1;
                                     newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -36,6 +38,9 @@ public class TestCase {
     private boolean markSampleTestCase; // đánh dấu là test case mẫu
     // Các trường và phương thức getter/setter khác
 
+    @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assessment> assessments;
 
 }
 

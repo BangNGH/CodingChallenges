@@ -29,6 +29,7 @@ public class Submission {
     private UserEntity student;
 
     private String language;
+    private int total_score;
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String source_code;

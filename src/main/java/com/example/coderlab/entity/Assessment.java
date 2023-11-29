@@ -31,5 +31,7 @@ public class Assessment {
     private String my_output;
     private Boolean ispassed;
 
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "testcase_id")
+    private TestCase testCase;
 }

@@ -25,6 +25,9 @@
   <link rel="stylesheet" th:href="@{/client_assets/css/elegantFont.css}">
   <link rel="stylesheet" th:href="@{/client_assets/css/default.css}">
   <link rel="stylesheet" th:href="@{/client_assets/css/style.css}">
+  <link rel="stylesheet" th:href="@{/client_assets/css/prism.css}">
+  <script th:src="@{/client_assets/js/prism.js}"></script>
+
   <style>
     .bx-icon {
       font-size: 20px;
@@ -96,21 +99,10 @@
             <div class="main-menu main-menu-2">
               <nav id="mobile-menu">
                 <ul>
-                  <li>
-                    <a href="/">Home</a>
-                  </li>
-                  <li class="has-dropdown">
-                    <a href="course-grid.html">Courses</a>
-                    <ul class="submenu">
-                      <li><a href="course-grid.html">Courses</a></li>
-                      <li><a href="course-list.html">Course List</a></li>
-                      <li><a href="course-sidebar.html">Course sidebar</a></li>
-                      <li><a href="course-details.html">Course Details</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="">Contact</a>
-                  </li>
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/prepare">Prepare</a></li>
+                  <li><a href="/skills-verification">Certify</a></li>
+                  <li><a href="/apply">Apply</a></li>
                 </ul>
               </nav>
             </div>
@@ -300,6 +292,7 @@
 <script th:src="@{/client_assets/js/wow.min.js}"></script>
 <script th:src="@{/client_assets/js/imagesloaded.pkgd.min.js}"></script>
 <script th:src="@{/client_assets/js/main.js}"></script>
+
 </body>
 </html>
 

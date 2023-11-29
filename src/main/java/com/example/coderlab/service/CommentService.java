@@ -7,18 +7,19 @@ import com.example.coderlab.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
 
-    public Comment save(String comment, Assignment assignment, UserEntity user) {
+    public Comment save(String comment, String source_code_comment, Assignment assignment, UserEntity user) {
         Comment newComment = new Comment();
         newComment.setAssignment(assignment);
         newComment.setUser(user);
-        newComment.setComment(comment);
+        if (source_code_comment != "false"){
+            newComment.setSource_code(source_code_comment);
+        }
+        newComment.setComment("false");
         commentRepository.save(newComment);
         return newComment;
     }

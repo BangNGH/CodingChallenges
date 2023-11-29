@@ -14,9 +14,6 @@
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
     <link rel="stylesheet" th:href="@{/admin_assets/vendor/markdown/simplemde.min.css}">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <style>
@@ -87,7 +84,7 @@
                         <div class="course__tab-content mb-95">
                             <input type="hidden" id="number_of_assignments" th:value="${assignment_kit.getAssignments().size()}">
                             <input type="hidden" id="assignment_kit_id" th:value="${assignment_kit.getId()}">
-                            <input type="hidden" id="user_id" th:value="${user_id}">
+                            <input type="hidden" id="duration" th:value="${assignment_kit.time}">
 
 
                             <div class="tab-content" id="courseTabContent">
@@ -98,7 +95,7 @@
                                         </h3>
                                         <br>
                                         <div class="d-flex">
-                                            <p th:text="'Test Duration: '+ ${assignment_kit.time} + ' mins'"></p>
+                                            <p id="countdown"></p>
                                             <p th:text="'Number of Question: '+ ${assignment_kit.getAssignments().size()}+ ' questions'"></p>
                                             <p th:remove="tag"
                                                th:text="'Log in as: '+ ${#authentication.principal.getUsername()}"></p>
@@ -147,10 +144,10 @@
                                                    for="inlineFormSelectPref">Preference</label>
                                             <select style="cursor: pointer;" class="form-select"
                                                     id="inlineFormSelectPref">
-                                                <option data-imagesrc="" selected value="cpp">C++</option>
-                                                <option data-imagesrc="" value="java">Java</option>
-                                                <option data-imagesrc="" value="cs">C#</option>
-                                                <option data-imagesrc="" value="python">Python</option>
+                                                <option data-imagesrc="" selected value="text/x-c++src">C++</option>
+                                                <option data-imagesrc="" value="text/x-java">Java</option>
+                                                <option data-imagesrc="" value="text/x-csharp">C#</option>
+                                                <option data-imagesrc="" value="text/x-python">Python</option>
                                             </select>
                                         </div>
                                         <div>
@@ -222,37 +219,38 @@
     <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
     <script th:inline="javascript">
+
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "text/x-c++src",
             theme: "dracula",
             lineNumbers: true,
             autoCloseBrackets: true,
-        })
-        var width = window.innerWidth
-        editor.setSize("initial", "")
+        });
+        var width = window.innerWidth;
+        editor.setSize("initial", "initial")
         var option;
         var langague_name;
         $("#inlineFormSelectPref").ddslick({
             onSelected: function (selectedData) {
-                if (selectedData.selectedData.value === "cpp") {
+                if (selectedData.selectedData.value === "text/x-c++src") {
                     editor.setOption("mode", "text/x-c++src")
                     editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                     option = 54;
                     langague_name = 'C++';
                 }
-                if (selectedData.selectedData.value === "java") {
+                if (selectedData.selectedData.value === "text/x-java") {
                     editor.setOption("mode", "text/x-java")
                     editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
                     option = 91;
                     langague_name = 'java';
                 }
-                if (selectedData.selectedData.value === "cs") {
+                if (selectedData.selectedData.value === "text/x-csharp") {
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
                     langague_name = 'C#';
                 }
-                if (selectedData.selectedData.value === "python") {
+                if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
                     editor.setOption("value", "print('Hello world!')")
                     option = 71;
@@ -261,17 +259,44 @@
             }
         });
         function changeTab(element) {
-            var currentTab = document.querySelector('.nav-item.activebutton');
-            var nextTab = currentTab.nextElementSibling;
-            nextTab.classList.add("activebutton");
+            var currentTab = document.querySelector(".nav-item.activebutton");
             currentTab.classList.remove("activebutton");
+            const parent_NextTabButton = element.closest('li');
+            parent_NextTabButton.classList.add("activebutton");
+
 
             if (editor.getValue()!="#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
                 if (confirm('Next tab without saving?')) {
-                    editor.setOption("mode", "text/x-c++src")
-                    editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
-                    option = 54;
-                    langague_name = 'C++';
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/submissions/clear-session',
+                        success: function(response) {
+                            var dSelectedText = document.querySelector('label.dd-selected-text');
+                            dSelectedText.innerHTML = "C++";
+                            var selectedInput = document.querySelector('a.dd-option-selected');
+                            selectedInput.classList.remove('dd-option-selected');
+
+                            const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
+                            var current_input = document.querySelector(current_input_value);
+                            if (current_input) {
+                                var parentA = current_input.closest('a');
+                                if (parentA) {
+                                    parentA.classList.add('dd-option-selected');
+                                } else {
+                                    console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                }
+                            } else {
+                                console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                            }
+                            editor.setOption("mode", "text/x-c++src")
+                            editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                            option = 54;
+                            langague_name = 'C++';
+                        },
+                        error: function(error) {
+                            console.error('Error clear session:', error);
+                        }
+                    });
                 }
             }
             const inputElement = document.getElementById('hidden_input');

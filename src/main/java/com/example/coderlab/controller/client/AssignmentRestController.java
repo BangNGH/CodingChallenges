@@ -6,7 +6,9 @@ import com.example.coderlab.utils.SubmissionInfoSendDTO;
 import com.example.coderlab.utils.SubmissionKitInfoSendDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
@@ -31,11 +33,12 @@ public class AssignmentRestController {
     private UserServices userServices;
 
     @PostMapping("/add")
-    public String handleSubmission(@RequestBody SubmissionInfoSendDTO submission, Principal principal) {
+    public String handleSubmission(@RequestBody SubmissionInfoSendDTO submission, Principal principal, HttpSession session) {
         try {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
              Long id_submission = submissionService.saveSubmissions(submission, current_user);
+            clearSession(session);
              return id_submission.toString();
         } catch (Exception e) {
             return "1";
@@ -43,11 +46,12 @@ public class AssignmentRestController {
     }
 
     @PostMapping("/end-contest")
-    public String endContest(@RequestBody SubmissionKitInfoSendDTO submissions_id, Principal principal) {
+    public String endContest(@RequestBody SubmissionKitInfoSendDTO submissions_id, Principal principal, HttpSession session) {
         try {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-           Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
+            Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
+            clearSession(session);
             if (status){
                 return "passed";
             }
@@ -59,11 +63,11 @@ public class AssignmentRestController {
 
     @GetMapping("/comment")
     @ResponseBody
-    public Comment commentPost(@RequestParam("comment") String comment, @RequestParam("assignment_id") long assignmentID, Principal principal) {
+    public Comment commentPost(@RequestParam("comment") String comment,@RequestParam(value ="source_code_comment", defaultValue = "false") String source_code_comment, @RequestParam("assignment_id") long assignmentID, Principal principal) {
         Assignment assignment = assignmentService.getAssignmentById(assignmentID);
         String email = principal.getName();
         UserEntity current_user = userServices.findByEmail(email).get();
-        return commentService.save(comment, assignment, current_user);
+        return commentService.save(comment, source_code_comment, assignment, current_user);
     }
 
     @GetMapping("/get-assignment-info")
@@ -78,5 +82,47 @@ public class AssignmentRestController {
         String memory_limit = objectMapper.writeValueAsString(assignment.getMemoryLimit());
 
         return "{ \"sampleTestCases\":" + sampleTestCasesJson + ", \"allTestCases\":" + allTestCasesJson + ", \"time_limit\":" + time_limit + ", \"memory_limit\":" + memory_limit + " }";
+    }
+
+    @PostMapping("/save-content")
+    public ResponseEntity<String> saveContent(@RequestParam String content,@RequestParam String mode,@RequestParam String langague_name,@RequestParam String current_tab_id, HttpSession session) {
+        session.setAttribute("editorContent", content);
+        session.setAttribute("mode", mode);
+        session.setAttribute("language_name", langague_name);
+        session.setAttribute("current_tab_id", current_tab_id);
+        return ResponseEntity.ok("Content saved successfully!");
+    }
+
+    @GetMapping("/get-content")
+    public String getContent(HttpSession session) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String content = objectMapper.writeValueAsString(session.getAttribute("editorContent"));
+        String mode = objectMapper.writeValueAsString(session.getAttribute("mode"));
+        String language_name = objectMapper.writeValueAsString(session.getAttribute("langague_name"));
+        String current_tab_id = objectMapper.writeValueAsString(session.getAttribute("current_tab_id"));
+        if (content.isBlank()||mode.isBlank()||language_name.isBlank()||current_tab_id.isBlank()){
+            return null;
+        }
+        return "{ \"content\":" + content + ", \"mode\":" + mode + ", \"language_name\":" + language_name + ", \"current_tab_id\":" + current_tab_id + " }";
+    }
+
+    @PostMapping("/clear-session")
+    public ResponseEntity<String> clearSessionRequest(HttpSession session) {
+        if (clearSession(session)){
+            return ResponseEntity.ok("Session cleared successfully!");
+        }else return ResponseEntity.ok("Error when clear session !");
+
+    }
+    private Boolean clearSession(HttpSession session){
+        if (session != null) {
+            session.removeAttribute("editorContent");
+            session.removeAttribute("mode");
+            session.removeAttribute("option");
+            session.removeAttribute("language_name");
+            session.removeAttribute("current_tab_id");
+            System.out.println("Session cleared successfully!");
+            return true;
+        }
+        return false;
     }
 }

@@ -41,10 +41,10 @@ public class CertifyController {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
             List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user);
-            Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
-            if (found_assignments_kit != null){
+            System.out.println(found_assignments_kit.toString());
+            if (!found_assignments_kit.isEmpty()){
                 model.addAttribute("already_tested", true);
-
+                Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
                 if (is_passed == false){
                     model.addAttribute("is_passed", false);
                 }else {

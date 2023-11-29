@@ -28,6 +28,10 @@ public class Comment {
     @Column(columnDefinition = "LONGTEXT")
     private String comment;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String source_code;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;

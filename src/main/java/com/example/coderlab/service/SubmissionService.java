@@ -17,7 +17,6 @@ public class SubmissionService {
     private final SubmissionRepository submissionRepository;
     private final AssignmentService assignmentService;
     private final AssesmentService assesmentService;
-    private final TestCaseService testCaseService;
 
     public void save(Submission submission) {
         this.submissionRepository.save(submission);
@@ -29,6 +28,7 @@ public class SubmissionService {
 
     public Long saveSubmissions(SubmissionInfoSendDTO submission_sent_form_client, UserEntity current_user) {
         Assignment foundChallenge = assignmentService.getAssignmentById(submission_sent_form_client.getAssignment_id());
+        List<TestCase> testCases_of_assignment = foundChallenge.getTestCases();
         Submission submission = new Submission();
         submission.setLanguage(submission_sent_form_client.getLanguage());
         submission.setSource_code(submission_sent_form_client.getSourceCode());
@@ -43,21 +43,23 @@ public class SubmissionService {
         for (TestCaseListDTO testCaseListDTO :submission_sent_form_client.getTestCaseListDTOS()
              ) {
             Assessment assessment = new Assessment();
+
             assessment.setExecutionTime(testCaseListDTO.getExecutionTime());
             assessment.setMemoryUsed(testCaseListDTO.getMemory());
             assessment.setSubmission(submission);
             assessment.setMy_output(testCaseListDTO.getMy_output());
+
+            Optional<TestCase> testCaseOptional = testCases_of_assignment.stream()
+                    .filter(testCase -> testCase.getInput().equals(testCaseListDTO.getStdin()) && testCase.getExpectedOutput().equals(testCaseListDTO.getExpected_output()))
+                    .findFirst();
+            if (testCaseOptional.isPresent()) {
+                my_score += testCaseOptional.get().getScore();
+                assessment.setTestCase(testCaseOptional.get());
+            } else {
+                System.out.println("Test Case not found for input: " + testCaseListDTO.getStdin() + " and output: " + testCaseListDTO.getExpected_output());
+            }
             if (testCaseListDTO.getIspassed()==true){
                 assessment.setIspassed(true);
-                List<TestCase> testCases_of_assignment = foundChallenge.getTestCases();
-                Optional<TestCase> testCaseOptional = testCases_of_assignment.stream()
-                        .filter(testCase -> testCase.getInput().equals(testCaseListDTO.getStdin()) && testCase.getExpectedOutput().equals(testCaseListDTO.getExpected_output()))
-                        .findFirst();
-                if (testCaseOptional.isPresent()) {
-                    my_score += testCaseOptional.get().getScore();
-                } else {
-                    System.out.println("Test Case not found for input: " + testCaseListDTO.getStdin() + " and output: " + testCaseListDTO.getExpected_output());
-                }
             }else assessment.setIspassed(false);
             assessments.add(assessment);
         }
@@ -66,6 +68,7 @@ public class SubmissionService {
             submission.setIs_success(true);
         }else submission.setIs_success(false);
         submission.setAssessments(assessments);
+        submission.setTotal_score(my_score);
         Submission savedSubmission = submissionRepository.save(submission);
         for (Assessment assessment :savedSubmission.getAssessments()
         ) {
@@ -73,5 +76,9 @@ public class SubmissionService {
             assesmentService.save(assessment);
         }
         return submission.getId();
+    }
+
+    public List<Submission> getSubmissions(Long userID, Long assignmentID) {
+        return this.submissionRepository.getSubmissions(userID, assignmentID);
     }
 }

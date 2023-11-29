@@ -14,7 +14,7 @@ public class TestCaseListDTO {
      private String my_output;
      private String expected_output;
      private String stdin;
-     private Boolean  ispassed;
+     private Boolean ispassed;
 
      @Override
      public String toString() {

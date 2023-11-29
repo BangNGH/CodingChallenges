@@ -17,6 +17,105 @@ const time_limit = document.getElementById('assignment_time_limit');
 const allTestCase = document.getElementById('allTestCase');
 const allTestCaseJSON = allTestCase.getAttribute('data-test-cases');
 const testCases = JSON.parse(testCasesJSON);
+
+
+$(document).ready(function() {
+    editor.on('change', function () {
+        saveContent(editor.getValue().trim());
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/api/submissions/get-content',
+        success: function(response) {
+            if (response) {
+                const dataJson = JSON.parse(response);
+                const mode_receive = dataJson.mode;
+                const content_receive = dataJson.content;
+                const language_name_receive = dataJson.language_name;
+
+                const current_input_value = 'input.dd-option-value[value="'+mode_receive+'"]';
+                var input_to_change = document.querySelector(current_input_value);
+                var selectedInput = document.querySelector('a.dd-option-selected');
+                var dSelectedValue = document.querySelector('input.dd-selected-value');
+                var dSelectedText = document.querySelector('label.dd-selected-text');
+                var img = document.querySelector('img.dd-selected-image');
+                if (mode_receive === "text/x-c++src") {
+                    dSelectedText.innerHTML = "C++";
+                    img.src = "/client_assets/lang-icon/cpp.png";
+                }
+                if (mode_receive === "text/x-java") {
+                    dSelectedText.innerHTML = "Java";
+                    img.src = "/client_assets/lang-icon/java.png";
+                }
+                if (mode_receive=== "text/x-csharp") {
+                    dSelectedText.innerHTML = "C#";
+                    img.src = "/client_assets/lang-icon/csharp.png";
+                }
+                if (mode_receive === "text/x-python") {
+                    dSelectedText.innerHTML = "Python";
+                    img.src = "/client_assets/lang-icon/python.png";
+                }
+
+                if (input_to_change) {
+                    var parentA = input_to_change.closest('a');
+                    // Kiểm tra xem có thẻ a được tìm thấy không
+                    if (parentA) {
+                        dSelectedValue.value =mode_receive;
+                        selectedInput.classList.remove('dd-option-selected');
+                        // Xoá class "dd-option-selected" khỏi thẻ a
+                        parentA.classList.add('dd-option-selected');
+                        console.log('Đã add class "dd-option-selected" từ thẻ a.');
+                    } else {
+                        console.log('Không tìm thấy thẻ a chứa input.');
+                    }
+                } else {
+                    console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                }
+
+                editor.setOption(mode_receive, language_name_receive)
+                editor.setValue(content_receive)
+                if (mode_receive === "text/x-c++src") {
+                    option = 54;
+                }
+                if (mode_receive === "text/x-java") {
+                    option = 91;
+
+                }
+                if (mode_receive === "text/x-csharp") {
+                    option = 51;
+                }
+                if (mode_receive === "text/x-python") {
+                    option = 71;
+                }
+                langague_name =language_name_receive;
+            }
+        },
+        error: function(error) {
+            console.error('Error getting content:', error);
+        }
+    });
+});
+function saveContent(content) {
+    // Lấy thẻ input đầu tiên có class "dd-option-selected" trong thẻ a
+    var selectedInput = document.querySelector('a.dd-option-selected input.dd-option-value');
+    $.ajax({
+        type: 'POST',
+        url: '/api/submissions/save-content',
+        data: {
+            content: content,
+            mode: selectedInput.value,
+            langague_name: langague_name,
+            current_tab_id: "-1"
+        },
+        success: function(response) {
+            console.log('Content saved successfully!');
+        },
+        error: function(error) {
+            console.error('Error saving content:', error);
+        }
+    });
+}
+
 function encode(str) {
     return btoa(unescape(encodeURIComponent(str || "")));
 }
@@ -54,35 +153,35 @@ run.addEventListener("click", async function () {
     bottomElement.scrollIntoView({ behavior: 'smooth' });
     let count =0;
     let submissions;
-    if(time_limit != 0 && memory_limit != 0) {
+    if(time_limit.value !== "0" && memory_limit.value !== "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 cpu_time_limit: time_limit.value,
                 memory_limit: memory_limit.value
             };
         });
-    }else if(time_limit != 0 && memory_limit == 0) {
+    }else if(time_limit.value !== "0" && memory_limit.value === "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 cpu_time_limit: time_limit.value
             };
         });
-    }else if(time_limit == 0 && memory_limit != 0) {
+    }else if(time_limit.value === "0" && memory_limit.value !== "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 memory_limit: memory_limit.value
@@ -93,7 +192,7 @@ run.addEventListener("click", async function () {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput
             };
@@ -163,17 +262,17 @@ run.addEventListener("click", async function () {
                 <div class="events__meta">
                    <span>${submission.time}s</span>
                                                    <span>${submission.memory}KB</span>
-                                                   <span>Sucess</span>
+                                                   <span>Success</span>
                 </div>
                 <h3 class="events__title">
                     <a class="price__features">
-                        <i class="far fa-check" style="background: rgb(48 168 32 / 9%);;
+                        <i class="far fa-check" style="background: rgb(48 168 32 / 9%);
                             border-radius: 50%;
                             font-size: 25px;"></i> Sample Test case 0${count}
                     </a>
                 </h3>
             </div>
-             <div class="events__more" style="display: ${isSampleTestCase ?  'block' : 'none'}">
+             <div class="events__more" style="display: ${isSampleTestCase ? 'block' : 'none'}">
                     <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
                         Xem chi tiết
                         <i class="far fa-arrow-right"></i>
@@ -197,7 +296,7 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial; text-align: center" id="message">Thành công</pre>
+                                    <pre class="pre-tags" style="font-weight: initial; text-align: center">Thành công</pre>
                                 </div>
                             </div>
                         </li>
@@ -205,7 +304,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdin}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -213,7 +316,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -226,6 +333,8 @@ run.addEventListener("click", async function () {
     `;
                                 // Thêm container vào container chứa test cases
                                 testCasesContainer.appendChild(newContainer);
+                                Prism.highlightAll();
+
                                 const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                                 const testcaseDetails = document.getElementById(`event-details-${count}`);
                                 viewMoreButton.addEventListener('click', () => {
@@ -239,9 +348,10 @@ run.addEventListener("click", async function () {
                                 resultSection.style.display = 'block';
                             }else if (submission.status && submission.status.id === 4) {
                                 //Wrong Answer
-                                var stdin = decode(submission.stdin);
-                                var stdout = decode(submission.stdout);
-                                var expected_output = decode(submission.expected_output);
+                                var stdin = decode(submission.stdin).trim();
+                                var stdout = decode(submission.stdout).trim();
+                                var expected_output = decode(submission.expected_output).trim();
+                                console.log("INPUT: "+stdin);
                                 count=count+1;
                                 newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
@@ -277,7 +387,7 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">Kết quả không trùng khớp</pre>
+                                    <pre class="pre-tags" style="font-weight: initial;text-align: center">Kết quả không trùng khớp</pre>
                                 </div>
                             </div>
                         </li>
@@ -285,7 +395,14 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                  
+                                   <pre class="pre-tags line-numbers language-markup">
+                                      <code class="language-markup"> 
+                                        ${stdin}
+                                       </code>
+                                     
+                                    </pre>
+                                
                                 </div>
                             </div>
                         </li>
@@ -293,7 +410,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Your Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                    <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -301,7 +422,12 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Expected Output</h4>
-                                    <pre class="pre-tags" id="expected_output">${expected_output}</pre>
+                               
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${expected_output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -313,6 +439,7 @@ run.addEventListener("click", async function () {
     `;
                                 // Thêm container vào container chứa test cases
                                 testCasesContainer.appendChild(newContainer);
+                                Prism.highlightAll();
                                 const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                                 const testcaseDetails = document.getElementById(`event-details-${count}`);
                                 viewMoreButton.addEventListener('click', () => {
@@ -331,15 +458,6 @@ run.addEventListener("click", async function () {
                                 var description = (submission.status.description);
                                 var output = [message, description].join("\n").trim();
 
-                                let submission_add_to_list = {
-                                    executionTime: submission.time,
-                                    memory: submission.memory,
-                                    my_output: output,
-                                    expected_output: submission.expected_output,
-                                    stdin: submission.stdin,
-                                    ispassed: false
-                                };
-                                submissions_to_send.push(submission_add_to_list);
                                 count=count+1;
                                 newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
@@ -375,8 +493,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
-                                
+                                     <pre style="font-weight: initial class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -389,6 +510,7 @@ run.addEventListener("click", async function () {
     `;
                                 // Thêm container vào container chứa test cases
                                 testCasesContainer.appendChild(newContainer);
+                                Prism.highlightAll();
                                 const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                                 const testcaseDetails = document.getElementById(`event-details-${count}`);
                                 viewMoreButton.addEventListener('click', () => {
@@ -443,8 +565,12 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
-                                 
+                              
+                                  <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -457,6 +583,8 @@ run.addEventListener("click", async function () {
     `;
                                 // Thêm container vào container chứa test cases
                                 testCasesContainer.appendChild(newContainer);
+                                Prism.highlightAll();
+
                                 const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                                 const testcaseDetails = document.getElementById(`event-details-${count}`);
                                 viewMoreButton.addEventListener('click', () => {
@@ -491,41 +619,41 @@ submit.addEventListener("click", async function () {
     let submissions_to_send = [];
     const allTestCases = JSON.parse(allTestCaseJSON); // Giả sử allTestCases chứa danh sách các test case dưới dạng JSON.
     const langagueName = langague_name;
-    const source_code = editor.getValue();
+    const source_code = editor.getValue().trim();
     excuting.style.display = 'block';
     const bottomElement = document.getElementById('excuting');
     bottomElement.scrollIntoView({ behavior: 'smooth' });
     let count =0;
     let submissions;
-    if(time_limit != 0 && memory_limit != 0) {
+    if(time_limit.value !== "0" && memory_limit.value !== "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 cpu_time_limit: time_limit.value,
                 memory_limit: memory_limit.value
             };
         });
-    }else if(time_limit != 0 && memory_limit == 0) {
+    }else if(time_limit.value !== "0" && memory_limit.value === "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 cpu_time_limit: time_limit.value
             };
         });
-    }else if(time_limit == 0 && memory_limit != 0) {
+    }else if(time_limit.value === "0" && memory_limit.value !== "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput,
                 memory_limit: memory_limit.value
@@ -536,7 +664,7 @@ submit.addEventListener("click", async function () {
             // Tạo đối tượng submission cho mỗi test case
             return {
                 language_id: option,
-                source_code: editor.getValue(),
+                source_code: editor.getValue().trim(),
                 stdin: testCase.input,
                 expected_output: testCase.expectedOutput
             };
@@ -595,7 +723,7 @@ submit.addEventListener("click", async function () {
                             let submission_add_to_list = {
                                 executionTime: submission.time,
                                 memory: submission.memory,
-                                my_output: submission.stdout,
+                                my_output: decode(submission.stdout),
                                 expected_output: decode(submission.expected_output),
                                 stdin: decode(submission.stdin),
                                 ispassed: true
@@ -620,9 +748,9 @@ submit.addEventListener("click", async function () {
                 </div>
                 <h3 class="events__title">
                     <a class="price__features">
-                        <i class="far fa-check" style="background: rgb(48 168 32 / 9%);;
+                        <i class="far fa-check" style="background: rgb(48 168 32 / 9%);
                             border-radius: 50%;
-                            font-size: 25px;"></i> Test case 0${count}
+                            font-size: 25px;"></i> Test case ${count}
                     </a>
                 </h3>
             </div>
@@ -651,7 +779,7 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial; text-align: center"" id="message">Thành công</pre>
+                                    <pre class="pre-tags" style="font-weight: initial; text-align: center">Thành công</pre>
                                 </div>
                             </div>
                         </li>
@@ -659,7 +787,12 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                 
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdin}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -667,7 +800,11 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -680,6 +817,8 @@ submit.addEventListener("click", async function () {
     `;
                             // Thêm container vào container chứa test cases
                             testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+
                             const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                             const testcaseDetails = document.getElementById(`event-details-${count}`);
                             viewMoreButton.addEventListener('click', () => {
@@ -693,16 +832,16 @@ submit.addEventListener("click", async function () {
                             resultSection.style.display = 'block';
                         }else if (submission.status && submission.status.id === 4) {
                             //Wrong Answer
-                            var stdin = decode(submission.stdin);
-                            var stdout = decode(submission.stdout);
-                            var expected_output = decode(submission.expected_output);
+                            var stdin = decode(submission.stdin).trim();
+                            var stdout = decode(submission.stdout).trim();
+                            var expected_output = decode(submission.expected_output).trim();
 
                             let submission_add_to_list = {
                                 executionTime: submission.time,
                                 memory: submission.memory,
-                                my_output: submission.stdout,
-                                expected_output: submission.expected_output,
-                                stdin: submission.stdin,
+                                my_output: decode(submission.stdout),
+                                expected_output: decode(submission.expected_output),
+                                stdin: decode(submission.stdin).trim(),
                                 ispassed: false
                             };
                             submissions_to_send.push(submission_add_to_list);
@@ -742,7 +881,7 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">Kết quả không trùng khớp</pre>
+                                    <pre class="pre-tags" style="font-weight: initial; text-align: center">Kết quả không trùng khớp</pre>
                                 </div>
                             </div>
                         </li>
@@ -750,7 +889,11 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                  <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdin}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -758,7 +901,11 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Your Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                   <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -766,7 +913,11 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Expected Output</h4>
-                                    <pre class="pre-tags" id="expected_output">${expected_output}</pre>
+                                 <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${expected_output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -778,6 +929,8 @@ submit.addEventListener("click", async function () {
     `;
                             // Thêm container vào container chứa test cases
                             testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+
                             const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                             const testcaseDetails = document.getElementById(`event-details-${count}`);
                             viewMoreButton.addEventListener('click', () => {
@@ -801,8 +954,8 @@ submit.addEventListener("click", async function () {
                                 executionTime: submission.time,
                                 memory: submission.memory,
                                 my_output: output,
-                                expected_output: submission.expected_output,
-                                stdin: submission.stdin,
+                                expected_output: decode(submission.expected_output),
+                                stdin: decode(submission.stdin),
                                 ispassed: false
                             };
                             submissions_to_send.push(submission_add_to_list);
@@ -841,8 +994,12 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
                                 
+                                        <pre style="font-weight: initial" class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -855,6 +1012,8 @@ submit.addEventListener("click", async function () {
     `;
                             // Thêm container vào container chứa test cases
                             testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+
                             const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                             const testcaseDetails = document.getElementById(`event-details-${count}`);
                             viewMoreButton.addEventListener('click', () => {
@@ -878,8 +1037,8 @@ submit.addEventListener("click", async function () {
                                 executionTime: submission.time,
                                 memory: submission.memory,
                                 my_output: output,
-                                expected_output: submission.expected_output,
-                                stdin: submission.stdin,
+                                expected_output: decode(submission.expected_output),
+                                stdin: decode(submission.stdin),
                                 ispassed: false
                             };
                             submissions_to_send.push(submission_add_to_list);
@@ -918,7 +1077,12 @@ submit.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
+                                 
+                                     <pre style="font-weight: initial" class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 
                                 </div>
                             </div>
@@ -932,6 +1096,8 @@ submit.addEventListener("click", async function () {
     `;
                             // Thêm container vào container chứa test cases
                             testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+
                             const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                             const testcaseDetails = document.getElementById(`event-details-${count}`);
                             viewMoreButton.addEventListener('click', () => {
