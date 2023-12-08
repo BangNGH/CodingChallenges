@@ -95,7 +95,7 @@
                                         </h3>
                                         <br>
                                         <div class="d-flex">
-                                            <p id="countdown"></p>
+                                            <p id="countdown">Time Left: <span class="text-success" id="timer">00:00</span></p>
                                             <p th:text="'Number of Question: '+ ${assignment_kit.getAssignments().size()}+ ' questions'"></p>
                                             <p th:remove="tag"
                                                th:text="'Log in as: '+ ${#authentication.principal.getUsername()}"></p>
@@ -260,9 +260,11 @@
         });
         function changeTab(element) {
             var currentTab = document.querySelector(".nav-item.activebutton");
+            var currentButtonElement = currentTab.querySelector("button");
             currentTab.classList.remove("activebutton");
             const parent_NextTabButton = element.closest('li');
             parent_NextTabButton.classList.add("activebutton");
+
 
 
             if (editor.getValue()!="#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
@@ -297,6 +299,29 @@
                             console.error('Error clear session:', error);
                         }
                     });
+
+                }else{
+
+                    currentButtonElement.setAttribute("aria-selected", "true");
+                    currentButtonElement.classList.add("active");
+                    const current_tab_id = "challenge" + currentButtonElement.getAttribute("id");
+                    let current_tab_div = document.getElementById(current_tab_id);
+                    if (current_tab_div == null) {
+                        current_tab_div = document.getElementById("description");
+                    }
+                    current_tab_div.className = "tab-pane fade active show";
+                    console.log("current_tab_id: "+current_tab_id+" current_tab_div: "+current_tab_div.classList);
+
+
+                    element.setAttribute("aria-selected", "false");
+                    element.classList.remove("active");
+                    const next_tab_id = "challenge" + element.getAttribute("id");
+                    let next_tab_div = document.getElementById(next_tab_id);
+                    if (next_tab_div == null) {
+                        next_tab_div = document.getElementById("description");
+                    }
+                    next_tab_div.className = "tab-pane fade";
+                    console.log("next_tab_id: "+next_tab_id+" next_tab_div: "+next_tab_div.classList);
                 }
             }
             const inputElement = document.getElementById('hidden_input');

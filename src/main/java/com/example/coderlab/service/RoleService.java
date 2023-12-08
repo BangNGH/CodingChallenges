@@ -3,6 +3,8 @@ package com.example.coderlab.service;
 import com.example.coderlab.entity.Role;
 import com.example.coderlab.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +22,7 @@ public class RoleService {
         if (roleRepository.findByName(name).isPresent()){
             return roleRepository.findByName(name).get();
         }
-
            throw new RuntimeException("Could not find role");
-
     }
 
     public void addRole() {
@@ -36,6 +36,7 @@ public class RoleService {
             roleRepository.save(adminRole);
             roleRepository.save(devRole);
             roleRepository.save(companyRole);
+            System.out.println("Added 3 roles");
         }
     }
 }

@@ -28,8 +28,8 @@ public class AssignmentKit {
 
     @NotBlank(message = "Title is required")
     private String title;
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime time;
+    // mins
+    private int time;
     @NotBlank(message = "Description is required")
     @Lob
     @Column(columnDefinition = "LONGTEXT")

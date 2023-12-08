@@ -18,8 +18,32 @@ const allTestCase = document.getElementById('allTestCase');
 const allTestCaseJSON = allTestCase.getAttribute('data-test-cases');
 const testCases = JSON.parse(testCasesJSON);
 
-
 $(document).ready(function() {
+    document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
+        const activeTab = event.target; // Tab đang active
+
+        // Kiểm tra tab và enable/disable các nút tương ứng
+        if (activeTab.value === 'locked') {
+            if (!confirm("If you unlock the solution, your score will not be counted toward your progress.")) {
+                event.preventDefault();
+                console.log("Cancelled unlock");
+            } else {
+                const assignmentIDElement = document.getElementById("assignment_id");
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/submissions/unlock-solution',
+                    data: {
+                        assignment_id: assignmentIDElement.value,
+                    },
+                    error: function (error) {
+                        console.error('Error getting content:', error);
+                    }
+                });
+            }
+        }
+    });
+
+
     editor.on('change', function () {
         saveContent(editor.getValue().trim());
     });
@@ -119,6 +143,7 @@ function saveContent(content) {
 function encode(str) {
     return btoa(unescape(encodeURIComponent(str || "")));
 }
+
 function decode(bytes) {
     var escaped = escape(atob(bytes || ""));
         return decodeURIComponent(escaped);

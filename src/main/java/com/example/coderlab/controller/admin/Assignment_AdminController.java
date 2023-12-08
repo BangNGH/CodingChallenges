@@ -5,6 +5,7 @@ import com.example.coderlab.entity.AssignmentKit;
 import com.example.coderlab.entity.Level;
 import com.example.coderlab.service.AssignmentKitService;
 import com.example.coderlab.service.AssignmentService;
+import com.example.coderlab.service.LanguageService;
 import com.example.coderlab.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class Assignment_AdminController {
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
-    private AssignmentKitService assignmentKitService;
+    private LanguageService languageService;
     @Autowired
     private LevelService levelService;
     @GetMapping()
@@ -36,6 +37,7 @@ public class Assignment_AdminController {
     public String add(Model model){
         model.addAttribute("assignment", new Assignment());
         model.addAttribute("levels", levelService.getListLevel());
+        model.addAttribute("languages", languageService.getAllLanguages());
         return "admin/assignment/add";
     }
     @PostMapping("/add")
@@ -44,10 +46,10 @@ public class Assignment_AdminController {
                                 @RequestParam(value = "timeLimit", required=false) Integer timeLimit, @RequestParam(value = "memoryLimit", required=false) Integer memoryLimit,
                                 RedirectAttributes redirectAttributes, @RequestParam("TSName[]") List<String> TestCaseNames,
                                 @RequestParam("TSScore[]") List<Integer> TestCaseScores, @RequestParam("TSInput[]") List<String> TestCaseInputs,
-                                @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples) throws IOException {
+                                @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples, @RequestParam(value = "language_option", required = false) String language_option, @RequestParam(value = "markdown_content", required = false) String solution) throws IOException {
 
-        assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level);
-        redirectAttributes.addFlashAttribute("message", "Save successfully!");
+      assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level, language_option, solution);
+       redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }
     @GetMapping("/edit/{id}")

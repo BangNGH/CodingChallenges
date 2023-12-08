@@ -38,12 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     const testDuration = durationElement.value;
-    const endTime = new Date();
-    const durationParts = testDuration.split(':');
-
-    endTime.setMinutes(endTime.getMinutes() + parseInt(durationParts[0]));
-    endTime.setSeconds(endTime.getSeconds() + parseInt(durationParts[1]));
-    updateTimer();
+    updateTimer(testDuration);
 
 });
 
@@ -149,24 +144,35 @@ function saveContent(content) {
         }
     });
 }
-function updateTimer() {
-    const cdElement = document.getElementById('countdown');
-    const now = new Date();
-    const remainingTime = new Date(endTime - now);
+function updateTimer(endTime) {
+    var timeLimitInMinutes = endTime;
+    var timeLimitInSeconds = timeLimitInMinutes * 60;
+    var timerElement = document.getElementById('timer');
 
-    const minutes = remainingTime.getMinutes();
-    const seconds = remainingTime.getSeconds();
+    function startTimer() {
+        timeLimitInSeconds--;
+        var minutes = Math.floor(timeLimitInSeconds / 60);
+        var seconds = timeLimitInSeconds % 60;
 
-    const formattedTime = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-    cdElement.innerText = 'Test Duration: ' + formattedTime + ' mins';
+        if (timeLimitInSeconds < 0) {
+            timerElement.textContent = '00:00';
+            timerElement.className = 'text-danger';
+            alert("Time Expired, You need to end test now!");
+            clearInterval(timerInterval);
+            return;
+        }
 
-    if (now < endTime) {
-        requestAnimationFrame(updateTimer);
-    } else {
-        cdElement.innerText = 'Test Time Expired';
-        cdElement.classList.add("text-danger");
-        alert("Time Expired, You need to end test now!");
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+
+        timerElement.textContent = minutes + ':' + seconds;
     }
+
+    var timerInterval = setInterval(startTimer, 1000);
 }
 function encode(str) {
     return btoa(unescape(encodeURIComponent(str || "")));

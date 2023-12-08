@@ -26,7 +26,7 @@ public class AssignmentKitService {
         return assignmentKitRepository.findById(id);
     }
 
-    public void addKit(String title, LocalTime time, String description, List<Long> assignmentsKit) {
+    public void addKit(String title, Integer time, String description, List<Long> assignmentsKit) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         UserEntity user = userServices.findByEmail(email).orElseThrow();

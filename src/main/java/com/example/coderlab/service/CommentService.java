@@ -18,8 +18,8 @@ public class CommentService {
         newComment.setUser(user);
         if (source_code_comment != "false"){
             newComment.setSource_code(source_code_comment);
-        }
-        newComment.setComment("false");
+        }else newComment.setSource_code("false");
+        newComment.setComment(comment);
         commentRepository.save(newComment);
         return newComment;
     }

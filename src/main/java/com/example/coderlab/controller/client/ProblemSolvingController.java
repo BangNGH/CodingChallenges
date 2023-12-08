@@ -2,6 +2,7 @@ package com.example.coderlab.controller.client;
 
 import com.example.coderlab.entity.*;
 import com.example.coderlab.service.AssignmentService;
+import com.example.coderlab.service.SolutionCheckService;
 import com.example.coderlab.service.SubmissionService;
 import com.example.coderlab.service.UserServices;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("problemSolving")
+@RequestMapping("/problemSolving")
 public class ProblemSolvingController {
     @Autowired
     private AssignmentService assignmentService;
@@ -28,16 +29,30 @@ public class ProblemSolvingController {
     private UserServices userServices;
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private SolutionCheckService solutionCheckService;
     @GetMapping()
     public String index(Model model){
 
-        return findPaginated(1, model);
+        return findPaginated(1, model, null);
     }
+
+    @GetMapping("/topic/{id}")
+    public String practiceByTopic(Model model, @PathVariable("id") String id){
+        return findPaginated(1, model, id);
+    }
+
     @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model){
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model, String byTopicID){
         int pageSize = 10;
-        Page<Assignment> page = assignmentService.findPaginated(pageNo, pageSize);
+        Page<Assignment> page;
+        if (byTopicID != null){
+            page = assignmentService.findPaginatedByTopic(pageNo, pageSize, byTopicID);
+        }else {
+            page = assignmentService.findPaginated(pageNo, pageSize);
+        }
         List<Assignment> listAssignment = page.getContent();
+
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -62,6 +77,7 @@ public class ProblemSolvingController {
         model.addAttribute("challenge", foundChallenge);
         List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
         model.addAttribute("comments", comments);
+        model.addAttribute("unlocked", solutionCheckService.isUnlocked(current_user, foundChallenge));
         return "client/problem/practice";
     }
 }

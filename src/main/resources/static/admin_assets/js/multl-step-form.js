@@ -1,5 +1,42 @@
-$(document).ready(function(){
-    $(".next").click(function(){
+$(document).ready(function () {
+    $(".next").click(function () {
+        var selectBox = document.getElementById("selectBox");
+        if (selectBox.value !== "") {
+
+            const hiddenDiv = document.getElementById("hidden_value");
+            const languageInputElement = document.getElementById("language_option");
+
+            if (languageInputElement !== null) {
+                languageInputElement.setAttribute("value", selectBox.value);
+            } else {
+                const createInputElementLanguage = document.createElement("input");
+                createInputElementLanguage.setAttribute("value", selectBox.value);
+                createInputElementLanguage.setAttribute("name", "language_option");
+                createInputElementLanguage.setAttribute("id", "language_option");
+                createInputElementLanguage.setAttribute("type", "hidden");
+                hiddenDiv.appendChild(createInputElementLanguage);
+            }
+
+            const inputElement = document.getElementById("markdown_content");
+            if (inputElement !== null) {
+                if (markdown_editor.value() === "") {
+                    inputElement.setAttribute("value", "This assignment has no solution");
+                }else {
+                    inputElement.setAttribute("value", markdown_editor.value());
+                }
+            } else {
+                const createInputElement = document.createElement("input");
+                if (markdown_editor.value() !== "") {
+                    createInputElement.setAttribute("value", markdown_editor.value());
+                } else {
+                    createInputElement.setAttribute("value", "This assignment has no solution");
+                }
+                createInputElement.setAttribute("name", "markdown_content");
+                createInputElement.setAttribute("id", "markdown_content");
+                createInputElement.setAttribute("type", "hidden");
+                hiddenDiv.appendChild(createInputElement);
+            }
+        }
         //validation
         var form = $('#msform');
         form.validate({
@@ -13,13 +50,13 @@ $(document).ready(function(){
             },
             rules: {
                 title: {
-                    required : true,
+                    required: true,
                 },
                 score: {
                     required: true,
                     number: true,
                 },
-                input:{
+                input: {
                     required: true,
                 },
                 output: {
@@ -41,7 +78,7 @@ $(document).ready(function(){
                 "TSOutput[]": {
                     required: true,
                 },
-                timeLimit:{
+                timeLimit: {
                     number: true,
                     required: false,
                 },
@@ -88,7 +125,7 @@ $(document).ready(function(){
                 }
             }
         });
-        if(form.valid() === true){
+        if (form.valid() === true) {
             var current_fs, next_fs, previous_fs; //fieldsets
             var opacity;
 
@@ -101,7 +138,7 @@ $(document).ready(function(){
             next_fs.show();
             //hide the current fieldset with style
             current_fs.animate({opacity: 0}, {
-                step: function(now) {
+                step: function (now) {
                     // for making fielset appear animation
                     opacity = 1 - now;
 
@@ -116,8 +153,7 @@ $(document).ready(function(){
         }
     });
 
-    $(".previous").click(function(){
-
+    $(".previous").click(function () {
         current_fs = $(this).parent();
         previous_fs = $(this).parent().prev();
 
@@ -129,7 +165,7 @@ $(document).ready(function(){
 
         //hide the current fieldset with style
         current_fs.animate({opacity: 0}, {
-            step: function(now) {
+            step: function (now) {
                 // for making fielset appear animation
                 opacity = 1 - now;
 
@@ -143,17 +179,17 @@ $(document).ready(function(){
         });
     });
 
-    $('.radio-group .radio').click(function(){
+    $('.radio-group .radio').click(function () {
         $(this).parent().find('.radio').removeClass('selected');
         $(this).addClass('selected');
     });
 
-    $(".submit").click(function(){
+    $(".submit").click(function () {
         return false;
     })
     var nextedu = 0;
     var number_testcase = parseInt($('#number_testcase').val());
-    if(!isNaN(number_testcase)){
+    if (!isNaN(number_testcase)) {
         nextedu = number_testcase;
     }
 
@@ -191,7 +227,7 @@ $(document).ready(function(){
             '                                        </div>';
         var newInput = $(newIn);
 
-        var removeBtn = '<button style="margin-bottom: 20px" id="remove' + (nextedu-1) + '" class="btn btn-danger remove-me" >Remove</button>';
+        var removeBtn = '<button style="margin-bottom: 20px" id="remove' + (nextedu - 1) + '" class="btn btn-danger remove-me" >Remove</button>';
         var removeButton = $(removeBtn);
         $(addto).after(newInput);
         $(addRemove).after(removeButton);

@@ -33,11 +33,20 @@ public class Assignment {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "language_id")
+    @JsonIgnore
+    private Language language_option;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String solution;
+
     //s
     private int timeLimit;
-
     //KB
     private int memoryLimit;
+    private int max_score;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")
@@ -64,4 +73,19 @@ public class Assignment {
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments= new ArrayList<>();
+
+    //
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<SolutionCheck> solutionChecks = new ArrayList<>();
+
+    @Transient
+    public Double getSuccessRate() {
+        if (submissions == null || submissions.isEmpty()) {
+            return 0.0;
+        }
+        long passedCount = submissions.stream().filter(submission -> submission.getIs_success() == true).count();
+        double successRate = (double) passedCount / submissions.size();
+        return successRate*100;
+    }
 }

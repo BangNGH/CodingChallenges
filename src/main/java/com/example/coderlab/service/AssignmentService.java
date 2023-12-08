@@ -1,6 +1,7 @@
 package com.example.coderlab.service;
 
 import com.example.coderlab.entity.Assignment;
+import com.example.coderlab.entity.Language;
 import com.example.coderlab.entity.TestCase;
 import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.repository.AssignmentRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AssignmentService {
@@ -28,6 +30,8 @@ public class AssignmentService {
     private TestCaseService testCaseService;
     @Autowired
     private LevelService levelService;
+    @Autowired
+    private LanguageService languageService;
     @Autowired
     private UserServices userServices;
     public List<Assignment> getAllAssignments(){
@@ -39,13 +43,24 @@ public class AssignmentService {
     public Assignment getAssignmentById(Long id){
         return assignmentRepository.findById(id).orElseThrow();
     }
-    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples, Long level) {
+    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples, Long level, String languageID, String solution) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        Language foundLanguage = null;
         UserEntity user = userServices.findByEmail(email).orElseThrow();
-
+        int max_score=0;
         Assignment assignment = new Assignment();
         assignment.setTitle(title);
+
+        if (languageID != null) {
+            Optional<Language> findLanguageById = languageService.findByLanguageID(Long.valueOf(languageID));
+            if (findLanguageById.isPresent()) {
+                foundLanguage = findLanguageById.get();
+                assignment.setLanguage_option(foundLanguage);
+                assignment.setSolution(solution);
+            }
+        }
+
         assignment.setDescription(description);
         assignment.setLevel(levelService.getLevelById(level));
         if (timeLimit!=null) {
@@ -61,6 +76,7 @@ public class AssignmentService {
             TestCase testCase = new TestCase();
             testCase.setName(testCaseNames.get(i));
             testCase.setScore(testCaseScores.get(i));
+            max_score += testCaseScores.get(i);
             testCase.setInput(testCaseInputs.get(i));
             testCase.setExpectedOutput(testCaseOutPuts.get(i));
             if (maskSamples != null && i < maskSamples.size()) {
@@ -71,6 +87,14 @@ public class AssignmentService {
             testCase.setAssignment(savedAssignment);
             testCaseService.saveTestCase(testCase);
         }
+        savedAssignment.setMax_score(max_score);
+
+        if (foundLanguage!=null) {
+            foundLanguage.getAssignments().add(savedAssignment);
+            languageService.save(foundLanguage);
+        }
+
+        assignmentRepository.save(savedAssignment);
     }
     public void updateAssignment(Assignment assignment, String description,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples){
         Assignment existingAssignment = assignmentRepository.findById(assignment.getId()).orElse(null);
@@ -102,6 +126,19 @@ public class AssignmentService {
     }
     public Page<Assignment> findPaginated(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.assignmentRepository.findProblemSolvingAssignments(pageable);
+    }
+    public Page<Assignment> findPaginatedByTopic(int pageNo, int pageSize,String languageID){
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Language foundLanguage = null;
+        Optional<Language> findLanguageById = languageService.findByLanguageID(Long.valueOf(languageID));
+        if (findLanguageById.isPresent()) {
+            foundLanguage = findLanguageById.get();
+        }
+        if (foundLanguage != null) {
+            return this.assignmentRepository.findAssignmentByLanguageID(pageable, foundLanguage);
+        }
         return this.assignmentRepository.findAll(pageable);
     }
+
 }

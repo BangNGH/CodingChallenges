@@ -32,13 +32,16 @@ public class AssignmentRestController {
     @Autowired
     private UserServices userServices;
 
+    @Autowired
+    private SolutionCheckService solutionCheckService;
+
     @PostMapping("/add")
     public String handleSubmission(@RequestBody SubmissionInfoSendDTO submission, Principal principal, HttpSession session) {
         try {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
              Long id_submission = submissionService.saveSubmissions(submission, current_user);
-            clearSession(session);
+             clearSession(session);
              return id_submission.toString();
         } catch (Exception e) {
             return "1";
@@ -68,6 +71,14 @@ public class AssignmentRestController {
         String email = principal.getName();
         UserEntity current_user = userServices.findByEmail(email).get();
         return commentService.save(comment, source_code_comment, assignment, current_user);
+    }
+    @PostMapping("/unlock-solution")
+    @ResponseBody
+    public void unlockSolution(@RequestParam("assignment_id") Long assignmentID, Principal principal) {
+        Assignment assignment = assignmentService.getAssignmentById(assignmentID);
+        String email = principal.getName();
+        UserEntity current_user = userServices.findByEmail(email).get();
+        solutionCheckService.save(assignment, current_user);
     }
 
     @GetMapping("/get-assignment-info")

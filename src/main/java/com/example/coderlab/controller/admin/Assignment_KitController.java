@@ -41,9 +41,9 @@ public class Assignment_KitController {
         return "admin/assignment_kit/add";
     }
     @PostMapping("/add")
-    public String addAssignment(@RequestParam("title") String title, @RequestParam("time") @DateTimeFormat(pattern = "HH:mm") LocalTime time, @RequestParam("description") String description,
+    public String addAssignment(@RequestParam("title") String title, @RequestParam("time") Integer time, @RequestParam("description") String description,
                                 @RequestParam(value = "multi_coding_select[]", required = false) List<Long> assignments_kit, RedirectAttributes redirectAttributes) throws IOException {
-        assignmentKitService.addKit(title, time,description,assignments_kit);
+        assignmentKitService.addKit(title, (time),description,assignments_kit);
       redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment-kit";
     }
