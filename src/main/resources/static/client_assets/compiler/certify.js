@@ -11,6 +11,7 @@ const durationElement = document.getElementById('duration');
 let check = 0;
 const submissionValues = [];
 document.addEventListener("DOMContentLoaded", (event) => {
+
     const run = document.getElementById('run');
     const submit = document.getElementById('submit');
     run.setAttribute("disabled", "");
@@ -18,7 +19,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById('courseTab').addEventListener('shown.bs.tab', function (event) {
         const activeTab = event.target; // Tab đang active
         const previousTab = event.relatedTarget; // Tab trước đó
-
         // Kiểm tra tab và enable/disable các nút tương ứng
         if (activeTab.id === 'description-tab') {
             run.setAttribute("disabled", "");
@@ -28,6 +28,48 @@ document.addEventListener("DOMContentLoaded", (event) => {
             submit.removeAttribute("disabled");
         }
     });
+
+    document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
+        const activeTab = event.target; // Tab đang active
+        if (editor.getValue() != "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
+            if (!confirm('Next tab without saving?')) {
+                event.preventDefault();
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/submissions/clear-session',
+                    success: function (response) {
+                        var dSelectedText = document.querySelector('label.dd-selected-text');
+                        dSelectedText.innerHTML = "C++";
+                        var selectedInput = document.querySelector('a.dd-option-selected');
+                        selectedInput.classList.remove('dd-option-selected');
+
+                        const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
+                        var current_input = document.querySelector(current_input_value);
+                        if (current_input) {
+                            var parentA = current_input.closest('a');
+                            if (parentA) {
+                                parentA.classList.add('dd-option-selected');
+                            } else {
+                                console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                            }
+                        } else {
+                            console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                        }
+                        editor.setOption("mode", "text/x-c++src")
+                        editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                        option = 54;
+                        langague_name = 'C++';
+                    },
+                    error: function (error) {
+                        console.error('Error clear session:', error);
+                    }
+                });
+
+            }
+        }
+    });
+
 
     for (let i = 1; i <= number_of_assignments.value; i++) {
         var input = document.createElement('input');
@@ -42,14 +84,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     editor.on('change', function () {
         saveContent(editor.getValue());
     });
     $.ajax({
         type: 'GET',
         url: '/api/submissions/get-content',
-        success: function(response) {
+        success: function (response) {
             if (response) {
 
                 console.log("JON session");
@@ -61,23 +103,23 @@ $(document).ready(function() {
                 const language_name_receive = dataJson.language_name;
 
 
-                const nextTabButton =document.getElementById(current_tab_id);
+                const nextTabButton = document.getElementById(current_tab_id);
                 nextTabButton.click();
 
 
-                const current_input_value = 'input.dd-option-value[value="'+mode_receive+'"]';
+                const current_input_value = 'input.dd-option-value[value="' + mode_receive + '"]';
                 var input_to_change = document.querySelector(current_input_value);
                 var selectedInput = document.querySelector('a.dd-option-selected');
                 var dSelectedValue = document.querySelector('input.dd-selected-value');
                 var dSelectedText = document.querySelector('label.dd-selected-text');
 
-                if (mode_receive === "text/x-c++src") { 
+                if (mode_receive === "text/x-c++src") {
                     dSelectedText.innerHTML = "C++";
                 }
                 if (mode_receive === "text/x-java") {
                     dSelectedText.innerHTML = "Java";
                 }
-                if (mode_receive=== "text/x-csharp") {
+                if (mode_receive === "text/x-csharp") {
                     dSelectedText.innerHTML = "C#";
                 }
                 if (mode_receive === "text/x-python") {
@@ -88,7 +130,7 @@ $(document).ready(function() {
                     var parentA = input_to_change.closest('a');
                     // Kiểm tra xem có thẻ a được tìm thấy không
                     if (parentA) {
-                        dSelectedValue.value =mode_receive;
+                        dSelectedValue.value = mode_receive;
                         selectedInput.classList.remove('dd-option-selected');
                         // Xoá class "dd-option-selected" khỏi thẻ a
                         parentA.classList.add('dd-option-selected');
@@ -115,18 +157,19 @@ $(document).ready(function() {
                 if (mode_receive === "text/x-python") {
                     option = 71;
                 }
-                langague_name =language_name_receive;
+                langague_name = language_name_receive;
             }
         },
-        error: function(error) {
+        error: function (error) {
             console.error('Error getting content:', error);
         }
     });
 });
+
 function saveContent(content) {
     // Lấy thẻ input đầu tiên có class "dd-option-selected" trong thẻ a
     var selectedInput = document.querySelector('a.dd-option-selected input.dd-option-value');
-    var current_tab_id =  document.querySelector('button.nav-link.active');
+    var current_tab_id = document.querySelector('button.nav-link.active');
     $.ajax({
         type: 'POST',
         url: '/api/submissions/save-content', // Đổi đường dẫn này thành API của bạn
@@ -136,14 +179,15 @@ function saveContent(content) {
             langague_name: langague_name,
             current_tab_id: current_tab_id.id
         },
-        success: function(response) {
+        success: function (response) {
             console.log('Content saved successfully!');
         },
-        error: function(error) {
+        error: function (error) {
             console.error('Error saving content:', error);
         }
     });
 }
+
 function updateTimer(endTime) {
     var timeLimitInMinutes = endTime;
     var timeLimitInSeconds = timeLimitInMinutes * 60;
@@ -174,6 +218,7 @@ function updateTimer(endTime) {
 
     var timerInterval = setInterval(startTimer, 1000);
 }
+
 function encode(str) {
     return btoa(unescape(encodeURIComponent(str || "")));
 }
@@ -1170,17 +1215,17 @@ submit.addEventListener("click", async function () {
 
                                     const result = await response.text();
                                     console.log("Submission_Kit Status: " + (result));
-                                    if (result== "passed"){
+                                    if (result == "passed") {
                                         const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
                                         window.location.href = url;
-                                    }else if (result=="failed"){
+                                    } else if (result == "failed") {
                                         const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
                                         window.location.href = url;
-                                    }else{
+                                    } else {
 
                                     }
 
-                                }else {
+                                } else {
                                     nextTab.classList.add("activebutton");
                                     currentTab.classList.remove("activebutton");
                                     nextTab.querySelector('button').click();

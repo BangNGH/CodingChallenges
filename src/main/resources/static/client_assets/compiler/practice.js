@@ -17,11 +17,30 @@ const time_limit = document.getElementById('assignment_time_limit');
 const allTestCase = document.getElementById('allTestCase');
 const allTestCaseJSON = allTestCase.getAttribute('data-test-cases');
 const testCases = JSON.parse(testCasesJSON);
+document.addEventListener('DOMContentLoaded', function () {
+    var hash = window.location.hash;
+    if (hash !== '') {
+        const tabToSelect = document.getElementById(window.location.hash.substr(1));
+        if (tabToSelect) {
+            const tab = new bootstrap.Tab(tabToSelect);
+            tab.show();
+        }
+    }
 
-$(document).ready(function() {
+
+});
+$(document).ready(function () {
+
     document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
         const activeTab = event.target; // Tab đang active
 
+        if (activeTab.id === 'curriculum-tab') {
+            window.location.hash = 'curriculum-tab';
+            window.location.reload();
+        } else {
+            window.location.hash = activeTab.id;
+        }
+        console.log(window.location.hash);
         // Kiểm tra tab và enable/disable các nút tương ứng
         if (activeTab.value === 'locked') {
             if (!confirm("If you unlock the solution, your score will not be counted toward your progress.")) {
@@ -34,6 +53,9 @@ $(document).ready(function() {
                     url: '/api/submissions/unlock-solution',
                     data: {
                         assignment_id: assignmentIDElement.value,
+                    },
+                    success: function () {
+
                     },
                     error: function (error) {
                         console.error('Error getting content:', error);
@@ -50,14 +72,14 @@ $(document).ready(function() {
     $.ajax({
         type: 'GET',
         url: '/api/submissions/get-content',
-        success: function(response) {
+        success: function (response) {
             if (response) {
                 const dataJson = JSON.parse(response);
                 const mode_receive = dataJson.mode;
                 const content_receive = dataJson.content;
                 const language_name_receive = dataJson.language_name;
 
-                const current_input_value = 'input.dd-option-value[value="'+mode_receive+'"]';
+                const current_input_value = 'input.dd-option-value[value="' + mode_receive + '"]';
                 var input_to_change = document.querySelector(current_input_value);
                 var selectedInput = document.querySelector('a.dd-option-selected');
                 var dSelectedValue = document.querySelector('input.dd-selected-value');
@@ -71,7 +93,7 @@ $(document).ready(function() {
                     dSelectedText.innerHTML = "Java";
                     img.src = "/client_assets/lang-icon/java.png";
                 }
-                if (mode_receive=== "text/x-csharp") {
+                if (mode_receive === "text/x-csharp") {
                     dSelectedText.innerHTML = "C#";
                     img.src = "/client_assets/lang-icon/csharp.png";
                 }
@@ -84,7 +106,7 @@ $(document).ready(function() {
                     var parentA = input_to_change.closest('a');
                     // Kiểm tra xem có thẻ a được tìm thấy không
                     if (parentA) {
-                        dSelectedValue.value =mode_receive;
+                        dSelectedValue.value = mode_receive;
                         selectedInput.classList.remove('dd-option-selected');
                         // Xoá class "dd-option-selected" khỏi thẻ a
                         parentA.classList.add('dd-option-selected');
@@ -111,14 +133,15 @@ $(document).ready(function() {
                 if (mode_receive === "text/x-python") {
                     option = 71;
                 }
-                langague_name =language_name_receive;
+                langague_name = language_name_receive;
             }
         },
-        error: function(error) {
+        error: function (error) {
             console.error('Error getting content:', error);
         }
     });
 });
+
 function saveContent(content) {
     // Lấy thẻ input đầu tiên có class "dd-option-selected" trong thẻ a
     var selectedInput = document.querySelector('a.dd-option-selected input.dd-option-value');
@@ -131,10 +154,10 @@ function saveContent(content) {
             langague_name: langague_name,
             current_tab_id: "-1"
         },
-        success: function(response) {
+        success: function (response) {
             console.log('Content saved successfully!');
         },
-        error: function(error) {
+        error: function (error) {
             console.error('Error saving content:', error);
         }
     });
@@ -146,9 +169,10 @@ function encode(str) {
 
 function decode(bytes) {
     var escaped = escape(atob(bytes || ""));
-        return decodeURIComponent(escaped);
+    return decodeURIComponent(escaped);
 
 }
+
 theme.addEventListener("change", function () {
     if (theme.value === "Dark") {
         editor.setOption("theme", "dracula")
@@ -175,10 +199,10 @@ run.addEventListener("click", async function () {
     testCasesContainer.innerHTML = '';
     excuting.style.display = 'block';
     const bottomElement = document.getElementById('excuting');
-    bottomElement.scrollIntoView({ behavior: 'smooth' });
-    let count =0;
+    bottomElement.scrollIntoView({behavior: 'smooth'});
+    let count = 0;
     let submissions;
-    if(time_limit.value !== "0" && memory_limit.value !== "0") {
+    if (time_limit.value !== "0" && memory_limit.value !== "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -190,7 +214,7 @@ run.addEventListener("click", async function () {
                 memory_limit: memory_limit.value
             };
         });
-    }else if(time_limit.value !== "0" && memory_limit.value === "0") {
+    } else if (time_limit.value !== "0" && memory_limit.value === "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -201,7 +225,7 @@ run.addEventListener("click", async function () {
                 cpu_time_limit: time_limit.value
             };
         });
-    }else if(time_limit.value === "0" && memory_limit.value !== "0") {
+    } else if (time_limit.value === "0" && memory_limit.value !== "0") {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -212,7 +236,7 @@ run.addEventListener("click", async function () {
                 memory_limit: memory_limit.value
             };
         });
-    }else {
+    } else {
         submissions = testCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -226,61 +250,61 @@ run.addEventListener("click", async function () {
     console.log(submissions);
 
     const postURL = 'https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=false';
-        const options = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Key': MY_API_KEY,
-                'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-            },
-            body: JSON.stringify({
-                submissions: submissions
-            })
-        };
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'Content-Type': 'application/json',
+            'X-RapidAPI-Key': MY_API_KEY,
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+        },
+        body: JSON.stringify({
+            submissions: submissions
+        })
+    };
 
-        try {
-            const response = await fetch(postURL, options);
-            const postResult = await response.json();
-            const tokens = postResult.map(item => item.token);
-            const tokensString = tokens.join(',');
-            console.log("Tokens: " + tokensString);
-            const checkStatus = async () => {
-                const getURL = `https://ce.judge0.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=source_code,stdout,stdin,memory,time,token,compile_output,message,status,expected_output`;
-                const getOptions = {
-                    method: 'GET',
-                    headers: {
-                        'X-RapidAPI-Key': MY_API_KEY,
-                        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-                    }
-                };
-                try {
-                    const getResult = await fetch(getURL, getOptions);
-                    const result = await getResult.json();
-                    console.log(result);
-                    //"Processing" - "In Queue"
-                    const processingSubmissions = result.submissions.filter(submission => submission.status && submission.status.id <=2);
-                    if (processingSubmissions.length >=1) {
-                        setTimeout(() => {
-                            checkStatus();
-                        }, 4000);
-                    } else {
-                        result.submissions.every((submission, index) => {
-                            const newContainer = document.createElement('div');
-                            newContainer.classList.add('col-xxl-10', 'offset-xxl-1', 'col-xl-10', 'offset-xl-1', 'col-lg-10', 'offset-lg-1');
-                            if (submission.status && submission.status.id === 3) {
-                                //Accepted
-                                var stdin = decode(submission.stdin);
-                                var stdout = decode(submission.stdout);
-                                var expected_output = decode(submission.expected_output);
+    try {
+        const response = await fetch(postURL, options);
+        const postResult = await response.json();
+        const tokens = postResult.map(item => item.token);
+        const tokensString = tokens.join(',');
+        console.log("Tokens: " + tokensString);
+        const checkStatus = async () => {
+            const getURL = `https://ce.judge0.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=source_code,stdout,stdin,memory,time,token,compile_output,message,status,expected_output`;
+            const getOptions = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': MY_API_KEY,
+                    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+                }
+            };
+            try {
+                const getResult = await fetch(getURL, getOptions);
+                const result = await getResult.json();
+                console.log(result);
+                //"Processing" - "In Queue"
+                const processingSubmissions = result.submissions.filter(submission => submission.status && submission.status.id <= 2);
+                if (processingSubmissions.length >= 1) {
+                    setTimeout(() => {
+                        checkStatus();
+                    }, 4000);
+                } else {
+                    result.submissions.every((submission, index) => {
+                        const newContainer = document.createElement('div');
+                        newContainer.classList.add('col-xxl-10', 'offset-xxl-1', 'col-xl-10', 'offset-xl-1', 'col-lg-10', 'offset-lg-1');
+                        if (submission.status && submission.status.id === 3) {
+                            //Accepted
+                            var stdin = decode(submission.stdin);
+                            var stdout = decode(submission.stdout);
+                            var expected_output = decode(submission.expected_output);
 
-                                count=count+1;
-                                let isSampleTestCase;
-                                if (count <= testCases.length){
-                                    isSampleTestCase = true;
-                                }else isSampleTestCase = false;
+                            count = count + 1;
+                            let isSampleTestCase;
+                            if (count <= testCases.length) {
+                                isSampleTestCase = true;
+                            } else isSampleTestCase = false;
 
-                                newContainer.innerHTML = `
+                            newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -356,29 +380,29 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                // Thêm container vào container chứa test cases
-                                testCasesContainer.appendChild(newContainer);
-                                Prism.highlightAll();
+                            // Thêm container vào container chứa test cases
+                            testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
 
-                                const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                viewMoreButton.addEventListener('click', () => {
-                                    if (testcaseDetails.style.display === 'block') {
-                                        testcaseDetails.style.display = 'none';
-                                    } else {
-                                        testcaseDetails.style.display = 'block';
-                                    }
-                                });
-                                excuting.style.display = 'none';
-                                resultSection.style.display = 'block';
-                            }else if (submission.status && submission.status.id === 4) {
-                                //Wrong Answer
-                                var stdin = decode(submission.stdin).trim();
-                                var stdout = decode(submission.stdout).trim();
-                                var expected_output = decode(submission.expected_output).trim();
-                                console.log("INPUT: "+stdin);
-                                count=count+1;
-                                newContainer.innerHTML = `
+                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                            const testcaseDetails = document.getElementById(`event-details-${count}`);
+                            viewMoreButton.addEventListener('click', () => {
+                                if (testcaseDetails.style.display === 'block') {
+                                    testcaseDetails.style.display = 'none';
+                                } else {
+                                    testcaseDetails.style.display = 'block';
+                                }
+                            });
+                            excuting.style.display = 'none';
+                            resultSection.style.display = 'block';
+                        } else if (submission.status && submission.status.id === 4) {
+                            //Wrong Answer
+                            var stdin = decode(submission.stdin).trim();
+                            var stdout = decode(submission.stdout).trim();
+                            var expected_output = decode(submission.expected_output).trim();
+                            console.log("INPUT: " + stdin);
+                            count = count + 1;
+                            newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -462,29 +486,28 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                // Thêm container vào container chứa test cases
-                                testCasesContainer.appendChild(newContainer);
-                                Prism.highlightAll();
-                                const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                viewMoreButton.addEventListener('click', () => {
-                                    if (testcaseDetails.style.display === 'block') {
-                                        testcaseDetails.style.display = 'none';
-                                    } else {
-                                        testcaseDetails.style.display = 'block';
-                                    }
-                                });
-                                excuting.style.display = 'none';
-                                resultSection.style.display = 'block';
-                                return false;
-                            }
-                            else if (submission.status && submission.status.id === 11) {
-                                var message = decode(submission.message);
-                                var description = (submission.status.description);
-                                var output = [message, description].join("\n").trim();
+                            // Thêm container vào container chứa test cases
+                            testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                            const testcaseDetails = document.getElementById(`event-details-${count}`);
+                            viewMoreButton.addEventListener('click', () => {
+                                if (testcaseDetails.style.display === 'block') {
+                                    testcaseDetails.style.display = 'none';
+                                } else {
+                                    testcaseDetails.style.display = 'block';
+                                }
+                            });
+                            excuting.style.display = 'none';
+                            resultSection.style.display = 'block';
+                            return false;
+                        } else if (submission.status && submission.status.id === 11) {
+                            var message = decode(submission.message);
+                            var description = (submission.status.description);
+                            var output = [message, description].join("\n").trim();
 
-                                count=count+1;
-                                newContainer.innerHTML = `
+                            count = count + 1;
+                            newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -533,30 +556,29 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                // Thêm container vào container chứa test cases
-                                testCasesContainer.appendChild(newContainer);
-                                Prism.highlightAll();
-                                const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                viewMoreButton.addEventListener('click', () => {
-                                    if (testcaseDetails.style.display === 'block') {
-                                        testcaseDetails.style.display = 'none';
-                                    } else {
-                                        testcaseDetails.style.display = 'block';
-                                    }
-                                });
-                                excuting.style.display = 'none';
-                                resultSection.style.display = 'block';
-                                return false;
-                            }
-                            else {
+                            // Thêm container vào container chứa test cases
+                            testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
+                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                            const testcaseDetails = document.getElementById(`event-details-${count}`);
+                            viewMoreButton.addEventListener('click', () => {
+                                if (testcaseDetails.style.display === 'block') {
+                                    testcaseDetails.style.display = 'none';
+                                } else {
+                                    testcaseDetails.style.display = 'block';
+                                }
+                            });
+                            excuting.style.display = 'none';
+                            resultSection.style.display = 'block';
+                            return false;
+                        } else {
 
-                                var stdout = decode(submission.stdout);
-                                var compile_output = decode(submission.compile_output);
-                                var output = [compile_output, stdout].join("\n").trim();
-                                console.log("status ID: "+submission.status.id);
-                                count=count+1;
-                                newContainer.innerHTML = `
+                            var stdout = decode(submission.stdout);
+                            var compile_output = decode(submission.compile_output);
+                            var output = [compile_output, stdout].join("\n").trim();
+                            console.log("status ID: " + submission.status.id);
+                            count = count + 1;
+                            newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -606,37 +628,36 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                // Thêm container vào container chứa test cases
-                                testCasesContainer.appendChild(newContainer);
-                                Prism.highlightAll();
+                            // Thêm container vào container chứa test cases
+                            testCasesContainer.appendChild(newContainer);
+                            Prism.highlightAll();
 
-                                const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                viewMoreButton.addEventListener('click', () => {
-                                    if (testcaseDetails.style.display === 'block') {
-                                        testcaseDetails.style.display = 'none';
-                                    } else {
-                                        testcaseDetails.style.display = 'block';
-                                    }
-                                });
-                                excuting.style.display = 'none';
-                                resultSection.style.display = 'block';
-                                return false;
-                            }
-                            return true;
-                        });
-                    }
-
-
-
-                } catch (error) {
-                    console.log(error);
+                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                            const testcaseDetails = document.getElementById(`event-details-${count}`);
+                            viewMoreButton.addEventListener('click', () => {
+                                if (testcaseDetails.style.display === 'block') {
+                                    testcaseDetails.style.display = 'none';
+                                } else {
+                                    testcaseDetails.style.display = 'block';
+                                }
+                            });
+                            excuting.style.display = 'none';
+                            resultSection.style.display = 'block';
+                            return false;
+                        }
+                        return true;
+                    });
                 }
-            };
-            await checkStatus();
-        } catch (error) {
-            console.error(error);
-        }
+
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        await checkStatus();
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 submit.addEventListener("click", async function () {
@@ -647,10 +668,10 @@ submit.addEventListener("click", async function () {
     const source_code = editor.getValue().trim();
     excuting.style.display = 'block';
     const bottomElement = document.getElementById('excuting');
-    bottomElement.scrollIntoView({ behavior: 'smooth' });
-    let count =0;
+    bottomElement.scrollIntoView({behavior: 'smooth'});
+    let count = 0;
     let submissions;
-    if(time_limit.value !== "0" && memory_limit.value !== "0") {
+    if (time_limit.value !== "0" && memory_limit.value !== "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -662,7 +683,7 @@ submit.addEventListener("click", async function () {
                 memory_limit: memory_limit.value
             };
         });
-    }else if(time_limit.value !== "0" && memory_limit.value === "0") {
+    } else if (time_limit.value !== "0" && memory_limit.value === "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -673,7 +694,7 @@ submit.addEventListener("click", async function () {
                 cpu_time_limit: time_limit.value
             };
         });
-    }else if(time_limit.value === "0" && memory_limit.value !== "0") {
+    } else if (time_limit.value === "0" && memory_limit.value !== "0") {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -684,7 +705,7 @@ submit.addEventListener("click", async function () {
                 memory_limit: memory_limit.value
             };
         });
-    }else {
+    } else {
         submissions = allTestCases.map(testCase => {
             // Tạo đối tượng submission cho mỗi test case
             return {
@@ -697,72 +718,72 @@ submit.addEventListener("click", async function () {
     }
     console.log(submissions);
     const postURL = 'https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=false';
-        const options = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Key': MY_API_KEY,
-                'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-            },
-            body: JSON.stringify({
-                submissions: submissions
-            })
-        };
+    const options = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'Content-Type': 'application/json',
+            'X-RapidAPI-Key': MY_API_KEY,
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+        },
+        body: JSON.stringify({
+            submissions: submissions
+        })
+    };
 
-        try {
-            const response = await fetch(postURL, options);
-            const postResult = await response.json();
-            const tokens = postResult.map(item => item.token);
-            const tokensString = tokens.join(',');
-            console.log("Tokens: " + tokensString);
-            const checkSubmitStatus = async () => {
-                const getURL = `https://ce.judge0.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=source_code,stdout,stdin,memory,time,token,compile_output,message,status,expected_output`;
-                const getOptions = {
-                    method: 'GET',
-                    headers: {
-                        'X-RapidAPI-Key': MY_API_KEY,
-                        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-                    }
-                };
+    try {
+        const response = await fetch(postURL, options);
+        const postResult = await response.json();
+        const tokens = postResult.map(item => item.token);
+        const tokensString = tokens.join(',');
+        console.log("Tokens: " + tokensString);
+        const checkSubmitStatus = async () => {
+            const getURL = `https://ce.judge0.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=source_code,stdout,stdin,memory,time,token,compile_output,message,status,expected_output`;
+            const getOptions = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': MY_API_KEY,
+                    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+                }
+            };
 
-                const getResult = await fetch(getURL, getOptions);
-                const result = await getResult.json();
-                console.log(result);
-                const processingSubmissions = result.submissions.filter(submission => submission.status && submission.status.id <=2);
-                if (processingSubmissions.length >=1) {
-                    setTimeout(() => {
-                        checkSubmitStatus();
-                    }, 4000);
-                }else {
-                    result.submissions.every((submission, index) => {
+            const getResult = await fetch(getURL, getOptions);
+            const result = await getResult.json();
+            console.log(result);
+            const processingSubmissions = result.submissions.filter(submission => submission.status && submission.status.id <= 2);
+            if (processingSubmissions.length >= 1) {
+                setTimeout(() => {
+                    checkSubmitStatus();
+                }, 4000);
+            } else {
+                result.submissions.every((submission, index) => {
 
-                        const newContainer = document.createElement('div');
-                        newContainer.classList.add('col-xxl-10', 'offset-xxl-1', 'col-xl-10', 'offset-xl-1', 'col-lg-10', 'offset-lg-1');
-                        if (submission.status && submission.status.id === 3) {
-                            //Accepted
-                            var stdin = decode(submission.stdin);
-                            var stdout = decode(submission.stdout);
-                            var expected_output = decode(submission.expected_output);
+                    const newContainer = document.createElement('div');
+                    newContainer.classList.add('col-xxl-10', 'offset-xxl-1', 'col-xl-10', 'offset-xl-1', 'col-lg-10', 'offset-lg-1');
+                    if (submission.status && submission.status.id === 3) {
+                        //Accepted
+                        var stdin = decode(submission.stdin);
+                        var stdout = decode(submission.stdout);
+                        var expected_output = decode(submission.expected_output);
 
-                            let submission_add_to_list = {
-                                executionTime: submission.time,
-                                memory: submission.memory,
-                                my_output: decode(submission.stdout),
-                                expected_output: decode(submission.expected_output),
-                                stdin: decode(submission.stdin),
-                                ispassed: true
-                            };
-                            submissions_to_send.push(submission_add_to_list);
+                        let submission_add_to_list = {
+                            executionTime: submission.time,
+                            memory: submission.memory,
+                            my_output: decode(submission.stdout),
+                            expected_output: decode(submission.expected_output),
+                            stdin: decode(submission.stdin),
+                            ispassed: true
+                        };
+                        submissions_to_send.push(submission_add_to_list);
 
 
-                            count=count+1;
-                            let isSampleTestCase;
-                            if (count <= testCases.length){
-                                isSampleTestCase = true;
-                            }else isSampleTestCase = false;
+                        count = count + 1;
+                        let isSampleTestCase;
+                        if (count <= testCases.length) {
+                            isSampleTestCase = true;
+                        } else isSampleTestCase = false;
 
-                            newContainer.innerHTML = `
+                        newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -780,7 +801,7 @@ submit.addEventListener("click", async function () {
                 </h3>
             </div>
           
-                <div class="events__more" style="display: ${isSampleTestCase ?  'block' : 'none'}">
+                <div class="events__more" style="display: ${isSampleTestCase ? 'block' : 'none'}">
                     <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
                         Xem chi tiết
                         <i class="far fa-arrow-right"></i>
@@ -840,39 +861,39 @@ submit.addEventListener("click", async function () {
         </div>
  
     `;
-                            // Thêm container vào container chứa test cases
-                            testCasesContainer.appendChild(newContainer);
-                            Prism.highlightAll();
+                        // Thêm container vào container chứa test cases
+                        testCasesContainer.appendChild(newContainer);
+                        Prism.highlightAll();
 
-                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                            const testcaseDetails = document.getElementById(`event-details-${count}`);
-                            viewMoreButton.addEventListener('click', () => {
-                                if (testcaseDetails.style.display === 'block') {
-                                    testcaseDetails.style.display = 'none';
-                                } else {
-                                    testcaseDetails.style.display = 'block';
-                                }
-                            });
-                            excuting.style.display = 'none';
-                            resultSection.style.display = 'block';
-                        }else if (submission.status && submission.status.id === 4) {
-                            //Wrong Answer
-                            var stdin = decode(submission.stdin).trim();
-                            var stdout = decode(submission.stdout).trim();
-                            var expected_output = decode(submission.expected_output).trim();
+                        const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                        const testcaseDetails = document.getElementById(`event-details-${count}`);
+                        viewMoreButton.addEventListener('click', () => {
+                            if (testcaseDetails.style.display === 'block') {
+                                testcaseDetails.style.display = 'none';
+                            } else {
+                                testcaseDetails.style.display = 'block';
+                            }
+                        });
+                        excuting.style.display = 'none';
+                        resultSection.style.display = 'block';
+                    } else if (submission.status && submission.status.id === 4) {
+                        //Wrong Answer
+                        var stdin = decode(submission.stdin).trim();
+                        var stdout = decode(submission.stdout).trim();
+                        var expected_output = decode(submission.expected_output).trim();
 
-                            let submission_add_to_list = {
-                                executionTime: submission.time,
-                                memory: submission.memory,
-                                my_output: decode(submission.stdout),
-                                expected_output: decode(submission.expected_output),
-                                stdin: decode(submission.stdin).trim(),
-                                ispassed: false
-                            };
-                            submissions_to_send.push(submission_add_to_list);
+                        let submission_add_to_list = {
+                            executionTime: submission.time,
+                            memory: submission.memory,
+                            my_output: decode(submission.stdout),
+                            expected_output: decode(submission.expected_output),
+                            stdin: decode(submission.stdin).trim(),
+                            ispassed: false
+                        };
+                        submissions_to_send.push(submission_add_to_list);
 
-                            count=count+1;
-                            newContainer.innerHTML = `
+                        count = count + 1;
+                        newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -952,40 +973,39 @@ submit.addEventListener("click", async function () {
         </div>
  
     `;
-                            // Thêm container vào container chứa test cases
-                            testCasesContainer.appendChild(newContainer);
-                            Prism.highlightAll();
+                        // Thêm container vào container chứa test cases
+                        testCasesContainer.appendChild(newContainer);
+                        Prism.highlightAll();
 
-                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                            const testcaseDetails = document.getElementById(`event-details-${count}`);
-                            viewMoreButton.addEventListener('click', () => {
-                                if (testcaseDetails.style.display === 'block') {
-                                    testcaseDetails.style.display = 'none';
-                                } else {
-                                    testcaseDetails.style.display = 'block';
-                                }
-                            });
-                            excuting.style.display = 'none';
-                            resultSection.style.display = 'block';
-                            return false;
-                        }
-                        else if (submission.status && submission.status.id === 11) {
+                        const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                        const testcaseDetails = document.getElementById(`event-details-${count}`);
+                        viewMoreButton.addEventListener('click', () => {
+                            if (testcaseDetails.style.display === 'block') {
+                                testcaseDetails.style.display = 'none';
+                            } else {
+                                testcaseDetails.style.display = 'block';
+                            }
+                        });
+                        excuting.style.display = 'none';
+                        resultSection.style.display = 'block';
+                        return false;
+                    } else if (submission.status && submission.status.id === 11) {
 
-                            var message = decode(submission.message);
-                            var description = (submission.status.description);
-                            var output = [message, description].join("\n").trim();
+                        var message = decode(submission.message);
+                        var description = (submission.status.description);
+                        var output = [message, description].join("\n").trim();
 
-                            let submission_add_to_list = {
-                                executionTime: submission.time,
-                                memory: submission.memory,
-                                my_output: output,
-                                expected_output: decode(submission.expected_output),
-                                stdin: decode(submission.stdin),
-                                ispassed: false
-                            };
-                            submissions_to_send.push(submission_add_to_list);
-                            count=count+1;
-                            newContainer.innerHTML = `
+                        let submission_add_to_list = {
+                            executionTime: submission.time,
+                            memory: submission.memory,
+                            my_output: output,
+                            expected_output: decode(submission.expected_output),
+                            stdin: decode(submission.stdin),
+                            ispassed: false
+                        };
+                        submissions_to_send.push(submission_add_to_list);
+                        count = count + 1;
+                        newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -1035,40 +1055,39 @@ submit.addEventListener("click", async function () {
         </div>
  
     `;
-                            // Thêm container vào container chứa test cases
-                            testCasesContainer.appendChild(newContainer);
-                            Prism.highlightAll();
+                        // Thêm container vào container chứa test cases
+                        testCasesContainer.appendChild(newContainer);
+                        Prism.highlightAll();
 
-                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                            const testcaseDetails = document.getElementById(`event-details-${count}`);
-                            viewMoreButton.addEventListener('click', () => {
-                                if (testcaseDetails.style.display === 'block') {
-                                    testcaseDetails.style.display = 'none';
-                                } else {
-                                    testcaseDetails.style.display = 'block';
-                                }
-                            });
-                            excuting.style.display = 'none';
-                            resultSection.style.display = 'block';
-                            return false;
-                        }
-                        else {
+                        const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                        const testcaseDetails = document.getElementById(`event-details-${count}`);
+                        viewMoreButton.addEventListener('click', () => {
+                            if (testcaseDetails.style.display === 'block') {
+                                testcaseDetails.style.display = 'none';
+                            } else {
+                                testcaseDetails.style.display = 'block';
+                            }
+                        });
+                        excuting.style.display = 'none';
+                        resultSection.style.display = 'block';
+                        return false;
+                    } else {
 
-                            var stdout = decode(submission.stdout);
-                            var compile_output = decode(submission.compile_output);
-                            var output = [compile_output, stdout].join("\n").trim();
+                        var stdout = decode(submission.stdout);
+                        var compile_output = decode(submission.compile_output);
+                        var output = [compile_output, stdout].join("\n").trim();
 
-                            let submission_add_to_list = {
-                                executionTime: submission.time,
-                                memory: submission.memory,
-                                my_output: output,
-                                expected_output: decode(submission.expected_output),
-                                stdin: decode(submission.stdin),
-                                ispassed: false
-                            };
-                            submissions_to_send.push(submission_add_to_list);
-                            count=count+1;
-                            newContainer.innerHTML = `
+                        let submission_add_to_list = {
+                            executionTime: submission.time,
+                            memory: submission.memory,
+                            my_output: output,
+                            expected_output: decode(submission.expected_output),
+                            stdin: decode(submission.stdin),
+                            ispassed: false
+                        };
+                        submissions_to_send.push(submission_add_to_list);
+                        count = count + 1;
+                        newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -1119,53 +1138,53 @@ submit.addEventListener("click", async function () {
         </div>
  
     `;
-                            // Thêm container vào container chứa test cases
-                            testCasesContainer.appendChild(newContainer);
-                            Prism.highlightAll();
+                        // Thêm container vào container chứa test cases
+                        testCasesContainer.appendChild(newContainer);
+                        Prism.highlightAll();
 
-                            const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                            const testcaseDetails = document.getElementById(`event-details-${count}`);
-                            viewMoreButton.addEventListener('click', () => {
-                                if (testcaseDetails.style.display === 'block') {
-                                    testcaseDetails.style.display = 'none';
-                                } else {
-                                    testcaseDetails.style.display = 'block';
-                                }
-                            });
-                            excuting.style.display = 'none';
-                            resultSection.style.display = 'block';
-                            return false;
-                        }
-                        return true;
+                        const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+                        const testcaseDetails = document.getElementById(`event-details-${count}`);
+                        viewMoreButton.addEventListener('click', () => {
+                            if (testcaseDetails.style.display === 'block') {
+                                testcaseDetails.style.display = 'none';
+                            } else {
+                                testcaseDetails.style.display = 'block';
+                            }
+                        });
+                        excuting.style.display = 'none';
+                        resultSection.style.display = 'block';
+                        return false;
+                    }
+                    return true;
+                });
+                try {
+                    const response = await fetch('/api/submissions/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            assignment_id: assignment_id,
+                            sourceCode: encode(source_code),
+                            language: langagueName,
+                            testCaseListDTOS: submissions_to_send
+                        })
                     });
-                        try {
-                            const response = await fetch('/api/submissions/add', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    assignment_id: assignment_id,
-                                    sourceCode: encode(source_code),
-                                    language: langagueName,
-                                    testCaseListDTOS: submissions_to_send
-                                })
-                            });
 
-                            const result = await response.json();
-                            console.log("Submission return: " + JSON.stringify(result));
+                    const result = await response.json();
+                    console.log("Submission return: " + JSON.stringify(result));
 
-                        } catch (error) {
-                            console.error("error when call /api/submit: "+ error);
-                        }
+                } catch (error) {
+                    console.error("error when call /api/submit: " + error);
                 }
-            };
+            }
+        };
 
-            // Bắt đầu kiểm tra trạng thái
-            await checkSubmitStatus();
-        } catch (error) {
-            console.error(error);
-        }
+        // Bắt đầu kiểm tra trạng thái
+        await checkSubmitStatus();
+    } catch (error) {
+        console.error(error);
+    }
 
 });
 

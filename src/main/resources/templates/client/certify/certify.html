@@ -123,7 +123,7 @@
                                             <button onclick="changeTab(this)" class="nav-link active" id="description-tab" data-bs-toggle="tab"
                                                     data-bs-target="#description" type="button" role="tab"
                                                     aria-controls="description" aria-selected="true"><i
-                                                    class="icon_ribbon_alt"></i> <span>Discription</span></button>
+                                                    class="icon_ribbon_alt"></i> <span>Description</span></button>
                                         </li>
                                         <li class="nav-item" role="presentation"
                                             th:each="assignment, itrStat  : ${assignment_kit.getAssignments()}">
@@ -260,70 +260,9 @@
         });
         function changeTab(element) {
             var currentTab = document.querySelector(".nav-item.activebutton");
-            var currentButtonElement = currentTab.querySelector("button");
             currentTab.classList.remove("activebutton");
             const parent_NextTabButton = element.closest('li');
             parent_NextTabButton.classList.add("activebutton");
-
-
-
-            if (editor.getValue()!="#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
-                if (confirm('Next tab without saving?')) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/api/submissions/clear-session',
-                        success: function(response) {
-                            var dSelectedText = document.querySelector('label.dd-selected-text');
-                            dSelectedText.innerHTML = "C++";
-                            var selectedInput = document.querySelector('a.dd-option-selected');
-                            selectedInput.classList.remove('dd-option-selected');
-
-                            const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
-                            var current_input = document.querySelector(current_input_value);
-                            if (current_input) {
-                                var parentA = current_input.closest('a');
-                                if (parentA) {
-                                    parentA.classList.add('dd-option-selected');
-                                } else {
-                                    console.log('Không tìm thấy thẻ a chứa input selec language option.');
-                                }
-                            } else {
-                                console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
-                            }
-                            editor.setOption("mode", "text/x-c++src")
-                            editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
-                            option = 54;
-                            langague_name = 'C++';
-                        },
-                        error: function(error) {
-                            console.error('Error clear session:', error);
-                        }
-                    });
-
-                }else{
-
-                    currentButtonElement.setAttribute("aria-selected", "true");
-                    currentButtonElement.classList.add("active");
-                    const current_tab_id = "challenge" + currentButtonElement.getAttribute("id");
-                    let current_tab_div = document.getElementById(current_tab_id);
-                    if (current_tab_div == null) {
-                        current_tab_div = document.getElementById("description");
-                    }
-                    current_tab_div.className = "tab-pane fade active show";
-                    console.log("current_tab_id: "+current_tab_id+" current_tab_div: "+current_tab_div.classList);
-
-
-                    element.setAttribute("aria-selected", "false");
-                    element.classList.remove("active");
-                    const next_tab_id = "challenge" + element.getAttribute("id");
-                    let next_tab_div = document.getElementById(next_tab_id);
-                    if (next_tab_div == null) {
-                        next_tab_div = document.getElementById("description");
-                    }
-                    next_tab_div.className = "tab-pane fade";
-                    console.log("next_tab_id: "+next_tab_id+" next_tab_div: "+next_tab_div.classList);
-                }
-            }
             const inputElement = document.getElementById('hidden_input');
             inputElement.value = element.getAttribute("id");
         }
