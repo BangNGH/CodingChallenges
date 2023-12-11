@@ -50,12 +50,10 @@ public class Assignment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")
-    @JsonIgnore
     private UserEntity lecturer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")
-    @JsonIgnore
     private Level level;
 
     @ManyToMany(mappedBy = "assignments", fetch = FetchType.EAGER)

@@ -34,33 +34,33 @@ public class ProblemSolvingController {
     @GetMapping()
     public String index(Model model){
 
-        return findPaginated(1, model, null);
+        return "client/problem/index";
     }
 
     @GetMapping("/topic/{id}")
     public String practiceByTopic(Model model, @PathVariable("id") String id){
-        return findPaginated(1, model, id);
+        model.addAttribute("topicID", id);
+        return "client/problem/topic";
     }
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model, String byTopicID){
-        int pageSize = 10;
-        Page<Assignment> page;
-        if (byTopicID != null){
-            page = assignmentService.findPaginatedByTopic(pageNo, pageSize, byTopicID);
-        }else {
-            page = assignmentService.findPaginated(pageNo, pageSize);
-        }
-        List<Assignment> listAssignment = page.getContent();
-
-
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-
-        model.addAttribute("assignments", listAssignment);
-        return "client/problem/index";
-    }
+//    @GetMapping("/page/{pageNo}")
+//    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model, String byTopicID){
+//        int pageSize = 10;
+//        Page<Assignment> page;
+//        if (byTopicID != null){
+//            page = assignmentService.findPaginatedByTopic(pageNo, pageSize, byTopicID);
+//        }else {
+//            page = assignmentService.findPaginated(pageNo, pageSize);
+//        }
+//        List<Assignment> listAssignment = page.getContent();
+//
+//        model.addAttribute("currentPage", pageNo);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("totalItems", page.getTotalElements());
+//
+//        model.addAttribute("assignments", listAssignment);
+//        return "client/problem/index";
+//    }
     @GetMapping("/{challengeID}")
     public String practice(@PathVariable("challengeID")Long challengeID, Model model, Principal principal) throws JsonProcessingException {
         Assignment foundChallenge = assignmentService.getAssignmentById(challengeID);

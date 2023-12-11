@@ -45,89 +45,90 @@
                 <div class="col-xxl-8 col-xl-8 col-lg-8">
                     <div class="course__tab-conent">
                         <div class="tab-content" id="courseTabContent">
+                            <input id="languageId" type="hidden" th:value="${topicID}">
                             <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
                                 <div class="row" id="assignments">
-<!--                                    <div th:each="assignment : ${assignments}" class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">-->
-<!--                                        <div class="course__item white-bg mb-30 fix">-->
-<!--                                            <div class="course__thumb w-img p-relative fix">-->
-<!--                                                <a th:href="@{problemSolving/{id}(id=${assignment.id})}">-->
-<!--&lt;!&ndash;                                                    <img th:src="@{/client_assets/img/course/course-1.jpg}" alt="">&ndash;&gt;-->
-<!--                                                </a>-->
-<!--                                                <div class="course__tag">-->
-<!--                                                    <a class="yellow" href="#">Algorithm</a>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="course__content">-->
-<!--                                                <div class="course__meta d-flex align-items-center justify-content-between">-->
-<!--                                                    <div class="course__lesson">-->
-<!--                                                        <span><i class="far fa-book-alt"></i>Max score: </span>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="course__rating">-->
-<!--                                                        <span>Success Rate:</span>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.title}"></a></h3>-->
-<!--                                                <div class="course__teacher d-flex align-items-center">-->
-<!--                                                    <div class="course__teacher-thumb mr-15">-->
-<!--                                                        <img th:if="${assignment.getLecturer().avatarUrl == null}" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
-<!--                                                        <img th:if="${assignment.getLecturer().avatarUrl != null}" th:src="@{${assignment.getLecturer().getImagesPath()}}" alt="">-->
-<!--                                                    </div>-->
-<!--                                                    <h6><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.getLecturer().getFullName()}"></a></h6>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="course__more d-flex justify-content-between align-items-center">-->
-<!--                                                <div th:if="${assignment.level.id != null}" class="course__status">-->
-<!--                                                    <span class="green" th:if="${assignment.level.id == 1}" th:text="${assignment.level.name}"></span>-->
-<!--                                                    <span class="blue" th:if="${assignment.level.id == 2}" th:text="${assignment.level.name}"></span>-->
-<!--                                                    <span class="blue-2" th:if="${assignment.level.id == 3}" th:text="${assignment.level.name}"></span>-->
+                                    <!--                                    <div th:each="assignment : ${assignments}" class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">-->
+                                    <!--                                        <div class="course__item white-bg mb-30 fix">-->
+                                    <!--                                            <div class="course__thumb w-img p-relative fix">-->
+                                    <!--                                                <a th:href="@{problemSolving/{id}(id=${assignment.id})}">-->
+                                    <!--&lt;!&ndash;                                                    <img th:src="@{/client_assets/img/course/course-1.jpg}" alt="">&ndash;&gt;-->
+                                    <!--                                                </a>-->
+                                    <!--                                                <div class="course__tag">-->
+                                    <!--                                                    <a class="yellow" href="#">Algorithm</a>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                            <div class="course__content">-->
+                                    <!--                                                <div class="course__meta d-flex align-items-center justify-content-between">-->
+                                    <!--                                                    <div class="course__lesson">-->
+                                    <!--                                                        <span><i class="far fa-book-alt"></i>Max score: </span>-->
+                                    <!--                                                    </div>-->
+                                    <!--                                                    <div class="course__rating">-->
+                                    <!--                                                        <span>Success Rate:</span>-->
+                                    <!--                                                    </div>-->
+                                    <!--                                                </div>-->
+                                    <!--                                                <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.title}"></a></h3>-->
+                                    <!--                                                <div class="course__teacher d-flex align-items-center">-->
+                                    <!--                                                    <div class="course__teacher-thumb mr-15">-->
+                                    <!--                                                        <img th:if="${assignment.getLecturer().avatarUrl == null}" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">-->
+                                    <!--                                                        <img th:if="${assignment.getLecturer().avatarUrl != null}" th:src="@{${assignment.getLecturer().getImagesPath()}}" alt="">-->
+                                    <!--                                                    </div>-->
+                                    <!--                                                    <h6><a th:href="@{problemSolving/{id}(id=${assignment.id})}" th:text="${assignment.getLecturer().getFullName()}"></a></h6>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                            <div class="course__more d-flex justify-content-between align-items-center">-->
+                                    <!--                                                <div th:if="${assignment.level.id != null}" class="course__status">-->
+                                    <!--                                                    <span class="green" th:if="${assignment.level.id == 1}" th:text="${assignment.level.name}"></span>-->
+                                    <!--                                                    <span class="blue" th:if="${assignment.level.id == 2}" th:text="${assignment.level.name}"></span>-->
+                                    <!--                                                    <span class="blue-2" th:if="${assignment.level.id == 3}" th:text="${assignment.level.name}"></span>-->
 
-<!--                                                </div>-->
-<!--                                                <div class="course__btn">-->
-<!--                                                    <a th:href="@{/problemSolving/{id}(id=${assignment.id})}" class="link-btn">-->
-<!--                                                        Solve Challenge-->
-<!--                                                        <i class="far fa-arrow-right"></i>-->
-<!--                                                        <i class="far fa-arrow-right"></i>-->
-<!--                                                    </a>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <!--                                                </div>-->
+                                    <!--                                                <div class="course__btn">-->
+                                    <!--                                                    <a th:href="@{/problemSolving/{id}(id=${assignment.id})}" class="link-btn">-->
+                                    <!--                                                        Solve Challenge-->
+                                    <!--                                                        <i class="far fa-arrow-right"></i>-->
+                                    <!--                                                        <i class="far fa-arrow-right"></i>-->
+                                    <!--                                                    </a>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
                         <div id="pagination" class="row">
-<!--                            <div class="col-xxl-12">-->
-<!--                                <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">-->
-<!--                                    <ul class="d-flex align-items-center">-->
-<!--                                        <li class="prev">-->
-<!--                                            <a th:if="${currentPage > 1}"-->
-<!--                                               th:href="@{'/problemSolving/page/' + ${currentPage - 1}}" class="link-btn link-prev">-->
-<!--                                                Prev-->
-<!--                                                <i class="arrow_left"></i>-->
-<!--                                                <i class="arrow_left"></i>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--&lt;!&ndash;                                        <li class="active">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <a href="course-grid.html">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                <span>2</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
-<!--                                        <li th:each="i: ${#numbers.sequence(1, totalPages)}">-->
-<!--                                            <a th:if="${currentPage != i}"-->
-<!--                                               th:href="@{'/problemSolving/page/' + ${i}}">[[${i}]]</a>-->
-<!--                                            <span th:unless="${currentPage != i}"><a style=" color: #ffffff;background: #2b4eff; border-color: #2b4eff;">[[${i}]]</a></span>-->
-<!--                                        </li>-->
-<!--                                        <li class="next">-->
-<!--                                            <a th:if="${currentPage < totalPages}"-->
-<!--                                               th:href="@{'/problemSolving/page/' + ${currentPage + 1}}" class="link-btn">-->
-<!--                                                Next-->
-<!--                                                <i class="arrow_right"></i>-->
-<!--                                                <i class="arrow_right"></i>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!--                            <div class="col-xxl-12">-->
+                            <!--                                <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">-->
+                            <!--                                    <ul class="d-flex align-items-center">-->
+                            <!--                                        <li class="prev">-->
+                            <!--                                            <a th:if="${currentPage > 1}"-->
+                            <!--                                               th:href="@{'/problemSolving/page/' + ${currentPage - 1}}" class="link-btn link-prev">-->
+                            <!--                                                Prev-->
+                            <!--                                                <i class="arrow_left"></i>-->
+                            <!--                                                <i class="arrow_left"></i>-->
+                            <!--                                            </a>-->
+                            <!--                                        </li>-->
+                            <!--&lt;!&ndash;                                        <li class="active">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                            <a href="course-grid.html">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                <span>2</span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                            </a>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                        </li>&ndash;&gt;-->
+                            <!--                                        <li th:each="i: ${#numbers.sequence(1, totalPages)}">-->
+                            <!--                                            <a th:if="${currentPage != i}"-->
+                            <!--                                               th:href="@{'/problemSolving/page/' + ${i}}">[[${i}]]</a>-->
+                            <!--                                            <span th:unless="${currentPage != i}"><a style=" color: #ffffff;background: #2b4eff; border-color: #2b4eff;">[[${i}]]</a></span>-->
+                            <!--                                        </li>-->
+                            <!--                                        <li class="next">-->
+                            <!--                                            <a th:if="${currentPage < totalPages}"-->
+                            <!--                                               th:href="@{'/problemSolving/page/' + ${currentPage + 1}}" class="link-btn">-->
+                            <!--                                                Next-->
+                            <!--                                                <i class="arrow_right"></i>-->
+                            <!--                                                <i class="arrow_right"></i>-->
+                            <!--                                            </a>-->
+                            <!--                                        </li>-->
+                            <!--                                    </ul>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -275,19 +276,22 @@
     <script th:src="@{/client_assets/js/problemSolving.js}"></script>
     <script th:inline="javascript">
         $(document).ready(function (){
+            let languageId = document.getElementById('languageId').value;
             function fetchAssignment(startPage) {
                 $.ajax({
                     type : "GET",
-                    url : "http://localhost:8080/api/problemSolving",
+                    url : "http://localhost:8080/api/problemSolving/topic",
                     data: {
                         page: startPage,
-                        size: 8
+                        size: 8,
+                        languageId: languageId,
                     },
                     success: function(response){
+                        // alert("success!!");
                         $('#assignments').empty();
                         // add table rows
                         $.each(response.content, (i, assignment) => {
-                          assignmentContent(assignment);
+                            assignmentContent(assignment);
                         });
                         // Update pagination
                         $('#pagination').empty()
@@ -311,12 +315,13 @@
                 var searchText = $("#keyword").val();
                 function showAssignments(startPage) {
                     $.ajax({
-                        url:'http://localhost:8080/api/problemSolving/search',
+                        url:'http://localhost:8080/api/problemSolving/searchTopic',
                         type: 'GET',
                         data: {
                             page: startPage,
                             size: 8,
-                            searchText: searchText
+                            searchText: searchText,
+                            languageId: languageId
                         },
                         success: function (response){
                             // alert(response.content);

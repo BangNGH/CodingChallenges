@@ -71,22 +71,61 @@ public class AssignmentService {
         }else assignment.setMemoryLimit(0);
         assignment.setLecturer(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
+        TestCase testCase = new TestCase();
 
-        for (int i = 0; i < testCaseNames.size(); i++) {
-            TestCase testCase = new TestCase();
-            testCase.setName(testCaseNames.get(i));
-            testCase.setScore(testCaseScores.get(i));
-            max_score += testCaseScores.get(i);
-            testCase.setInput(testCaseInputs.get(i));
-            testCase.setExpectedOutput(testCaseOutPuts.get(i));
-            if (maskSamples != null && i < maskSamples.size()) {
-                testCase.setMarkSampleTestCase(maskSamples.get(i));
-            } else {
-                testCase.setMarkSampleTestCase(false);
+        if(testCaseNames.size() == 1){
+            if(testCaseInputs.size() >= 2 || testCaseOutPuts.size() >= 2){
+                testCase.setName(testCaseNames.get(0));
+                testCase.setScore(testCaseScores.get(0));
+                if(testCaseInputs.size() >= 2){
+                    StringBuilder temp1 = new StringBuilder();
+                    for (int i = 0; i < testCaseInputs.size(); i++) {
+                        String temp = testCaseInputs.get(i);
+                        temp1.append(temp);
+                        if (i < testCaseInputs.size() - 1) {
+                            temp1.append(", ");
+                        }
+                    }
+                    testCase.setInput(temp1.toString());
+                }
+                else
+                    testCase.setInput(testCaseInputs.get(0));
+                if(testCaseOutPuts.size() >= 2){
+                    StringBuilder temp2 = new StringBuilder();
+                    for (int i = 0; i < testCaseOutPuts.size(); i++) {
+                        String temp = testCaseOutPuts.get(i);
+                        temp2.append(temp);
+                        if (i < testCaseOutPuts.size() - 1) {
+                            temp2.append(", ");
+                        }
+                    }
+                    testCase.setExpectedOutput(temp2.toString());
+                }
+                else
+                    testCase.setExpectedOutput(testCaseOutPuts.get(0));
+                if (maskSamples != null && !maskSamples.isEmpty()) {
+                    testCase.setMarkSampleTestCase(maskSamples.get(0));
+                } else {
+                    testCase.setMarkSampleTestCase(false);
+                }
             }
-            testCase.setAssignment(savedAssignment);
-            testCaseService.saveTestCase(testCase);
+        }else {
+            for (int i = 0; i < testCaseNames.size(); i++) {
+
+                testCase.setName(testCaseNames.get(i));
+                testCase.setScore(testCaseScores.get(i));
+                max_score += testCaseScores.get(i);
+                testCase.setInput(testCaseInputs.get(i));
+                testCase.setExpectedOutput(testCaseOutPuts.get(i));
+                if (maskSamples != null && i < maskSamples.size()) {
+                    testCase.setMarkSampleTestCase(maskSamples.get(i));
+                } else {
+                    testCase.setMarkSampleTestCase(false);
+                }
+                testCase.setAssignment(savedAssignment);
+            }
         }
+        testCaseService.saveTestCase(testCase);
         savedAssignment.setMax_score(max_score);
 
         if (foundLanguage!=null) {
@@ -106,20 +145,60 @@ public class AssignmentService {
         assignmentRepository.save(existingAssignment);
 
         testCaseService.deleteAllTestCase(existingAssignment.getId());
-        for (int i = 0; i < testCaseNames.size(); i++) {
-            TestCase testCase = new TestCase();
-            testCase.setName(testCaseNames.get(i));
-            testCase.setScore(testCaseScores.get(i));
-            testCase.setInput(testCaseInputs.get(i));
-            testCase.setExpectedOutput(testCaseOutPuts.get(i));
-            if (maskSamples != null && i < maskSamples.size()) {
-                testCase.setMarkSampleTestCase(maskSamples.get(i));
-            } else {
-                testCase.setMarkSampleTestCase(false);
+        TestCase testCase = new TestCase();
+
+        if(testCaseNames.size() == 1){
+            if(testCaseInputs.size() >= 2 || testCaseOutPuts.size() >= 2){
+                testCase.setName(testCaseNames.get(0));
+                testCase.setScore(testCaseScores.get(0));
+                if(testCaseInputs.size() >= 2){
+                    StringBuilder temp1 = new StringBuilder();
+                    for (int i = 0; i < testCaseInputs.size(); i++) {
+                        String temp = testCaseInputs.get(i);
+                        temp1.append(temp);
+                        if (i < testCaseInputs.size() - 1) {
+                            temp1.append(", ");
+                        }
+                    }
+                    testCase.setInput(temp1.toString());
+                }
+                else
+                    testCase.setInput(testCaseInputs.get(0));
+                if(testCaseOutPuts.size() >= 2){
+                    StringBuilder temp2 = new StringBuilder();
+                    for (int i = 0; i < testCaseOutPuts.size(); i++) {
+                        String temp = testCaseOutPuts.get(i);
+                        temp2.append(temp);
+                        if (i < testCaseOutPuts.size() - 1) {
+                            temp2.append(", ");
+                        }
+                    }
+                    testCase.setExpectedOutput(temp2.toString());
+                }
+                else
+                    testCase.setExpectedOutput(testCaseOutPuts.get(0));
+                if (maskSamples != null && !maskSamples.isEmpty()) {
+                    testCase.setMarkSampleTestCase(maskSamples.get(0));
+                } else {
+                    testCase.setMarkSampleTestCase(false);
+                }
             }
-            testCase.setAssignment(existingAssignment);
-            testCaseService.saveTestCase(testCase);
         }
+        else{
+            for (int i = 0; i < testCaseNames.size(); i++) {
+                testCase.setName(testCaseNames.get(i));
+                testCase.setScore(testCaseScores.get(i));
+                testCase.setInput(testCaseInputs.get(i));
+                testCase.setExpectedOutput(testCaseOutPuts.get(i));
+                if (maskSamples != null && i < maskSamples.size()) {
+                    testCase.setMarkSampleTestCase(maskSamples.get(i));
+                } else {
+                    testCase.setMarkSampleTestCase(false);
+                }
+            }
+        }
+        testCase.setAssignment(existingAssignment);
+        testCaseService.saveTestCase(testCase);
     }
     public void deleteAssignmentById(Long id){
         assignmentRepository.deleteById(id);
@@ -128,17 +207,25 @@ public class AssignmentService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.assignmentRepository.findProblemSolvingAssignments(pageable);
     }
-    public Page<Assignment> findPaginatedByTopic(int pageNo, int pageSize,String languageID){
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Language foundLanguage = null;
-        Optional<Language> findLanguageById = languageService.findByLanguageID(Long.valueOf(languageID));
-        if (findLanguageById.isPresent()) {
-            foundLanguage = findLanguageById.get();
-        }
-        if (foundLanguage != null) {
-            return this.assignmentRepository.findAssignmentByLanguageID(pageable, foundLanguage);
-        }
-        return this.assignmentRepository.findAll(pageable);
+//    public Page<Assignment> findPaginatedByTopic(int pageNo, int pageSize,String languageID){
+//        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+//        Language foundLanguage = null;
+//        Optional<Language> findLanguageById = languageService.findByLanguageID(Long.valueOf(languageID));
+//        if (findLanguageById.isPresent()) {
+//            foundLanguage = findLanguageById.get();
+//        }
+//        if (foundLanguage != null) {
+//            return this.assignmentRepository.findAssignmentByLanguageID(pageable, foundLanguage);
+//        }
+//        return this.assignmentRepository.findAll(pageable);
+//    }
+    public Page<Assignment> searchAssignmentByName(String keyword, Pageable pageable){
+        return assignmentRepository.searchAssignmentByName(keyword, pageable);
     }
-
+    public Page<Assignment> searchAssignmentTopicByName(String keyword, Long languageId, Pageable pageable){
+        return assignmentRepository.searchAssignmentTopicByName(keyword, languageId, pageable);
+    }
+    public Page<Assignment> listAssignmentByTopic(Long languageId, Pageable pageable){
+        return assignmentRepository.findAssignmentByLanguageID(languageId, pageable);
+    }
 }

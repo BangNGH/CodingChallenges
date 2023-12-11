@@ -24,7 +24,7 @@ public class Level {
 
     private String description;
 
-    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Assignment> assignments;
 }
