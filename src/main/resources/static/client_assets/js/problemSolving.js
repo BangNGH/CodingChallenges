@@ -31,7 +31,7 @@ function assignmentContent(assignment){
                                                     <span class="${getLevelClass(assignment.level.id)}">${assignment.level.name}</span>
                                                 </div>
                                                 <div class="course__btn">
-                                                    <a href="problemSolving/${assignment.id}" class="link-btn">
+                                                    <a href="/problemSolving/${assignment.id}" class="link-btn">
                                                         Solve Challenge
                                                         <i class="far fa-arrow-right"></i>
                                                         <i class="far fa-arrow-right"></i>

@@ -21,6 +21,7 @@ public class Language {
     private Long id;
 
     private String name;
+    private String value;
     private String description;
 
     @OneToMany(mappedBy = "language_option", cascade = CascadeType.ALL)

@@ -10,6 +10,7 @@ const number_of_assignments = document.getElementById('number_of_assignments');
 const durationElement = document.getElementById('duration');
 let check = 0;
 const submissionValues = [];
+
 document.addEventListener("DOMContentLoaded", (event) => {
 
     const run = document.getElementById('run');
@@ -93,9 +94,6 @@ $(document).ready(function () {
         url: '/api/submissions/get-content',
         success: function (response) {
             if (response) {
-
-                console.log("JON session");
-
                 const dataJson = JSON.parse(response);
                 const mode_receive = dataJson.mode;
                 const current_tab_id = dataJson.current_tab_id;
@@ -134,7 +132,6 @@ $(document).ready(function () {
                         selectedInput.classList.remove('dd-option-selected');
                         // Xoá class "dd-option-selected" khỏi thẻ a
                         parentA.classList.add('dd-option-selected');
-                        console.log('Đã add class "dd-option-selected" từ thẻ a.');
                     } else {
                         console.log('Không tìm thấy thẻ a chứa input.');
                     }
@@ -187,7 +184,6 @@ function saveContent(content) {
         }
     });
 }
-
 function updateTimer(endTime) {
     var timeLimitInMinutes = endTime;
     var timeLimitInSeconds = timeLimitInMinutes * 60;
@@ -198,11 +194,34 @@ function updateTimer(endTime) {
         var minutes = Math.floor(timeLimitInSeconds / 60);
         var seconds = timeLimitInSeconds % 60;
 
+        if (minutes == 5 && seconds == 0) {
+            alert('5mins left. The test will close and you will fail if timeup, so Please submit the test before the deadline.');
+        }
+        if (minutes == 1 && seconds == 0) {
+            alert('The test will close in 2mins and you will fail if timeup, Please submit the test now!');
+        }
+        if (minutes <= 4) {
+            timerElement.className = 'text-danger';
+        }
         if (timeLimitInSeconds < 0) {
             timerElement.textContent = '00:00';
             timerElement.className = 'text-danger';
-            alert("Time Expired, You need to end test now!");
             clearInterval(timerInterval);
+            $.ajax({
+                type: 'POST',
+                url: '/api/submissions/time-expired',
+                data: {
+                    assignment_kit_id: assignment_kit_idElement.value
+                },
+                success: function (response) {
+                    alert('Thank you for taking the test. You have used up the allotted time for this test. You can retry this test after 30 days');
+                    const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
+                    window.location.href = url;
+                },
+                error: function (error) {
+                    console.error('Error saving content:', error);
+                }
+            });
             return;
         }
 

@@ -18,7 +18,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
     @Query("SELECT p FROM Assignment p WHERE p.language_option is null")
     Page<Assignment> findProblemSolvingAssignments(Pageable pageable);
 
-    @Query("SELECT a from Assignment a where a.title like %?1%")
+    @Query("SELECT a from Assignment a where a.title like %?1% and a.language_option is null")
     Page<Assignment> searchAssignmentByName(String keyword, Pageable pageable);
     @Query("SELECT a from Assignment a where a.title like %?1% and a.language_option.id =?2")
     Page<Assignment> searchAssignmentTopicByName(String keyword ,Long languageId, Pageable pageable);

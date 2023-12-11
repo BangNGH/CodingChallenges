@@ -3,10 +3,8 @@ package com.example.coderlab.controller.client;
 import com.example.coderlab.entity.AssignmentKit;
 import com.example.coderlab.entity.AssignmentKitSubmission;
 import com.example.coderlab.entity.UserEntity;
-import com.example.coderlab.service.AssignmentKitService;
-import com.example.coderlab.service.AssignmentKitSubmissionService;
-import com.example.coderlab.service.TestCaseService;
-import com.example.coderlab.service.UserServices;
+import com.example.coderlab.service.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Controller
 @RequestMapping("/skills-verification")
@@ -28,6 +30,7 @@ public class CertifyController {
     private final AssignmentKitService assignmentKitService;
     private final AssignmentKitSubmissionService assignmentKitSubmissionService;
     private final UserServices userServices;
+    private final LanguageService languageService;
     @GetMapping
     public String index(Model model) {
         model.addAttribute("assignment_kits", assignmentKitService.getAllAssignmentsKit());
@@ -35,20 +38,31 @@ public class CertifyController {
     }
 
     @GetMapping("/details/{id}")
-    public String details(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
+    public String details(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal, HttpSession session) {
+        clearSession(session);
         Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
         if (found_kit_by_id.isPresent()) {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user);
-            System.out.println(found_assignments_kit.toString());
+            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user).stream().sorted(Comparator.comparing(AssignmentKitSubmission::getSubmitted_at)).toList();
+
             if (!found_assignments_kit.isEmpty()){
                 model.addAttribute("already_tested", true);
                 Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
+                LocalDate last_attempt_at = LocalDate.from(found_assignments_kit.get(found_assignments_kit.size()-1).getSubmitted_at());
                 if (is_passed == false){
+                    LocalDate now = LocalDate.now();
+                    long daysBetween = DAYS.between(last_attempt_at, now);
+                    if (daysBetween>=30){
+                        model.addAttribute("retake", true);
+                    }else{
+                        model.addAttribute("retake", false);
+                    }
                     model.addAttribute("is_passed", false);
+                    model.addAttribute("last_attempt", last_attempt_at);
                 }else {
                     model.addAttribute("is_passed", true);
+                    model.addAttribute("last_attempt", last_attempt_at);
                 }
             } else {
                 model.addAttribute("already_tested", false);
@@ -63,18 +77,50 @@ public class CertifyController {
     }
     @GetMapping("/test/{id}")
     public String test(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
+
         Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
         if (found_kit_by_id.isPresent()) {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-            model.addAttribute("assignment_kit", found_kit_by_id.get());
-            model.addAttribute("user_id", current_user.getId());
+            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user);
+            if (found_assignments_kit.isEmpty()){
+                model.addAttribute("assignment_kit", found_kit_by_id.get());
+                model.addAttribute("user_id", current_user.getId());
+                model.addAttribute("languages",languageService.getAllLanguages());
+                return "client/certify/certify";
+            }
+            Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
+            if (is_passed) {
+                return "redirect:/skills-verification/details/"+id;
+            }else {
+                LocalDate last_attempt_at = LocalDate.from(found_assignments_kit.get(found_assignments_kit.size()-1).getSubmitted_at());
+                LocalDate now = LocalDate.now();
+                long daysBetween = DAYS.between(last_attempt_at, now);
+                if (daysBetween>=30) {
+                    model.addAttribute("assignment_kit", found_kit_by_id.get());
+                    model.addAttribute("user_id", current_user.getId());
+                    model.addAttribute("languages",languageService.getAllLanguages());
+                    return "client/certify/certify";
+                }else {
+                    return "redirect:/skills-verification/details/"+id;
 
-            return "client/certify/certify";
+                }
+            }
         }
         redirectAttributes.addFlashAttribute("message", "Not found certify with ID: " + id);
         return "redirect:/skills-verification";
-
+    }
+    private Boolean clearSession(HttpSession session) {
+        if (session != null) {
+            session.removeAttribute("editorContent");
+            session.removeAttribute("mode");
+            session.removeAttribute("option");
+            session.removeAttribute("language_name");
+            session.removeAttribute("current_tab_id");
+            System.out.println("Session cleared successfully!");
+            return true;
+        }
+        return false;
     }
 
 }

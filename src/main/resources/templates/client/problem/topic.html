@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-xxl-12">
                     <div class="page__title-wrapper mt-110">
-                        <h3 class="page__title">Problem Solving</h3>
+                        <h3 class="page__title" th:text="${nameOfTopic}"></h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -280,7 +280,7 @@
             function fetchAssignment(startPage) {
                 $.ajax({
                     type : "GET",
-                    url : "http://localhost:8080/api/problemSolving/topic",
+                    url : "/api/problemSolving/topic",
                     data: {
                         page: startPage,
                         size: 8,
@@ -315,7 +315,7 @@
                 var searchText = $("#keyword").val();
                 function showAssignments(startPage) {
                     $.ajax({
-                        url:'http://localhost:8080/api/problemSolving/searchTopic',
+                        url:'/api/problemSolving/searchTopic',
                         type: 'GET',
                         data: {
                             page: startPage,

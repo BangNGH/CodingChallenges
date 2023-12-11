@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/problemSolving")
+@RequestMapping("/api/problemSolving")
 public class ProblemSolvingRestController {
     @Autowired
     private AssignmentService assignmentService;
@@ -20,7 +20,7 @@ public class ProblemSolvingRestController {
     private AssignmentRepository assignmentRepository;
     @GetMapping("")
     public Page<Assignment> list(Pageable pageable){
-        return assignmentRepository.findAll(pageable);
+        return assignmentRepository.findProblemSolvingAssignments(pageable);
     }
     @GetMapping("/search")
     public Page<Assignment> searchAssignment(@RequestParam("searchText") String searchText, Pageable pageable){

@@ -82,7 +82,8 @@
                 <div>
                     <div class="course__wrapper">
                         <div class="course__tab-content mb-95">
-                            <input type="hidden" id="number_of_assignments" th:value="${assignment_kit.getAssignments().size()}">
+                            <input type="hidden" id="number_of_assignments"
+                                   th:value="${assignment_kit.getAssignments().size()}">
                             <input type="hidden" id="assignment_kit_id" th:value="${assignment_kit.getId()}">
                             <input type="hidden" id="duration" th:value="${assignment_kit.time}">
 
@@ -95,12 +96,15 @@
                                         </h3>
                                         <br>
                                         <div class="d-flex">
-                                            <p id="countdown">Time Left: <span class="text-success" id="timer">00:00</span></p>
+                                            <p>You have <span class="text-success"
+                                                              >[[${assignment_kit.time}]]m</span> to complete this
+                                                test.</p>
                                             <p th:text="'Number of Question: '+ ${assignment_kit.getAssignments().size()}+ ' questions'"></p>
                                             <p th:remove="tag"
                                                th:text="'Log in as: '+ ${#authentication.principal.getUsername()}"></p>
-
                                         </div>
+                                        <p class="mt-20"><span class="text-danger">*</span> The test will close when time up. In that case, you will fail this test so please submit your answer before the timeup</p>
+                                        <p class="mt-20"><span class="text-danger">*</span> The certificate for this test will be awarded immediately upon completion of the test with correct answers. Otherwise, you will have to wait 30 days to retake this test.</p>
                                     </div>
 
                                 </div>
@@ -120,18 +124,27 @@
                                     </div>
                                     <ul class="nav nav-tabs" id="courseTab" role="tablist">
                                         <li class="nav-item activebutton" role="presentation">
-                                            <button onclick="changeTab(this)" class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                                            <button onclick="changeTab(this)" class="nav-link active"
+                                                    id="description-tab" data-bs-toggle="tab"
                                                     data-bs-target="#description" type="button" role="tab"
                                                     aria-controls="description" aria-selected="true"><i
                                                     class="icon_ribbon_alt"></i> <span>Description</span></button>
                                         </li>
                                         <li class="nav-item" role="presentation"
                                             th:each="assignment, itrStat  : ${assignment_kit.getAssignments()}">
-                                            <button onclick="changeTab(this)" class="nav-link " th:id="${assignment.id}" data-bs-toggle="tab"
-                                                    th:data-bs-target="${'#challenge'+assignment.id}" type="button" role="tab"
+                                            <button onclick="changeTab(this)" class="nav-link " th:id="${assignment.id}"
+                                                    data-bs-toggle="tab"
+                                                    th:data-bs-target="${'#challenge'+assignment.id}" type="button"
+                                                    role="tab"
                                                     aria-controls="curriculum" aria-selected="false"><i
                                                     class="icon_book_alt"></i> <span
                                                     th:text="'Chanllenge 0'+${itrStat.index+1}"></span></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button style="cursor: initial" id="countdown" class="nav-link "
+                                                    type="button"><i
+                                                    class="icon_clock_alt"></i><span class="text-success" id="timer">00:00</span>
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -144,10 +157,9 @@
                                                    for="inlineFormSelectPref">Preference</label>
                                             <select style="cursor: pointer;" class="form-select"
                                                     id="inlineFormSelectPref">
-                                                <option data-imagesrc="" selected value="text/x-c++src">C++</option>
-                                                <option data-imagesrc="" value="text/x-java">Java</option>
-                                                <option data-imagesrc="" value="text/x-csharp">C#</option>
-                                                <option data-imagesrc="" value="text/x-python">Python</option>
+                                                <option th:each="language :${languages}" th:text="${language.name}"
+                                                        th:value="${language.value}">
+                                                </option>
                                             </select>
                                         </div>
                                         <div>
@@ -168,7 +180,8 @@
                                                class="bx bx-play"></i></button>
                                         <button style="cursor: pointer;background-color: #00751f" type="button"
                                                 id="submit" class="btn btn-success">Submit<i style="font-size: 17px;"
-                                                                                             class="bx bx-play"></i></button>
+                                                                                             class="bx bx-play"></i>
+                                        </button>
                                     </div>
                                     <div style="border-color: #eee; border-style: solid; border-width: 5px;">
                                                 <textarea type="text" id="editor" class="form-control"
@@ -234,13 +247,13 @@
             onSelected: function (selectedData) {
                 if (selectedData.selectedData.value === "text/x-c++src") {
                     editor.setOption("mode", "text/x-c++src")
-                    editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                    editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                     option = 54;
                     langague_name = 'C++';
                 }
                 if (selectedData.selectedData.value === "text/x-java") {
                     editor.setOption("mode", "text/x-java")
-                    editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
+                    editor.setValue('import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
                     option = 91;
                     langague_name = 'java';
                 }
@@ -252,12 +265,13 @@
                 }
                 if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
-                    editor.setOption("value", "print('Hello world!')")
+                    editor.setValue("print('Hello world!')")
                     option = 71;
-                    langague_name ='python';
+                    langague_name = 'python';
                 }
             }
         });
+
         function changeTab(element) {
             var currentTab = document.querySelector(".nav-item.activebutton");
             currentTab.classList.remove("activebutton");
@@ -268,7 +282,6 @@
         }
 
     </script>
-
     <script type="module" th:src="@{/client_assets/compiler/certify.js}"></script>
 </div>
 </body>

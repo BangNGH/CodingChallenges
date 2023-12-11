@@ -20,7 +20,6 @@ public class LanguageService {
 
     public Optional<Language> findByLanguageID(Long languageID) {
         return languageRepository.findById(languageID);
-
     }
 
     public void addLanguage() {
@@ -31,9 +30,13 @@ public class LanguageService {
             Language cpp_language = new Language();
 
             java_language.setName("Java");
+            java_language.setValue("text/x-java");
             csharp_language.setName("C#");
+            csharp_language.setValue("text/x-csharp");
             python_language.setName("Python");
+            python_language.setValue("text/x-python");
             cpp_language.setName("C++");
+            cpp_language.setValue("text/x-c++src");
 
             languageRepository.save(java_language);
             languageRepository.save(csharp_language);

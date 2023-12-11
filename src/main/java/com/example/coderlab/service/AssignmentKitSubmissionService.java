@@ -113,4 +113,15 @@ public class AssignmentKitSubmissionService {
         List<AssignmentKitSubmission> foundAssignmentKitSubmission = assignmentKitSubmissionRepo.getByAssignmentKit_User_Id(assignmentKit.getId(), currentUser.getId());
         return foundAssignmentKitSubmission;
     }
+
+    public void endTestWTimeExpried(Long assignmentKitId, UserEntity currentUser) {
+        Optional<AssignmentKit> found_assignment_kit = assignmentKitService.findById(assignmentKitId);
+        if (found_assignment_kit.isPresent()) {
+            AssignmentKitSubmission assignmentKitSubmission = new AssignmentKitSubmission();
+            assignmentKitSubmission.setIs_success(false);
+            assignmentKitSubmission.setUser_submited(currentUser);
+            assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
+            assignmentKitSubmissionRepo.save(assignmentKitSubmission);
+        }
+    }
 }

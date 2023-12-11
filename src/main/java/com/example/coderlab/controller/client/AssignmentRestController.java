@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -40,9 +41,9 @@ public class AssignmentRestController {
         try {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-             Long id_submission = submissionService.saveSubmissions(submission, current_user);
-             clearSession(session);
-             return id_submission.toString();
+            Long id_submission = submissionService.saveSubmissions(submission, current_user);
+            clearSession(session);
+            return id_submission.toString();
         } catch (Exception e) {
             return "1";
         }
@@ -55,7 +56,7 @@ public class AssignmentRestController {
             UserEntity current_user = userServices.findByEmail(email).get();
             Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
             clearSession(session);
-            if (status){
+            if (status) {
                 return "passed";
             }
             return "failed";
@@ -66,12 +67,13 @@ public class AssignmentRestController {
 
     @GetMapping("/comment")
     @ResponseBody
-    public Comment commentPost(@RequestParam("comment") String comment,@RequestParam(value ="source_code_comment", defaultValue = "false") String source_code_comment, @RequestParam("assignment_id") long assignmentID, Principal principal) {
+    public Comment commentPost(@RequestParam("comment") String comment, @RequestParam(value = "source_code_comment", defaultValue = "false") String source_code_comment, @RequestParam("assignment_id") long assignmentID, Principal principal) {
         Assignment assignment = assignmentService.getAssignmentById(assignmentID);
         String email = principal.getName();
         UserEntity current_user = userServices.findByEmail(email).get();
         return commentService.save(comment, source_code_comment, assignment, current_user);
     }
+
     @PostMapping("/unlock-solution")
     @ResponseBody
     public void unlockSolution(@RequestParam("assignment_id") Long assignmentID, Principal principal) {
@@ -79,6 +81,20 @@ public class AssignmentRestController {
         String email = principal.getName();
         UserEntity current_user = userServices.findByEmail(email).get();
         solutionCheckService.save(assignment, current_user);
+    }
+
+    @PostMapping("/time-expired")
+    @ResponseBody
+    public String timeExpired(@RequestParam("assignment_kit_id") Long assignment_kit_id, Principal principal, HttpSession session) {
+        try {
+            String email = principal.getName();
+            UserEntity current_user = userServices.findByEmail(email).get();
+            submissionKitService.endTestWTimeExpried(assignment_kit_id, current_user);
+            clearSession(session);
+        } catch (Exception e) {
+            return "Error " + e.getMessage();
+        }
+        return "End test.";
     }
 
     @GetMapping("/get-assignment-info")
@@ -96,7 +112,7 @@ public class AssignmentRestController {
     }
 
     @PostMapping("/save-content")
-    public ResponseEntity<String> saveContent(@RequestParam String content,@RequestParam String mode,@RequestParam String langague_name,@RequestParam String current_tab_id, HttpSession session) {
+    public ResponseEntity<String> saveContent(@RequestParam String content, @RequestParam String mode, @RequestParam String langague_name, @RequestParam String current_tab_id, HttpSession session) {
         session.setAttribute("editorContent", content);
         session.setAttribute("mode", mode);
         session.setAttribute("language_name", langague_name);
@@ -111,7 +127,7 @@ public class AssignmentRestController {
         String mode = objectMapper.writeValueAsString(session.getAttribute("mode"));
         String language_name = objectMapper.writeValueAsString(session.getAttribute("langague_name"));
         String current_tab_id = objectMapper.writeValueAsString(session.getAttribute("current_tab_id"));
-        if (content.isBlank()||mode.isBlank()||language_name.isBlank()||current_tab_id.isBlank()){
+        if (content.isBlank() || mode.isBlank() || language_name.isBlank() || current_tab_id.isBlank()) {
             return null;
         }
         return "{ \"content\":" + content + ", \"mode\":" + mode + ", \"language_name\":" + language_name + ", \"current_tab_id\":" + current_tab_id + " }";
@@ -119,12 +135,13 @@ public class AssignmentRestController {
 
     @PostMapping("/clear-session")
     public ResponseEntity<String> clearSessionRequest(HttpSession session) {
-        if (clearSession(session)){
+        if (clearSession(session)) {
             return ResponseEntity.ok("Session cleared successfully!");
-        }else return ResponseEntity.ok("Error when clear session !");
+        } else return ResponseEntity.ok("Error when clear session !");
 
     }
-    private Boolean clearSession(HttpSession session){
+
+    private Boolean clearSession(HttpSession session) {
         if (session != null) {
             session.removeAttribute("editorContent");
             session.removeAttribute("mode");

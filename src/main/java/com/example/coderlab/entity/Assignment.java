@@ -10,6 +10,7 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,8 +83,13 @@ public class Assignment {
         if (submissions == null || submissions.isEmpty()) {
             return 0.0;
         }
-        long passedCount = submissions.stream().filter(submission -> submission.getIs_success() == true).count();
-        double successRate = (double) passedCount / submissions.size();
-        return successRate*100;
+
+        long passedCount = submissions.stream().filter(submission -> submission.getIs_success()).count();
+        double successRate = (double) passedCount / submissions.size() * 100;
+
+        // Làm tròn 2 chữ số sau dấu phẩy
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        System.out.println(Double.parseDouble(decimalFormat.format(successRate)));
+        return Double.parseDouble(decimalFormat.format(successRate));
     }
 }

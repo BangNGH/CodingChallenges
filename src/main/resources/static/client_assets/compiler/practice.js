@@ -74,6 +74,7 @@ $(document).ready(function () {
         url: '/api/submissions/get-content',
         success: function (response) {
             if (response) {
+                console.log("GET SESSION");
                 const dataJson = JSON.parse(response);
                 const mode_receive = dataJson.mode;
                 const content_receive = dataJson.content;
@@ -84,22 +85,17 @@ $(document).ready(function () {
                 var selectedInput = document.querySelector('a.dd-option-selected');
                 var dSelectedValue = document.querySelector('input.dd-selected-value');
                 var dSelectedText = document.querySelector('label.dd-selected-text');
-                var img = document.querySelector('img.dd-selected-image');
                 if (mode_receive === "text/x-c++src") {
                     dSelectedText.innerHTML = "C++";
-                    img.src = "/client_assets/lang-icon/cpp.png";
                 }
                 if (mode_receive === "text/x-java") {
                     dSelectedText.innerHTML = "Java";
-                    img.src = "/client_assets/lang-icon/java.png";
                 }
                 if (mode_receive === "text/x-csharp") {
                     dSelectedText.innerHTML = "C#";
-                    img.src = "/client_assets/lang-icon/csharp.png";
                 }
                 if (mode_receive === "text/x-python") {
                     dSelectedText.innerHTML = "Python";
-                    img.src = "/client_assets/lang-icon/python.png";
                 }
 
                 if (input_to_change) {
@@ -118,8 +114,8 @@ $(document).ready(function () {
                     console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
                 }
 
-                editor.setOption(mode_receive, language_name_receive)
-                editor.setValue(content_receive)
+                editor.setOption(mode_receive, language_name_receive);
+                editor.setValue(content_receive);
                 if (mode_receive === "text/x-c++src") {
                     option = 54;
                 }

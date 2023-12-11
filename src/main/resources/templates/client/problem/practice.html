@@ -34,7 +34,8 @@
                 <div>
                     <div class="course__wrapper">
                         <div class="page__title-content mb-25">
-                            <span class="page__title-pre">Algorithm</span>
+                            <span class="page__title-pre" th:if="${challenge.language_option}" th:text="${challenge.language_option.name}"></span>
+                            <span class="page__title-pre" th:unless="${challenge.language_option}">Optional Language</span>
                             <h5 class="page__title-3" th:text="${challenge.title}"></h5>
                         </div>
                         <div class="course__meta-2 d-sm-flex mb-30 mt-20">
@@ -127,21 +128,19 @@
                                             <div>
                                                 <label class="visually-hidden"
                                                        for="inlineFormSelectPref">Preference</label>
-                                                <select style="cursor: pointer;" class="form-select"
+                                                <select th:if="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
                                                         id="inlineFormSelectPref">
-                                                    <option data-imagesrc="/client_assets/lang-icon/cpp.png" selected
-                                                            value="text/x-c++src">C++
-                                                    </option>
-                                                    <option data-imagesrc="/client_assets/lang-icon/java.png"
-                                                            value="text/x-java">Java
-                                                    </option>
-                                                    <option data-imagesrc="/client_assets/lang-icon/csharp.png"
-                                                            value="text/x-csharp">C#
-                                                    </option>
-                                                    <option data-imagesrc="/client_assets/lang-icon/python.png"
-                                                            value="text/x-python">Python
+                                                    <option selected th:text="${challenge.getLanguage_option().getName()}"
+                                                            th:value="${challenge.getLanguage_option().getValue()}">
                                                     </option>
                                                 </select>
+                                                <select th:unless="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
+                                                        id="inlineFormSelectPref">
+                                                    <option th:each="language :${languages}" th:text="${language.name}"
+                                                            th:value="${language.value}">
+                                                    </option>
+                                                </select>
+
                                             </div>
                                             <div>
                                                 <select style="cursor: pointer; width: 120%;" class="form-select"
