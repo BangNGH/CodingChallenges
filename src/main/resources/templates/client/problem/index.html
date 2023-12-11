@@ -278,7 +278,7 @@
             function fetchAssignment(startPage) {
                 $.ajax({
                     type : "GET",
-                    url : "http://localhost:8080/api/problemSolving",
+                    url : "/api/problemSolving",
                     data: {
                         page: startPage,
                         size: 8
@@ -311,7 +311,7 @@
                 var searchText = $("#keyword").val();
                 function showAssignments(startPage) {
                     $.ajax({
-                        url:'http://localhost:8080/api/problemSolving/search',
+                        url:'/api/problemSolving/search',
                         type: 'GET',
                         data: {
                             page: startPage,

@@ -1,4 +1,5 @@
 function assignmentContent(assignment){
+   console.log(assignment.getSuccessRate);
     let assignmentRow = `                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                                         <div class="course__item white-bg mb-30 fix">
                                             <div class="course__thumb w-img p-relative fix">
@@ -14,10 +15,10 @@ function assignmentContent(assignment){
                                                         <span><i class="far fa-book-alt"></i>Max score: ${assignment.max_score} </span>
                                                     </div>
                                                     <div class="course__rating">
-                                                        <span><i class="icon_star"></i>Success Rate: ${assignment.getSuccessRate}</span>
+                                                        <span><i class="icon_star"></i>Success Rate: </span>
                                                     </div>
                                                 </div>
-                                                <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a href="problemSolving/${assignment.id}">${assignment.title}</a></h3>
+                                                <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a href="/problemSolving/${assignment.id}">${assignment.title}</a></h3>
                                                 <div class="course__teacher d-flex align-items-center">
                                                     <div class="course__teacher-thumb mr-15">
                                                         <img src="${assignment.lecturer.imagesPath ? assignment.lecturer.imagesPath : 'https://bootdey.com/img/Content/avatar/avatar1.png'}"/>
