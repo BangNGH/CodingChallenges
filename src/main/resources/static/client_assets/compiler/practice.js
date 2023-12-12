@@ -1,3 +1,4 @@
+import {MY_CHATGPT_API_KEY} from "./config.js"
 const testCasesContainer = document.getElementById('test-cases-container');
 const resultSection = document.getElementById('result');
 var run = document.getElementById("run")
@@ -34,8 +35,8 @@ $(document).ready(function () {
     document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
         const activeTab = event.target; // Tab đang active
 
-        if (activeTab.id === 'curriculum-tab') {
-            window.location.hash = 'curriculum-tab';
+        if (activeTab.id === 'submission-tab') {
+            window.location.hash = 'submission-tab';
             window.location.reload();
         } else {
             window.location.hash = activeTab.id;
@@ -167,6 +168,39 @@ function decode(bytes) {
     var escaped = escape(atob(bytes || ""));
     return decodeURIComponent(escaped);
 
+}
+async function generateAssessment() {
+    const prompt_text = "Làm thế nào bạn có thể cải thiện hiệu suất của đoạn mã nguồn sau đây. Lưu ý bạn chỉ đưa ra gợi ý và không cung cấp mã nguồn:"
+    const source = editor.getValue().trim();
+    const prompt_send = prompt_text+source;
+    const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-RapidAPI-Key': MY_CHATGPT_API_KEY,
+            'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+        },
+        body: JSON.stringify({
+            question: prompt_send
+        })
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        const outputElement = document.getElementById("chatgpt_response");
+        const assessmentBtn = document.getElementById("assessmentBtn");
+        const chatgpt_response_container = document.getElementById("chatgpt_response_container");
+        assessmentBtn.remove();
+        chatgpt_response_container.style.display = "block";
+        const chatgpt_loading = document.getElementById(`chatgpt_loading`);
+        chatgpt_loading.remove();
+        outputElement.innerHTML = result.answer;
+
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 theme.addEventListener("change", function () {
@@ -378,7 +412,6 @@ run.addEventListener("click", async function () {
     `;
                             // Thêm container vào container chứa test cases
                             testCasesContainer.appendChild(newContainer);
-                            Prism.highlightAll();
 
                             const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                             const testcaseDetails = document.getElementById(`event-details-${count}`);
@@ -390,7 +423,9 @@ run.addEventListener("click", async function () {
                                 }
                             });
                             excuting.style.display = 'none';
+                            Prism.highlightAll();
                             resultSection.style.display = 'block';
+
                         } else if (submission.status && submission.status.id === 4) {
                             //Wrong Answer
                             var stdin = decode(submission.stdin).trim();
@@ -658,8 +693,10 @@ run.addEventListener("click", async function () {
 
 submit.addEventListener("click", async function () {
     testCasesContainer.innerHTML = '';
+    var html = "<div style='display: none' id='assessment'><p id='chatgpt_loading' style='float: left;display: none;animation: slide 1.5s infinite;'><span style='color: #ff9800;' class='yellow-bg yellow-bg-big'>Đang phân tích...</span> </p><a id='assessmentBtn' class='link-btn' style='cursor: pointer;float: right;color: #316314;margin-bottom: 20px;'>Xem đánh giá<i class='far fa-arrow-right'></i><i class='far fa-question-circle'></i></a><pre id='chatgpt_response_container' class='line-numbers language-markup' style='white-space: break-spaces;display: none;margin-bottom: 15px;'><code id='chatgpt_response' class='language-markup'></code></pre></div>";
+    testCasesContainer.innerHTML += html;
     let submissions_to_send = [];
-    const allTestCases = JSON.parse(allTestCaseJSON); // Giả sử allTestCases chứa danh sách các test case dưới dạng JSON.
+    const allTestCases = JSON.parse(allTestCaseJSON);
     const langagueName = langague_name;
     const source_code = editor.getValue().trim();
     excuting.style.display = 'block';
@@ -780,6 +817,7 @@ submit.addEventListener("click", async function () {
                         } else isSampleTestCase = false;
 
                         newContainer.innerHTML = `
+
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
             <div class="events__content">
@@ -797,20 +835,19 @@ submit.addEventListener("click", async function () {
                 </h3>
             </div>
           
-                <div class="events__more" style="display: ${isSampleTestCase ? 'block' : 'none'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Xem chi tiết
-                        <i class="far fa-arrow-right"></i>
-                        <i class="far fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="events__more" style="display: ${isSampleTestCase ? 'none' : 'block'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Hidden TestCase
-                        <i style="color: #69b35c;" class="far fa-unlock"></i>
-                        <i style="color: #e65972;" class="far fa-lock"></i>
-                    </a>
-                </div>
+             <div class="events__more">
+    ${isSampleTestCase ? `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                            Xem chi tiết
+                            <i class="far fa-arrow-right"></i>
+                            <i class="far fa-arrow-right"></i>
+                          </a>` : `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                                      Hidden TestCase
+                                      <i style="color: #69b35c;" class="far fa-unlock"></i>
+                                      <i style="color: #e65972;" class="far fa-lock"></i>
+                                   </a>`}
+</div>
+
+            
             </div>
         </div>
         <div id="event-details-${count}" style="display: none; padding: 10px 60px 60px 60px; border-radius: 7px; background-color: white">
@@ -857,9 +894,11 @@ submit.addEventListener("click", async function () {
         </div>
  
     `;
+                        const assessment_div = document.getElementById("assessment");
+                        assessment_div.style.display ="block";
+
                         // Thêm container vào container chứa test cases
                         testCasesContainer.appendChild(newContainer);
-                        Prism.highlightAll();
 
                         const viewMoreButton = document.getElementById(`view-more-button-${count}`);
                         const testcaseDetails = document.getElementById(`event-details-${count}`);
@@ -872,6 +911,9 @@ submit.addEventListener("click", async function () {
                         });
                         excuting.style.display = 'none';
                         resultSection.style.display = 'block';
+                        Prism.highlightAll();
+
+
                     } else if (submission.status && submission.status.id === 4) {
                         //Wrong Answer
                         var stdin = decode(submission.stdin).trim();
@@ -1182,5 +1224,11 @@ submit.addEventListener("click", async function () {
         console.error(error);
     }
 
+    const assessment_btn = document.getElementById(`assessmentBtn`);
+    assessment_btn.addEventListener('click', () => {
+        const chatgpt_loading = document.getElementById(`chatgpt_loading`);
+        chatgpt_loading.style.display = 'block';
+        generateAssessment();
+    });
 });
 
