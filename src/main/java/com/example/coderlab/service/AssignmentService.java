@@ -72,12 +72,13 @@ public class AssignmentService {
         }else assignment.setMemoryLimit(0);
         assignment.setLecturer(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        TestCase testCase = new TestCase();
 
         if(testCaseNames.size() == 1){
             if(testCaseInputs.size() >= 2 || testCaseOutPuts.size() >= 2){
+                TestCase testCase = new TestCase();
                 testCase.setName(testCaseNames.get(0));
                 testCase.setScore(testCaseScores.get(0));
+                testCase.setAssignment(savedAssignment);
                 if(testCaseInputs.size() >= 2){
                     StringBuilder temp1 = new StringBuilder();
                     for (int i = 0; i < testCaseInputs.size(); i++) {
@@ -109,10 +110,11 @@ public class AssignmentService {
                 } else {
                     testCase.setMarkSampleTestCase(false);
                 }
+                testCaseService.saveTestCase(testCase);
             }
         }else {
             for (int i = 0; i < testCaseNames.size(); i++) {
-
+                TestCase testCase = new TestCase();
                 testCase.setName(testCaseNames.get(i));
                 testCase.setScore(testCaseScores.get(i));
                 max_score += testCaseScores.get(i);
@@ -124,16 +126,15 @@ public class AssignmentService {
                     testCase.setMarkSampleTestCase(false);
                 }
                 testCase.setAssignment(savedAssignment);
+                testCaseService.saveTestCase(testCase);
             }
         }
-        testCaseService.saveTestCase(testCase);
         savedAssignment.setMax_score(max_score);
 
         if (foundLanguage!=null) {
             foundLanguage.getAssignments().add(savedAssignment);
             languageService.save(foundLanguage);
         }
-
         assignmentRepository.save(savedAssignment);
     }
     public void updateAssignment(Assignment assignment, String description,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples){
