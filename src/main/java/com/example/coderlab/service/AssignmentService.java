@@ -74,11 +74,16 @@ public class AssignmentService {
         Assignment savedAssignment = assignmentRepository.save(assignment);
 
         if(testCaseNames.size() == 1){
+            TestCase testCase = new TestCase();
+            testCase.setName(testCaseNames.get(0));
+            testCase.setScore(testCaseScores.get(0));
+            testCase.setAssignment(savedAssignment);
+            if (maskSamples != null && !maskSamples.isEmpty()) {
+                testCase.setMarkSampleTestCase(maskSamples.get(0));
+            } else {
+                testCase.setMarkSampleTestCase(false);
+            }
             if(testCaseInputs.size() >= 2 || testCaseOutPuts.size() >= 2){
-                TestCase testCase = new TestCase();
-                testCase.setName(testCaseNames.get(0));
-                testCase.setScore(testCaseScores.get(0));
-                testCase.setAssignment(savedAssignment);
                 if(testCaseInputs.size() >= 2){
                     StringBuilder temp1 = new StringBuilder();
                     for (int i = 0; i < testCaseInputs.size(); i++) {
@@ -90,8 +95,6 @@ public class AssignmentService {
                     }
                     testCase.setInput(temp1.toString());
                 }
-                else
-                    testCase.setInput(testCaseInputs.get(0));
                 if(testCaseOutPuts.size() >= 2){
                     StringBuilder temp2 = new StringBuilder();
                     for (int i = 0; i < testCaseOutPuts.size(); i++) {
@@ -103,15 +106,11 @@ public class AssignmentService {
                     }
                     testCase.setExpectedOutput(temp2.toString());
                 }
-                else
-                    testCase.setExpectedOutput(testCaseOutPuts.get(0));
-                if (maskSamples != null && !maskSamples.isEmpty()) {
-                    testCase.setMarkSampleTestCase(maskSamples.get(0));
-                } else {
-                    testCase.setMarkSampleTestCase(false);
-                }
-                testCaseService.saveTestCase(testCase);
+            }else{
+                testCase.setInput(testCaseInputs.get(0));
+                testCase.setExpectedOutput(testCaseOutPuts.get(0));
             }
+            testCaseService.saveTestCase(testCase);
         }else {
             for (int i = 0; i < testCaseNames.size(); i++) {
                 TestCase testCase = new TestCase();
@@ -135,6 +134,7 @@ public class AssignmentService {
             foundLanguage.getAssignments().add(savedAssignment);
             languageService.save(foundLanguage);
         }
+
         assignmentRepository.save(savedAssignment);
     }
     public void updateAssignment(Assignment assignment, String description,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples){
