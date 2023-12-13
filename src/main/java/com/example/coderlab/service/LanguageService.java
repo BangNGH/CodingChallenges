@@ -30,12 +30,19 @@ public class LanguageService {
 
             java_language.setName("Java");
             java_language.setValue("text/x-java");
+            java_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+
             csharp_language.setName("C#");
+            csharp_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
             csharp_language.setValue("text/x-csharp");
+
             python_language.setName("Python");
             python_language.setValue("text/x-python");
+            python_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+
             cpp_language.setName("C++");
             cpp_language.setValue("text/x-c++src");
+            cpp_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
 
             languageRepository.save(java_language);
             languageRepository.save(csharp_language);
@@ -48,5 +55,9 @@ public class LanguageService {
 
     public void save(Language foundLanguage) {
         languageRepository.save(foundLanguage);
+    }
+
+    public Optional<Language> findLanguageByValue(String languageValue) {
+        return languageRepository.findByValue(languageValue);
     }
 }

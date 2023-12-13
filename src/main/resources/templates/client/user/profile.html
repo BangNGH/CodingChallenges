@@ -54,11 +54,12 @@
                       <div class="custom-title">Points</div>
                     </div>
                     <div class="progress mt-4" style="height: 5px;">
-                      <div class="progress-bar bg-purple-light" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-primary" role="progressbar" th:style="'width: ' + ${percentage}+'%;'" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="mt-2">
-                      <span class="float-left f12 text-muted">You have earned <strong>[[${myTotalScore}]]</strong> points </span>
-                     <!-- <span class="float-right f12 text-muted">1250 Left</span>-->
+                      <span th:if="${myTotalScore}" style="float: left">Bạn đã nhận được <strong>[[${myTotalScore}]]</strong> điểm</span>
+                      <span th:unless="${myTotalScore}" style="float: left">Hãy hoàn thành những bài tập để nhận điểm </span>
+                      <span th:if="${maxScore}" style="float: right"><strong>[[${maxScore}]]</strong> points</span>
                     </div>
                   </div>
                   <div class="dropdown-divider"></div>

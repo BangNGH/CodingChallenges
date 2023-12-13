@@ -28,7 +28,10 @@ public class Submission {
     @JoinColumn(name = "student_id")
     private UserEntity student;
 
-    private String language;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "language_id")
+    private Language language;
+
     private int total_score;
     @Lob
     @Column(columnDefinition = "LONGTEXT")

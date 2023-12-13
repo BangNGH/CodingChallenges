@@ -111,12 +111,12 @@ public class AssignmentService {
                 testCase.setExpectedOutput(testCaseOutPuts.get(0));
             }
             testCaseService.saveTestCase(testCase);
+            max_score += testCase.getScore();
         }else {
             for (int i = 0; i < testCaseNames.size(); i++) {
                 TestCase testCase = new TestCase();
                 testCase.setName(testCaseNames.get(i));
                 testCase.setScore(testCaseScores.get(i));
-                max_score += testCaseScores.get(i);
                 testCase.setInput(testCaseInputs.get(i));
                 testCase.setExpectedOutput(testCaseOutPuts.get(i));
                 if (maskSamples != null && i < maskSamples.size()) {
@@ -126,6 +126,7 @@ public class AssignmentService {
                 }
                 testCase.setAssignment(savedAssignment);
                 testCaseService.saveTestCase(testCase);
+                max_score += testCase.getScore();
             }
         }
         savedAssignment.setMax_score(max_score);

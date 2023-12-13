@@ -29,11 +29,21 @@ public class UserController {
     @GetMapping("/my-profile")
     public String profile(Model model){
         UserEntity user = getUser();
-        Integer myTotalScore = user.getTotalScore();
+        Integer myTotalScore = userServices.getTotalScore(user.getId());
         Integer maxScore = assignmentService.getMaxScore();
+        if (myTotalScore!=null){
+            double percentage = ((double)myTotalScore / (double)maxScore) * 100;
+            percentage = Math.round(percentage * 100) / 100.0;
+            model.addAttribute("percentage", percentage);
+            model.addAttribute("myTotalScore", myTotalScore);
+            model.addAttribute("maxScore", maxScore);
+
+        }else{
+            model.addAttribute("percentage", 0);
+            model.addAttribute("myTotalScore", 0);
+        }
+
         model.addAttribute("user", user);
-        model.addAttribute("myTotalScore", myTotalScore);
-        model.addAttribute("maxScore", maxScore);
 
         return "client/user/profile";
     }    @GetMapping("/settings")

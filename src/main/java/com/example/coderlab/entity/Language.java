@@ -27,4 +27,7 @@ public class Language {
     @OneToMany(mappedBy = "language_option", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Assignment> assignments;
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Submission> submissions;
 }

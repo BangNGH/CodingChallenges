@@ -67,7 +67,7 @@ public class UserEntity {
     @JsonIgnore
     private List<AssignmentKit> assignmentKits;
 
-    @OneToMany(mappedBy = "user_submited", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_submitted", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AssignmentKitSubmission> assignmentKitSubmissions;
 
@@ -87,14 +87,6 @@ public class UserEntity {
     public String getImagesPath(){
         if(avatarUrl == null || id == null) return null;
         return "/avt-images/" + id + "/" + avatarUrl;
-    }
-    public Integer getTotalScore(){
-        if (!submissions.isEmpty()){
-            AtomicInteger myScore = new AtomicInteger(0);
-            submissions.forEach(submission -> myScore.addAndGet(submission.getTotal_score()));
-            return myScore.get();
-        }
-        return 0;
     }
 
 }

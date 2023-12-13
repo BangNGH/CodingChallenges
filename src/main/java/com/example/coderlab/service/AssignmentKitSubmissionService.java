@@ -42,18 +42,24 @@ public class AssignmentKitSubmissionService {
             for (String submission_id : submissionsId.getSubmissions_id()
                  ) {
                 Submission found_submission = submissionService.getSubmission(Long.parseLong(submission_id)).get();
+
                 submissions.add(found_submission);
                 if (found_submission.getIs_success()==false){
                     is_passed= false;
                 }
             }
             assignmentKitSubmission.setIs_success(is_passed);
-            assignmentKitSubmission.setUser_submited(current_user);
+            assignmentKitSubmission.setUser_submitted(current_user);
             assignmentKitSubmission.setSubmissions(submissions);
             assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
             AssignmentKitSubmission saved = assignmentKitSubmissionRepo.save(assignmentKitSubmission);
             current_user.getAssignmentKitSubmissions().add(saved);
             userServices.save(current_user);
+            for (Submission submission : submissions
+            ) {
+                submission.setAssignment_kit_submission(saved);
+                submissionService.save(submission);
+            }
         }
         if (is_passed) {
             //absolute path to \client_assets\img\certificate.png"
@@ -122,7 +128,7 @@ public class AssignmentKitSubmissionService {
         if (found_assignment_kit.isPresent()) {
             AssignmentKitSubmission assignmentKitSubmission = new AssignmentKitSubmission();
             assignmentKitSubmission.setIs_success(false);
-            assignmentKitSubmission.setUser_submited(currentUser);
+            assignmentKitSubmission.setUser_submitted(currentUser);
             assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
             assignmentKitSubmissionRepo.save(assignmentKitSubmission);
         }

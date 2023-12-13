@@ -215,7 +215,7 @@
                                                             <span th:unless="${submission.is_success}"
                                                                   class="compiler-error-label text-danger">[[${itrStat.index+1}]]. Compilation Error</span>
                                                             <span class="compiler-error-label">[[${submission.total_score}]]/[[${challenge.max_score}]]</span>
-                                                            <span class="compiler-error-label">[[${submission.language}]]</span>
+                                                            <span class="compiler-error-label">[[${submission.language.name}]]</span>
                                                             <span th:id="${'timeSpan-'+submission.id}"
                                                                   class="compiler-error-label"></span>
                                                             <script th:inline="javascript">
@@ -249,7 +249,7 @@
                                                                 </div>
                                                                 <div class="course__curriculum-meta">
                                                                     <span class="question"
-                                                                          th:text="${submission.language}"></span>
+                                                                          th:text="${submission.language.name}"></span>
                                                                 </div>
                                                             </div>
                                                             <div th:if="${unlocked}" class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
@@ -274,7 +274,7 @@
                                                                     </pre>
 
                                                                     <script th:inline="javascript">
-                                                                        decodeSubmission([[${submission.source_code}]], [[${submission.id}]], [[${submission.language}]],);
+                                                                        decodeSubmission([[${submission.source_code}]], [[${submission.id}]]);
                                                                     </script>
                                                                 </div>
                                                             </div>
@@ -692,26 +692,23 @@
                     editor.setOption("mode", "text/x-c++src")
                     editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                     option = 54;
-                    langague_name = 'cpp';
                 }
                 if (selectedData.selectedData.value === "text/x-java") {
                     editor.setOption("mode", "text/x-java")
                     editor.setValue('import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
                     option = 91;
-                    langague_name = 'java';
                 }
                 if (selectedData.selectedData.value === "text/x-csharp") {
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
-                    langague_name = 'csharp';
                 }
                 if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
                     editor.setValue("print('Hello world!')")
                     option = 71;
-                    langague_name = 'python';
                 }
+                langague_name = selectedData.selectedData.value;
             }
         });
     </script>

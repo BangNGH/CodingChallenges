@@ -17,9 +17,9 @@
     timeSpan.innerHTML = '<i class="icon_clock_alt"></i>    ' + moment(time).fromNow();
 }
 
-    function decodeSubmission(source, id, language) {
+    function decodeSubmission(source, id) {
     var codeTag = document.getElementById('src_submission-' + id);
-    codeTag.classList.add('language-' + language)
+    codeTag.classList.add('language-java')
     codeTag.innerHTML = decode(source);
 }
     function viewMoreEvent(id) {

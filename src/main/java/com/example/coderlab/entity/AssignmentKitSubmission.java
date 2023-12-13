@@ -41,9 +41,9 @@ public class AssignmentKitSubmission {
     private AssignmentKit assignment_kit;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assignment_kit_submission_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private UserEntity user_submited;
+    private UserEntity user_submitted;
 
 
 }

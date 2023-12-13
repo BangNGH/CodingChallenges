@@ -3,7 +3,6 @@ package com.example.coderlab.service;
 import com.example.coderlab.entity.*;
 import com.example.coderlab.exception.AlreadyExistsException;
 import com.example.coderlab.exception.ResourceNotFoundException;
-import com.example.coderlab.repository.RoleRepository;
 import com.example.coderlab.repository.UserRepository;
 import com.example.coderlab.repository.UserRoleRepository;
 import com.example.coderlab.repository.VerificationTokenRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
@@ -142,5 +140,9 @@ public class UserServices {
         verificationToken.setToken(UUID.randomUUID().toString());
         verificationToken.setExpirationTime(verificationTokenTime.getTokenExpirationTime());
         return tokenRepository.save(verificationToken);
+    }
+
+    public Integer getTotalScore(Long id) {
+        return userRepository.getTotalScore(id);
     }
 }

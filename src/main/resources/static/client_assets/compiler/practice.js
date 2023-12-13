@@ -115,7 +115,7 @@ $(document).ready(function () {
                     console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
                 }
 
-                editor.setOption(mode_receive, language_name_receive);
+                editor.setOption("mode", mode_receive)
                 editor.setValue(content_receive);
                 if (mode_receive === "text/x-c++src") {
                     option = 54;

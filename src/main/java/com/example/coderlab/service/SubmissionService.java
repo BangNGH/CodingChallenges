@@ -19,6 +19,7 @@ public class SubmissionService {
     private final AssesmentService assesmentService;
     private final SolutionCheckService solutionCheckService;
     private final UserServices userServices;
+    private final LanguageService languageService;
 
     public void save(Submission submission) {
         this.submissionRepository.save(submission);
@@ -32,7 +33,16 @@ public class SubmissionService {
         Assignment foundChallenge = assignmentService.getAssignmentById(submission_sent_form_client.getAssignment_id());
         List<TestCase> testCases_of_assignment = foundChallenge.getTestCases();
         Submission submission = new Submission();
-        submission.setLanguage(submission_sent_form_client.getLanguage());
+
+        //languageID_id
+        String languageValue = submission_sent_form_client.getLanguage();
+        Optional<Language> foundLanguage = languageService.findLanguageByValue(languageValue);
+        System.out.println(languageValue);
+        System.out.println(foundLanguage.get());
+        if (foundLanguage.isPresent()) {
+            submission.setLanguage(foundLanguage.get());
+        }else submission.setLanguage(null);
+
         submission.setSource_code(submission_sent_form_client.getSourceCode());
         submission.setStudent(current_user);
         submission.setAssignment(foundChallenge);
