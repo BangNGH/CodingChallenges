@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Solve Algorithms | Coder'sLab</title>
+    <title th:inline="text">[[${language.name}]] | Coder'sLab</title>
     <style>
         .redH{
             color: #f44336 !important;
@@ -19,16 +19,16 @@
 <body>
 <div layout:fragment="content">
     <!-- page title area start -->
-    <section class="page__title-area page__title-height page__title-overlay d-flex align-items-center" th:attr="data-background=@{/client_assets/img/background.png}">
+    <section class="page__title-area page__title-height page__title-overlay d-flex align-items-center" th:attr="data-background=@{/client_assets/img/programing-language.jpg}">
         <div class="container">
             <div class="row">
                 <div class="col-xxl-12">
                     <div class="page__title-wrapper mt-110">
-                        <h3 class="page__title" th:text="${nameOfTopic}"></h3>
+                        <h3 class="page__title" th:text="${language.name}"></h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Problem Solving</li>
+                                <li class="breadcrumb-item active" aria-current="page" th:text="${language.name}"></li>
                             </ol>
                         </nav>
                     </div>
@@ -151,36 +151,18 @@
                         </div>
                         <div class="course__sidebar-widget grey-bg">
                             <div class="course__sidebar-info">
-                                <h3 class="course__sidebar-title">Categories</h3>
+                                <h3 class="course__sidebar-title">STATUS</h3>
                                 <ul>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                             <input class="m-check-input" type="checkbox" id="m-eng">
-                                            <label class="m-check-label" for="m-eng">English  (6)</label>
+                                            <label class="m-check-label" for="m-eng">Solved</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                             <input class="m-check-input" type="checkbox" id="m-edu">
-                                            <label class="m-check-label" for="m-edu">Education  (8)</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-bus">
-                                            <label class="m-check-label" for="m-bus">Business  (5)</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-design">
-                                            <label class="m-check-label" for="m-design">UX Design  (3)</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-math">
-                                            <label class="m-check-label" for="m-math">Mathematics  (3)</label>
+                                            <label class="m-check-label" for="m-edu">Unsolved</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -188,24 +170,24 @@
                         </div>
                         <div class="course__sidebar-widget grey-bg">
                             <div class="course__sidebar-info">
-                                <h3 class="course__sidebar-title">Language</h3>
+                                <h3 class="course__sidebar-title">DIFFICULTY</h3>
                                 <ul>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-all">
-                                            <label class="m-check-label" for="m-all">All Language</label>
+                                            <input class="m-check-input" type="checkbox" id="easy">
+                                            <label class="m-check-label" for="easy">Easy</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-eng-2">
-                                            <label class="m-check-label" for="m-eng-2">English</label>
+                                            <input class="m-check-input" type="checkbox" id="medium">
+                                            <label class="m-check-label" for="medium">Medium</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-russ">
-                                            <label class="m-check-label" for="m-russ">Russian</label>
+                                            <input class="m-check-input" type="checkbox" id="hard">
+                                            <label class="m-check-label" for="hard">Hard</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -213,55 +195,36 @@
                         </div>
                         <div class="course__sidebar-widget grey-bg">
                             <div class="course__sidebar-info">
-                                <h3 class="course__sidebar-title">Price Filter</h3>
+                                <h3 class="course__sidebar-title">SUBDOMAINS</h3>
                                 <ul>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                             <input class="m-check-input" type="checkbox" id="m-all-course">
-                                            <label class="m-check-label" for="m-all-course">All  (204)</label>
+                                            <label class="m-check-label" for="m-all-course">Warmup</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                             <input class="m-check-input" type="checkbox" id="m-free">
-                                            <label class="m-check-label" for="m-free">Free Courses  (36)</label>
+                                            <label class="m-check-label" for="m-free">String</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                             <input class="m-check-input" type="checkbox" id="m-premium">
-                                            <label class="m-check-label" for="m-premium">Premium Courses  (184)</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="course__sidebar-widget grey-bg">
-                            <div class="course__sidebar-info">
-                                <h3 class="course__sidebar-title">Skill level</h3>
-                                <ul>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-level">
-                                            <label class="m-check-label" for="m-level">All Levels  (50)</label>
+                                            <label class="m-check-label" for="m-premium">Search</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-beginner">
-                                            <label class="m-check-label" for="m-beginner">Beginner  (32)</label>
+                                            <input class="m-check-input" type="checkbox" id="m-sort">
+                                            <label class="m-check-label" for="m-sort">Sort</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-intermediate">
-                                            <label class="m-check-label" for="m-intermediate">Intermediate  (17)</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-expert">
-                                            <label class="m-check-label" for="m-expert">Expert  (2)</label>
+                                            <input class="m-check-input" type="checkbox" id="m-recursion">
+                                            <label class="m-check-label" for="m-sort">Recursion</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -280,7 +243,7 @@
             function fetchAssignment(startPage) {
                 $.ajax({
                     type : "GET",
-                    url : "/api/problemSolving/topic",
+                    url : "http://localhost:8080/api/problemSolving/topic",
                     data: {
                         page: startPage,
                         size: 8,
@@ -303,7 +266,7 @@
                 });
             }
             fetchAssignment(0);
-            $(document).on('click', '#pagination a', function () {
+            $(document).on('click', '#pagination #page-fetch a', function () {
                 let page = $(this).data('page');
                 if (page !== undefined) {
                     // alert(page)
@@ -315,7 +278,7 @@
                 var searchText = $("#keyword").val();
                 function showAssignments(startPage) {
                     $.ajax({
-                        url:'/api/problemSolving/searchTopic',
+                        url:'http://localhost:8080/api/problemSolving/searchTopic',
                         type: 'GET',
                         data: {
                             page: startPage,
@@ -340,12 +303,54 @@
                     });
                 }
                 showAssignments(0);
+                $(document).on('click', '#pagination #page-searchh a', function () {
+                    let page = $(this).data('page');
+                    if (page !== undefined) {
+                        // alert(page)
+                        showAssignments(page);
+                    }
+                });
             });
-            $(document).on('click', '#pagination #page-search2 a', function () {
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    filterData();
+                });
+            });
+            function filterData(startPage){
+                const easyChecked = document.getElementById('easy').checked;
+                const mediumChecked = document.getElementById('medium').checked;
+                const hardChecked = document.getElementById('hard').checked;
+                $.ajax({
+                    url:'/api/problemSolving/filterOfTopic',
+                    type: 'GET',
+                    data: {
+                        page: startPage,
+                        size: 8,
+                        easyChecked: easyChecked,
+                        mediumChecked: mediumChecked,
+                        hardChecked: hardChecked,
+                        languageId: languageId,
+                    },
+                    success: function (response){
+                        // alert(response.content);
+                        $('#assignments').empty();
+                        // add table rows
+                        $.each(response.content, (i, assignment) => {
+                            assignmentContent(assignment)
+                        });
+                        // Update pagination
+                        $('#pagination').empty();
+                        buildPaginationForFilter(response)
+                    },
+                    error: function (){
+                        console.log("error");
+                    }
+                });
+            }
+            $(document).on('click', '#pagination #page-filter a', function () {
                 let page = $(this).data('page');
                 if (page !== undefined) {
-                    // alert(page)
-                    fetchAssignment(page);
+                    filterData(page);
                 }
             });
         });

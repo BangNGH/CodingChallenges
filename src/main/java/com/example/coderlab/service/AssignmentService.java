@@ -228,4 +228,10 @@ public class AssignmentService {
     public Page<Assignment> listAssignmentByTopic(Long languageId, Pageable pageable){
         return assignmentRepository.findAssignmentByLanguageID(languageId, pageable);
     }
+    public Page<Assignment> filterAssignment(boolean easy, boolean medium, boolean hard, Pageable pageable){
+        return assignmentRepository.filterAssignment(easy, medium, hard, pageable);
+    }
+    public Page<Assignment> filterAssignmentTopic(boolean easy, boolean medium, boolean hard,long languageId ,Pageable pageable){
+        return assignmentRepository.filterAssignmentTopic(easy, medium, hard, languageId, pageable);
+    }
 }

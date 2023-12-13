@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/problemSolving")
 public class ProblemSolvingRestController {
@@ -20,7 +22,7 @@ public class ProblemSolvingRestController {
     private AssignmentRepository assignmentRepository;
     @GetMapping("")
     public Page<Assignment> list(Pageable pageable){
-        return assignmentRepository.findProblemSolvingAssignments(pageable);
+        return assignmentRepository.findAll(pageable);
     }
     @GetMapping("/search")
     public Page<Assignment> searchAssignment(@RequestParam("searchText") String searchText, Pageable pageable){
@@ -33,5 +35,23 @@ public class ProblemSolvingRestController {
     @GetMapping("/topic")
     public Page<Assignment> listAssignmentByTopic(@RequestParam("languageId") Long id, Pageable pageable){
         return assignmentService.listAssignmentByTopic(id, pageable);
+    }
+    @GetMapping("/filter")
+    public Page<Assignment> filterAssignment(@RequestParam("easyChecked") Boolean easy,
+                                             @RequestParam("mediumChecked") Boolean medium,
+                                             @RequestParam("hardChecked") Boolean hard, Pageable pageable){
+        if(!easy && !medium && !hard){
+            return assignmentRepository.findAll(pageable);
+        }
+        return assignmentService.filterAssignment(easy,medium,hard,pageable);
+    }
+    @GetMapping("/filterOfTopic")
+    public Page<Assignment> filterAssignmentTopic(@RequestParam("easyChecked") Boolean easy,
+                                                @RequestParam("mediumChecked") Boolean medium,
+                                                @RequestParam("hardChecked") Boolean hard, @RequestParam("languageId") Long languageId, Pageable pageable){
+        if(!easy && !medium && !hard){
+            return assignmentService.listAssignmentByTopic(languageId, pageable);
+        }
+        return assignmentService.filterAssignmentTopic(easy,medium,hard,languageId,pageable);
     }
 }

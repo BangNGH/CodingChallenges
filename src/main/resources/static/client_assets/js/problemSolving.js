@@ -15,7 +15,7 @@ function assignmentContent(assignment){
                                                         <span><i class="far fa-book-alt"></i>Max score: ${assignment.max_score} </span>
                                                     </div>
                                                     <div class="course__rating">
-                                                        <span><i class="icon_star"></i>Success Rate: </span>
+                                                        <span><i class="icon_star"></i>Success Rate: ${assignment.getSuccessRate}</span>
                                                     </div>
                                                 </div>
                                                 <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a href="/problemSolving/${assignment.id}">${assignment.title}</a></h3>
@@ -57,7 +57,7 @@ function getLevelClass(levelId) {
 function buildPagination(response) {
     if (response.totalPages > 1) {
         let paginationRow = `
-        <div class="col-xxl-12">
+        <div id="page-fetch" class="col-xxl-12">
             <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
                 <ul class="d-flex align-items-center">
                     <li class="prev">
@@ -93,7 +93,43 @@ function buildPagination(response) {
 }
 function buildPaginationForSearch(response) {
     if (response.totalPages > 1) {
-        let paginationRow = `<div id="page-search2" class="col-xxl-12">
+        let paginationRow = `<div id="page-searchh" class="col-xxl-12">
+            <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
+                <ul class="d-flex align-items-center">
+                    <li class="prev">
+                        <a style="cursor: pointer" class="link-btn link-prev" ${(response.number > 0) ? `data-page="${response.number - 1}"` : ''}>
+                            Prev
+                            <i class="arrow_left"></i>
+                             <i class="arrow_left"></i>
+                        </a>
+                    </li>
+    `;
+        for (let i = 1; i <= response.totalPages; i++) {
+            paginationRow += `
+            <li>
+                <a style="cursor: pointer" ${(response.number != i-1) ? `data-page="${i-1}"` : ''}
+                ${response.number === i-1 ? 'class="current-page"' : ''}>${i}</a>
+            </li>
+        `;
+        }
+        paginationRow += `
+                    <li class="next">
+                        <a class="link-btn" style="cursor: pointer" ${(response.number < response.totalPages-1) ? `data-page="${response.number + 1}"` : ''}>
+                            Next
+                            <i class="arrow_right"></i>
+                            <i class="arrow_right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+        $('#pagination').append(paginationRow);
+    }
+}
+function buildPaginationForFilter(response) {
+    if (response.totalPages > 1) {
+        let paginationRow = `<div id="page-filter" class="col-xxl-12">
             <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
                 <ul class="d-flex align-items-center">
                     <li class="prev">

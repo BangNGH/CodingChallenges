@@ -21,7 +21,6 @@ public class LanguageService {
     public Optional<Language> findByLanguageID(Long languageID) {
         return languageRepository.findById(languageID);
     }
-
     public void addLanguage() {
         if (this.getAllLanguages().isEmpty()) {
             Language java_language = new Language();

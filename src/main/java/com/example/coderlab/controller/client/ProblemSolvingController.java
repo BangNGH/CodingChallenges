@@ -4,7 +4,6 @@ import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,17 +31,15 @@ public class ProblemSolvingController {
     @Autowired
     private LanguageService languageService;
     @GetMapping()
-    public String index(HttpSession session){
-        clearSession(session);
+    public String index(Model model){
+
         return "client/problem/index";
     }
 
     @GetMapping("/topic/{id}")
-    public String practiceByTopic(Model model, @PathVariable("id") String id, HttpSession session){
-        clearSession(session);
+    public String practiceByTopic(Model model, @PathVariable("id") Long id){
         model.addAttribute("topicID", id);
-        String topicName = languageService.findByLanguageID(Long.valueOf(id)).get().getName();
-        model.addAttribute("nameOfTopic", topicName);
+        model.addAttribute("language", languageService.findByLanguageID(id).orElseThrow());
         return "client/problem/topic";
     }
 
@@ -80,20 +77,7 @@ public class ProblemSolvingController {
         model.addAttribute("challenge", foundChallenge);
         List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
         model.addAttribute("comments", comments);
-        model.addAttribute("languages", languageService.getAllLanguages());
         model.addAttribute("unlocked", solutionCheckService.isUnlocked(current_user, foundChallenge));
         return "client/problem/practice";
-    }
-    private Boolean clearSession(HttpSession session) {
-        if (session != null) {
-            session.removeAttribute("editorContent");
-            session.removeAttribute("mode");
-            session.removeAttribute("option");
-            session.removeAttribute("language_name");
-            session.removeAttribute("current_tab_id");
-            System.out.println("Session cleared successfully!");
-            return true;
-        }
-        return false;
     }
 }
