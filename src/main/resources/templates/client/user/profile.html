@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | Coder'sLab</title>
+
+  <link th:href="@{/admin_assets/css/main.css}" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link th:href="@{/admin_assets/vendor/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- services area start -->
+  <section class="services__area pt-115 pb-40">
+    <div class="container">
+      <div class="row">
+        <!--main content wrapper-->
+        <div class="content-wrapper">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xl-4 col-md-6 profile-info-position">
+                <div class="card card-shadow mb-4 ">
+                  <div class="card-body">
+                    <a href="/user/settings">
+                      <i class="fa fa-edit" aria-hidden="true" style="float: right;font-size: large;"></i>
+                    </a>
+                    <div class="text-center">
+                      <div class="mt-4 mb-3">
+                        <img class="rounded-circle" width="85" th:if="${user.avatarUrl}"
+                             th:src="@{${user.getImagesPath()}}"
+                             alt="">
+                        <img class="rounded-circle" width="85" th:unless="${user.avatarUrl}"
+                             src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                             alt="">
+                      </div>
+                      <h5 class="text-uppercase mb-0" th:text="${user.fullName}"></h5>
+                      <p class="text-muted mb-0">Sr. Marketing Executive </p>
+                      <div class="profile-social-link mb-4">
+                        <a href="#" class="mx-2"><i class="fa fa-facebook-square"></i></a>
+                        <a href="#" class="mx-2"><i class="fa fa-github"></i></a>
+                        <a href="#" class="mx-2"><i class="fa fa-youtube"></i></a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="card card-shadow mb-4">
+                  <div class="card-header border-0">
+                    <div class="custom-title-wrap bar-danger">
+                      <div class="custom-title">Points</div>
+                    </div>
+                    <div class="progress mt-4" style="height: 5px;">
+                      <div class="progress-bar bg-purple-light" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="mt-2">
+                      <span class="float-left f12 text-muted">Total 7250</span>
+                      <span class="float-right f12 text-muted">1250 Left</span>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="card-body">
+                    <div class="row f12 mb-3">
+                      <div class="col-6">Article Read</div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div class="col-6">900/1200</div>
+                          <div class="col-6">
+                            <div class="progress mt-2" style="height: 5px;">
+                              <div class="progress-bar bg-info" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row f12 mb-3">
+                      <div class="col-6">Comments</div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div class="col-6">145/450</div>
+                          <div class="col-6">
+                            <div class="progress mt-2" style="height: 5px;">
+                              <div class="progress-bar bg-primary" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row f12 mb-3">
+                      <div class="col-6">Likes</div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div class="col-6">370/750</div>
+                          <div class="col-6">
+                            <div class="progress mt-2" style="height: 5px;">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row f12">
+                      <div class="col-6">Share</div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div class="col-6">30/100</div>
+                          <div class="col-6">
+                            <div class="progress mt-2" style="height: 5px;">
+                              <div class="progress-bar bg-danger" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-center mt-4">
+                      <a href="#" class="btn btn-sm btn-pill btn-outline-primary">View All</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card card-shadow mb-4">
+                  <div class="card-header border-0">
+                    <div class="custom-title-wrap bar-success">
+                      <div class="custom-title">Your Items</div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="media text-muted mb-3">
+                      <img class="rounded mr-3" src="assets/img/watch.jpg" width="80" alt=""/>
+                      <p class="media-body pb-3 mb-0">
+                        <a href="#" class="d-block text-secondary"><strong class="">Bhawin Jagad</strong></a>
+                        Donec id elit non mi porta gravida at eget metus.
+                      </p>
+                    </div>
+                    <div class="media text-muted">
+                      <img class="rounded mr-3" src="assets/img/device.jpg" width="80" alt=""/>
+                      <p class="media-body pb-3 mb-0">
+                        <a href="#" class="d-block text-secondary"><strong class="">Bhawin Jagad</strong></a>
+                        Donec id elit non mi porta gravida at eget metus.
+                      </p>
+                    </div>
+                    <div class="text-center mt-4">
+                      <a href="#" class="btn btn-sm btn-pill btn-outline-success">View All</a>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-xl-8 col-md-6">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="timeline-title btn-pill text-muted d-inline-block px-3 py-1 mb-5 mx-5">January 2018</div>
+                    <ul class="list-unstyled base-timeline activity-timeline">
+
+                      <li class="">
+                        <div class="timeline-icon bg-danger">
+                          <i class="fa fa-tasks"></i>
+                        </div>
+                        <div class="act-time">Today</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-danger">Task Added</a>
+                          <span class="d-block">You have added task #26 Successfully to the project “Agile CRM”</span>
+                        </div>
+                        <small class="text-muted">
+                          28 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-success">
+                          <i class="fa fa-download"></i>
+                        </div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-success">Download Complete</a>
+                          <span class="d-block">You downloaded the pdf documentation file of Agile CRM</span>
+                        </div>
+                        <small class="text-muted">
+                          45 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-primary">
+                          <i class="fa fa-handshake-o"></i>
+                        </div>
+                        <div class="act-time">Yesterday</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-primary">Deal Added</a>
+                          <span class="d-block">Final deal with ABC Company is done and added to the “Upcoming deal” list</span>
+                        </div>
+                        <small class="text-muted">
+                          12 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon">
+                          <img src="assets/img/avatar/avatar2.jpg" alt=""/>
+                        </div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-info">Charlie Johnson</a>
+                          <span class="d-block">joined DashLab last week.</span>
+                        </div>
+                        <small class="text-muted">
+                          3 days ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-purple">
+                          <i class="fa fa-check"></i>
+                        </div>
+                        <div class="act-time">29 January</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-purple">Task Complete</a>
+                          <span class="d-block">5 tasks for 29 january is completed successfully and no task pending</span>
+                        </div>
+                        <small class="text-muted">
+                          07:00 PM
+                        </small>
+                      </li>
+                    </ul>
+
+                    <br/>
+
+                    <div class="timeline-title btn-pill text-muted d-inline-block px-3 py-1 mb-5 mx-5">February 2018</div>
+                    <ul class="list-unstyled base-timeline activity-timeline">
+
+                      <li class="">
+                        <div class="timeline-icon bg-dark">
+                          <i class="fa fa-tasks"></i>
+                        </div>
+                        <div class="act-time">02 February</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-dark">Task Added</a>
+                          <span class="d-block">You have added task #26 Successfully to the project “Agile CRM”</span>
+                        </div>
+                        <small class="text-muted">
+                          28 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-warning">
+                          <i class="fa fa-handshake-o"></i>
+                        </div>
+                        <div class="act-time">04 february</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-warning">Deal Added</a>
+                          <span class="d-block">Final deal with ABC Company is done and added to the “Upcoming deal” list</span>
+                        </div>
+                        <small class="text-muted">
+                          12 mins ago
+                        </small>
+                      </li>
+                    </ul>
+
+                    <br/>
+
+                    <div class="timeline-title btn-pill text-muted d-inline-block px-3 py-1 mb-5 mx-5">March 2018</div>
+                    <ul class="list-unstyled base-timeline activity-timeline">
+
+                      <li class="">
+                        <div class="timeline-icon bg-purple">
+                          <i class="fa fa-tasks"></i>
+                        </div>
+                        <div class="act-time">05 March</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-purple">Task Added</a>
+                          <span class="d-block">You have added task #26 Successfully to the project “Agile CRM”</span>
+                        </div>
+                        <small class="text-muted">
+                          28 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-info">
+                          <i class="fa fa-handshake-o"></i>
+                        </div>
+                        <div class="act-time">06 March</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-info">Deal Added</a>
+                          <span class="d-block">Final deal with ABC Company is done and added to the “Upcoming deal” list</span>
+                        </div>
+                        <small class="text-muted">
+                          12 mins ago
+                        </small>
+                      </li>
+                      <li class="">
+                        <div class="timeline-icon bg-danger">
+                          <i class="fa fa-calendar-o"></i>
+                        </div>
+                        <div class="act-time">06 March</div>
+                        <div class="base-timeline-info">
+                          <a href="#" class="text-uppercase weight700 f12 text-danger">Event Created</a>
+                          <span class="d-block">Final deal with ABC Company is done and added to the “Upcoming deal” list</span>
+                        </div>
+                        <small class="text-muted">
+                          43 mins ago
+                        </small>
+                      </li>
+                    </ul>
+
+                    <br/>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- services area end -->
+</div>
+</body>
+</html>

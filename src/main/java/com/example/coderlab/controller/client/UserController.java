@@ -23,7 +23,15 @@ public class UserController {
         String email = authentication.getName();
         return userServices.findByEmail(email).orElseThrow();
     }
-    @GetMapping("/settings")
+    @GetMapping("/my-profile")
+    public String profile(Model model){
+        UserEntity user = getUser();
+        model.addAttribute("user", user);
+        if(model.containsAttribute("message")){
+            model.addAttribute("message", model.getAttribute("message"));
+        }
+        return "client/user/profile";
+    }    @GetMapping("/settings")
     public String userSettings(Model model){
         UserEntity user = getUser();
         model.addAttribute("user", user);
