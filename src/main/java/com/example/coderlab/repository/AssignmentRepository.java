@@ -24,7 +24,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
 
     @Query("SELECT a from Assignment a where a.title like %?1% and a.language_option.id =?2")
     Page<Assignment> searchAssignmentTopicByName(String keyword ,Long languageId, Pageable pageable);
-    @Query("SELECT a FROM Assignment a WHERE (:easy = TRUE AND a.level.id = 1) " +
+    @Query("SELECT a FROM Assignment a WHERE a.language_option is null and (:easy = TRUE AND a.level.id = 1) " +
             "OR (:medium = TRUE AND a.level.id = 2) " +
             "OR (:hard = TRUE AND a.level.id = 3)")
     Page<Assignment> filterAssignment(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, Pageable pageable);

@@ -234,4 +234,8 @@ public class AssignmentService {
     public Page<Assignment> filterAssignmentTopic(boolean easy, boolean medium, boolean hard,long languageId ,Pageable pageable){
         return assignmentRepository.filterAssignmentTopic(easy, medium, hard, languageId, pageable);
     }
+
+    public Page<Assignment> findProblemSolvingAssignments(Pageable pageable) {
+        return assignmentRepository.findProblemSolvingAssignments(pageable);
+    }
 }

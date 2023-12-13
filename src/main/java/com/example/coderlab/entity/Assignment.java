@@ -78,7 +78,7 @@ public class Assignment {
     @JsonIgnore
     private List<SolutionCheck> solutionChecks = new ArrayList<>();
 
-    @Transient
+
     public Double getSuccessRate() {
         if (submissions == null || submissions.isEmpty()) {
             return 0.0;

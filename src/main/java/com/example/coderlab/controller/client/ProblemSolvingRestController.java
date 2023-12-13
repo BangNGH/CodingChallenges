@@ -18,11 +18,9 @@ import java.util.List;
 public class ProblemSolvingRestController {
     @Autowired
     private AssignmentService assignmentService;
-    @Autowired
-    private AssignmentRepository assignmentRepository;
     @GetMapping("")
     public Page<Assignment> list(Pageable pageable){
-        return assignmentRepository.findAll(pageable);
+        return assignmentService.findProblemSolvingAssignments(pageable);
     }
     @GetMapping("/search")
     public Page<Assignment> searchAssignment(@RequestParam("searchText") String searchText, Pageable pageable){
@@ -41,7 +39,7 @@ public class ProblemSolvingRestController {
                                              @RequestParam("mediumChecked") Boolean medium,
                                              @RequestParam("hardChecked") Boolean hard, Pageable pageable){
         if(!easy && !medium && !hard){
-            return assignmentRepository.findAll(pageable);
+            return assignmentService.findProblemSolvingAssignments(pageable);
         }
         return assignmentService.filterAssignment(easy,medium,hard,pageable);
     }
