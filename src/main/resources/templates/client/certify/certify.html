@@ -249,26 +249,23 @@
                     editor.setOption("mode", "text/x-c++src")
                     editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                     option = 54;
-                    langague_name = 'C++';
                 }
                 if (selectedData.selectedData.value === "text/x-java") {
                     editor.setOption("mode", "text/x-java")
                     editor.setValue('import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
                     option = 91;
-                    langague_name = 'java';
                 }
                 if (selectedData.selectedData.value === "text/x-csharp") {
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
-                    langague_name = 'C#';
                 }
                 if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
                     editor.setValue("print('Hello world!')")
                     option = 71;
-                    langague_name = 'python';
                 }
+                langague_name = selectedData.selectedData.value;
             }
         });
 

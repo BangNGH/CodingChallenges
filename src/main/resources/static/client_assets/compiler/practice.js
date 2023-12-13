@@ -697,7 +697,8 @@ submit.addEventListener("click", async function () {
     testCasesContainer.innerHTML += html;
     let submissions_to_send = [];
     const allTestCases = JSON.parse(allTestCaseJSON);
-    const langagueName = langague_name;
+    const languageInput = document.querySelector('input.dd-selected-value');
+    const langagueName=languageInput.value;
     const source_code = editor.getValue().trim();
     excuting.style.display = 'block';
     const bottomElement = document.getElementById('excuting');

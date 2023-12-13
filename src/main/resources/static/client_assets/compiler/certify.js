@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         editor.setOption("mode", "text/x-c++src")
                         editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                         option = 54;
-                        langague_name = 'C++';
+                        langague_name = 'text/x-c++src';
                     },
                     error: function (error) {
                         console.error('Error clear session:', error);
@@ -139,8 +139,8 @@ $(document).ready(function () {
                     console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
                 }
 
-                editor.setOption(mode_receive, language_name_receive)
-                editor.setValue(content_receive)
+                editor.setOption("mode", mode_receive);
+                editor.setValue(content_receive);
                 if (mode_receive === "text/x-c++src") {
                     option = 54;
                 }
@@ -719,7 +719,8 @@ submit.addEventListener("click", async function () {
     if (confirm('Are you sure to submit this challenge?')) {
         testCasesContainer.innerHTML = '';
         let submissions_to_send = [];
-        const langagueName = langague_name;
+        const languageInput = document.querySelector('input.dd-selected-value');
+        const langagueName=languageInput.value;
         const source_code = editor.getValue();
         excuting.style.display = 'block';
         const bottomElement = document.getElementById('excuting');

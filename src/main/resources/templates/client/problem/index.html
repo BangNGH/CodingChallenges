@@ -272,7 +272,7 @@
             //search
             $("#keyword").keyup(function (){
                 var searchText = $("#keyword").val();
-                function showAssignments(startPage, searchText) {
+                function showAssignments(startPage) {
                     $.ajax({
                         url:'/api/problemSolving/search',
                         type: 'GET',

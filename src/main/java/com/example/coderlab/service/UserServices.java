@@ -142,7 +142,11 @@ public class UserServices {
         return tokenRepository.save(verificationToken);
     }
 
-    public Integer getTotalScore(Long id) {
-        return userRepository.getTotalScore(id);
+    public Integer getSovledAssignment(Long id) {
+        return userRepository.getSovledAssignment(id);
+    }
+
+    public List<Object[]> getLanguagePercentageByStudentId(Long id) {
+        return userRepository.getLanguagePercentageByStudentId(id);
     }
 }

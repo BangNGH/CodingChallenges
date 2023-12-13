@@ -1,10 +1,12 @@
 package com.example.coderlab.repository;
 
+import com.example.coderlab.entity.Submission;
 import com.example.coderlab.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("SELECT COUNT(*) FROM UserEntity ")
     Long countById(Long id);
 
-    @Query("SELECT sub2.total_score \n" +
+    //get total score of user
+/*    @Query("SELECT sub2.total_score \n" +
             "from(\n" +
             "\tSELECT sub.student_id as student_id, SUM(sub.max_score) AS total_score\n" +
             "\tFROM (\n" +
@@ -29,6 +32,20 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "\tORDER BY total_score DESC\n" +
             ") AS sub2\n" +
             "where sub2.student_id =?1")
-    Integer getTotalScore(Long id);
-}
+    Integer getTotalScore(Long id);*/
 
+    @Query("SELECT COUNT(*) \n" +
+            "FROM (SELECT s.student.id as student_id, s.assignment.id as assignment_id\n" +
+            "  FROM Submission AS s \n" +
+            "  where s.is_success= true and s.student.id = ?1\n" +
+            "  GROUP BY s.student.id, s.assignment.id) AS sub")
+    Integer getSovledAssignment(Long id);
+
+
+    @Query(value = "SELECT s.language_id as language_id, (COUNT(*) * 100 / SUM(COUNT(*)) OVER (PARTITION BY s.student_id)) AS percentage \n" +
+            "FROM submissions AS s\n" +
+            "WHERE s.is_success = true and s.student_id = ?1\n" +
+            "GROUP BY s.student_id, s.language_id\n" +
+            "ORDER BY s.student_id, percentage DESC", nativeQuery = true)
+    List<Object[]> getLanguagePercentageByStudentId(Long id); // Đặt tên cho method và truyền vào tham số
+}
