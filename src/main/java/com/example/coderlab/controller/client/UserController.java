@@ -83,7 +83,7 @@ public class UserController {
     public String userSettingsPost(@ModelAttribute("user") UserEntity user, @RequestParam("image") MultipartFile multipartFile, RedirectAttributes redirectAttributes) throws IOException {
         userServices.updateUser(user, multipartFile);
         redirectAttributes.addFlashAttribute("message", "Save successfully!");
-        return "redirect:/user/settings";
+        return "redirect:/user/my-profile";
     }
     @GetMapping("/changePassword")
     public String userChangePassword(Model model){

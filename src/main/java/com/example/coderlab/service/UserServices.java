@@ -52,6 +52,15 @@ public class UserServices {
     public void updateUser(UserEntity user, MultipartFile multipartFile) throws IOException {
         UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow();
         existingUser.setFullName(user.getFullName());
+        if (user.getEducation() != null) {
+            existingUser.setEducation(user.getEducation());
+        } if (user.getWork_experiences() != null) {
+            existingUser.setWork_experiences(user.getWork_experiences());
+        } if (user.getSkills() != null) {
+            existingUser.setSkills(user.getSkills());
+        } if (user.getCertificates() != null) {
+            existingUser.setCertificates(user.getCertificates());
+        }
         if(multipartFile != null && !multipartFile.isEmpty()){
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             existingUser.setAvatarUrl(fileName);

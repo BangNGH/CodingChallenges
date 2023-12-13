@@ -45,13 +45,29 @@
                             <hr class="border-light m-0">
                             <div class="card-body">
                                 <input th:field="*{id}" type="hidden">
-                                <div class="form-group">
-                                    <label style="color: #000" class="form-label">Name: </label>
-                                    <input required name="Name" th:field="*{fullName}" type="text" class="form-control mb-1 form-validate" placeholder="Enter name">
-                                </div>
-                                <div class="form-group">
+                                <div class="form-group mb-20">
                                     <label style="color: #000" class="form-label">Email:</label>
                                     <input th:field="*{email}" readonly type="text" class="form-control" placeholder="Enter email">
+                                </div>
+                                <div class="form-group mb-20">
+                                    <label style="color: #000" class="form-label">Tên: </label>
+                                    <input required name="Name" th:field="*{fullName}" type="text" class="form-control mb-1 form-validate" placeholder="Nhập tên">
+                                </div>
+                                <div class="form-group mb-20">
+                                    <label style="color: #000" class="form-label">Education:</label>
+                                    <input th:field="*{education}" type="text" class="form-control" placeholder="Nhập tên trường hoặc nơi làm việc của bạn">
+                                </div>
+                                <div class="form-group mb-20">
+                                    <label style="color: #000" class="form-label">Work Experiences:</label>
+                                    <textarea th:field="*{work_experiences}" rows="12" class="form-control" placeholder="Mô tả về kinh nghiệm của bạn"></textarea>
+                                </div>
+                                <div class="form-group mb-20">
+                                    <label style="color: #000" class="form-label">Skills:</label>
+                                    <textarea rows="5" th:field="*{skills}" class="form-control" placeholder="Các kỹ năng mềm(nếu có)"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: #000" class="form-label">Certificates:</label>
+                                    <textarea rows="5" th:field="*{certificates}" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>

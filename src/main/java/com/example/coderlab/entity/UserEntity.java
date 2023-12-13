@@ -37,6 +37,19 @@ public class UserEntity {
     @Column(name = "full_name", length = 127)
     private String fullName;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String education;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String skills;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String work_experiences;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String certificates;
+
     @Column(name = "password")
     private String password;
 
