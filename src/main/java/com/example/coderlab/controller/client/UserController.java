@@ -1,6 +1,7 @@
 package com.example.coderlab.controller.client;
 
 import com.example.coderlab.entity.UserEntity;
+import com.example.coderlab.service.AssignmentService;
 import com.example.coderlab.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,8 @@ import java.io.IOException;
 public class UserController {
     @Autowired
     private UserServices userServices;
+    @Autowired
+    private AssignmentService assignmentService;
     public UserEntity getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -26,10 +29,12 @@ public class UserController {
     @GetMapping("/my-profile")
     public String profile(Model model){
         UserEntity user = getUser();
+        Integer myTotalScore = user.getTotalScore();
+        Integer maxScore = assignmentService.getMaxScore();
         model.addAttribute("user", user);
-        if(model.containsAttribute("message")){
-            model.addAttribute("message", model.getAttribute("message"));
-        }
+        model.addAttribute("myTotalScore", myTotalScore);
+        model.addAttribute("maxScore", maxScore);
+
         return "client/user/profile";
     }    @GetMapping("/settings")
     public String userSettings(Model model){

@@ -31,6 +31,7 @@ public class AssignmentKitSubmissionService {
     private final AssignmentKitSubmissionRepo assignmentKitSubmissionRepo;
     private final AssignmentKitService assignmentKitService;
     private final SubmissionService submissionService;
+    private final UserServices userServices;
 
     public Boolean saveSubmissions(SubmissionKitInfoSendDTO submissionsId, UserEntity current_user) throws IOException {
         Optional<AssignmentKit> found_assignment_kit = assignmentKitService.findById(Long.valueOf(submissionsId.getAssignment_kit_id()));
@@ -50,7 +51,9 @@ public class AssignmentKitSubmissionService {
             assignmentKitSubmission.setUser_submited(current_user);
             assignmentKitSubmission.setSubmissions(submissions);
             assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
-            assignmentKitSubmissionRepo.save(assignmentKitSubmission);
+            AssignmentKitSubmission saved = assignmentKitSubmissionRepo.save(assignmentKitSubmission);
+            current_user.getAssignmentKitSubmissions().add(saved);
+            userServices.save(current_user);
         }
         if (is_passed) {
             //absolute path to \client_assets\img\certificate.png"

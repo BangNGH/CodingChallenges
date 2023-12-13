@@ -18,6 +18,7 @@ public class SubmissionService {
     private final AssignmentService assignmentService;
     private final AssesmentService assesmentService;
     private final SolutionCheckService solutionCheckService;
+    private final UserServices userServices;
 
     public void save(Submission submission) {
         this.submissionRepository.save(submission);
@@ -75,6 +76,8 @@ public class SubmissionService {
         }else submission.setTotal_score(my_score);
 
         Submission savedSubmission = submissionRepository.save(submission);
+        current_user.getSubmissions().add(savedSubmission);
+        userServices.save(current_user);
         for (Assessment assessment :savedSubmission.getAssessments()
         ) {
             assessment.setSubmission(savedSubmission);

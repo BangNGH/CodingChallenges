@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 @Setter
@@ -69,9 +71,13 @@ public class UserEntity {
     @JsonIgnore
     private List<AssignmentKitSubmission> assignmentKitSubmissions;
 
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Submission> submissions;
 
     //
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -82,4 +88,13 @@ public class UserEntity {
         if(avatarUrl == null || id == null) return null;
         return "/avt-images/" + id + "/" + avatarUrl;
     }
+    public Integer getTotalScore(){
+        if (!submissions.isEmpty()){
+            AtomicInteger myScore = new AtomicInteger(0);
+            submissions.forEach(submission -> myScore.addAndGet(submission.getTotal_score()));
+            return myScore.get();
+        }
+        return 0;
+    }
+
 }

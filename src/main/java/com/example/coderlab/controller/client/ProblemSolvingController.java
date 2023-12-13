@@ -77,6 +77,7 @@ public class ProblemSolvingController {
         model.addAttribute("challenge", foundChallenge);
         List<Comment> comments = foundChallenge.getComments().stream().sorted(Comparator.comparing(Comment::getCommented_at).reversed()).toList();
         model.addAttribute("comments", comments);
+        model.addAttribute("languages", languageService.getAllLanguages());
         model.addAttribute("unlocked", solutionCheckService.isUnlocked(current_user, foundChallenge));
         return "client/problem/practice";
     }

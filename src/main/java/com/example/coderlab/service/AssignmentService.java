@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class AssignmentService {
@@ -237,5 +238,15 @@ public class AssignmentService {
 
     public Page<Assignment> findProblemSolvingAssignments(Pageable pageable) {
         return assignmentRepository.findProblemSolvingAssignments(pageable);
+    }
+
+    public Integer getMaxScore() {
+        List<Assignment> assignments = assignmentRepository.findAll();
+        if (!assignments.isEmpty()){
+            AtomicInteger maxScore = new AtomicInteger(0);
+            assignments.forEach(assignment -> maxScore.addAndGet(assignment.getMax_score()));
+            return maxScore.get();
+        }
+        return 0;
     }
 }

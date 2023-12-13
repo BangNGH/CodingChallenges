@@ -87,9 +87,7 @@ public class Assignment {
         long passedCount = submissions.stream().filter(submission -> submission.getIs_success()).count();
         double successRate = (double) passedCount / submissions.size() * 100;
 
-        // Làm tròn 2 chữ số sau dấu phẩy
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        System.out.println(Double.parseDouble(decimalFormat.format(successRate)));
         return Double.parseDouble(decimalFormat.format(successRate));
     }
 }   
