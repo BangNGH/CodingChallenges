@@ -6,7 +6,7 @@ import com.example.coderlab.exception.ResourceNotFoundException;
 import com.example.coderlab.repository.UserRepository;
 import com.example.coderlab.repository.UserRoleRepository;
 import com.example.coderlab.repository.VerificationTokenRepository;
-import com.example.coderlab.utils.FileUploadUtil;
+import com.example.coderlab.dto.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +33,12 @@ public class UserServices {
 
     public Optional<UserEntity> findByEmail(String email) {
         Optional<UserEntity> result = userRepository.findByEmail(email);
+        if (result.isPresent()) {
+            return result;
+        } else return null;
+    }
+    public Optional<UserEntity> findById(Long id) {
+        Optional<UserEntity> result = userRepository.findById(id);
         if (result.isPresent()) {
             return result;
         } else return null;

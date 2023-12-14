@@ -2,8 +2,8 @@ package com.example.coderlab.service;
 
 import com.example.coderlab.entity.*;
 import com.example.coderlab.repository.SubmissionRepository;
-import com.example.coderlab.utils.SubmissionInfoSendDTO;
-import com.example.coderlab.utils.TestCaseListDTO;
+import com.example.coderlab.dto.SubmissionInfoSendDTO;
+import com.example.coderlab.dto.TestCaseListDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -98,5 +98,9 @@ public class SubmissionService {
 
     public List<Submission> getSubmissions(Long userID, Long assignmentID) {
         return this.submissionRepository.getSubmissions(userID, assignmentID);
+    }
+
+    public List<Object[]> rankByAssignment() {
+        return submissionRepository.rankByAssignment();
     }
 }

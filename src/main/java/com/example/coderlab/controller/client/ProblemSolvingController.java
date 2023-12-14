@@ -70,7 +70,7 @@ public class ProblemSolvingController {
         List<Submission> submissions = submissionService.getSubmissions(current_user.getId(), foundChallenge.getId());
 
         if (!submissions.isEmpty()){
-            model.addAttribute("submissions", submissions.stream().sorted(Comparator.comparing(Submission::getSubmittedAt, Comparator.reverseOrder())).collect(Collectors.toList()));
+            model.addAttribute("submissions", submissions.stream().filter(i->i.getAssignment_kit_submission()==null).sorted(Comparator.comparing(Submission::getSubmittedAt, Comparator.reverseOrder())).collect(Collectors.toList()));
         }else  model.addAttribute("submissions", false);
         model.addAttribute("test_cases_json", new ObjectMapper().writeValueAsString(sampleTestCase));
         model.addAttribute("all_test_cases_json", new ObjectMapper().writeValueAsString(foundChallenge.getTestCases()));

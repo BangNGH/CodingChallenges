@@ -1,4 +1,4 @@
-package com.example.coderlab.utils;
+package com.example.coderlab.dto;
 
 import com.example.coderlab.entity.Language;
 import lombok.AllArgsConstructor;

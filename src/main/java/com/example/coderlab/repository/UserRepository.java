@@ -47,5 +47,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "WHERE s.is_success = true and s.student_id = ?1\n" +
             "GROUP BY s.student_id, s.language_id\n" +
             "ORDER BY s.student_id, percentage DESC", nativeQuery = true)
-    List<Object[]> getLanguagePercentageByStudentId(Long id); // Đặt tên cho method và truyền vào tham số
+    List<Object[]> getLanguagePercentageByStudentId(Long id);
 }

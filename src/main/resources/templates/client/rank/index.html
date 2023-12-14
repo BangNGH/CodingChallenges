@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rank | Coder'sLab</title>
+  <link href="/admin_assets/vendor/themify-icons/css/themify-icons.css" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- services area start -->
+  <section class="services__area pt-115 pb-40">
+    <div class="container">
+      <div class="row">
+        <div class="col-xxl-6 offset-xxl-3 col-xl-6 offset-xl-3">
+          <div class="section__title-wrapper section-padding mb-60 text-center">
+            <h2 class="section__title">LeaderBoard <span class="yellow-bg">Coder's Lab <img th:src="@{/client_assets/img/shape/yellow-bg-2.png}" alt=""></span></h2>
+            <p>Chúc mừng 100 người dùng sau đây được xếp hạng trên Coder's Lab.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card card-shadow mb-4">
+            <div class="card-header border-0">
+              <div class="custom-title-wrap bar-primary">
+                <div class="custom-title"></div>
+              </div>
+            </div>
+            <div class="card-body- pt-3 pb-4">
+              <div class="table-responsive">
+                <table id="data_table" class="table table-bordered table-striped" cellspacing="0">
+                  <thead>
+                  <tr>
+                    <th>#Rank</th>
+                    <th>Email</th>
+                    <th>Tài Khoản</th>
+                    <th>Số Bài Giải</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                  <tr>
+                    <th>#Rank</th>
+                    <th>Email</th>
+                    <th>Tài Khoản</th>
+                    <th>Số Bài Giải</th>
+                  </tr>
+                  </tfoot>
+                  <tbody>
+                  <tr th:each="rank :${rankList}">
+                  <td th:if="${rank.rank == 1}"><i class="ti-medall" style="color: gold;font-size: 30px"></i>[[${rank.rank}]]</td>
+                    <td th:if="${rank.rank == 2}"><i class="ti-medall" style="color: silver;font-size: 30px"></i>[[${rank.rank}]]</td>
+                    <td th:if="${rank.rank == 3}"><i class="ti-medall" style="color: chocolate;font-size: 30px"></i>[[${rank.rank}]]</td>
+                    <td th:if="${rank.rank != 3 && rank.rank != 2 && rank.rank != 1}">[[${rank.rank}]]</td>
+                    <td th:text="${rank.user.email}"></td>
+                    <td th:text="${rank.user.fullName}"></td>
+                    <td th:text="${rank.solvedAssignments}"></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- services area end -->
+</div>
+</body>
+</html>

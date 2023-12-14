@@ -2,8 +2,8 @@ package com.example.coderlab.controller.client;
 
 import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
-import com.example.coderlab.utils.SubmissionInfoSendDTO;
-import com.example.coderlab.utils.SubmissionKitInfoSendDTO;
+import com.example.coderlab.dto.SubmissionInfoSendDTO;
+import com.example.coderlab.dto.SubmissionKitInfoSendDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;

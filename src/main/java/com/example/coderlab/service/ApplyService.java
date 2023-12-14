@@ -1,11 +1,9 @@
 package com.example.coderlab.service;
 
 import com.example.coderlab.entity.Apply;
-import com.example.coderlab.entity.Assignment;
-import com.example.coderlab.entity.TestCase;
 import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.repository.ApplyRepository;
-import com.example.coderlab.utils.FileUploadUtil;
+import com.example.coderlab.dto.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

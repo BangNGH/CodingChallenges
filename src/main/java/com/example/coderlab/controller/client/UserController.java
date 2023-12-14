@@ -5,7 +5,7 @@ import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.service.AssignmentService;
 import com.example.coderlab.service.LanguageService;
 import com.example.coderlab.service.UserServices;
-import com.example.coderlab.utils.LanguagePercentageDTO;
+import com.example.coderlab.dto.LanguagePercentageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

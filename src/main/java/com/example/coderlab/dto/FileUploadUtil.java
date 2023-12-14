@@ -1,4 +1,4 @@
-package com.example.coderlab.utils;
+package com.example.coderlab.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
