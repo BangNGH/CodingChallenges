@@ -2,6 +2,7 @@ package com.example.coderlab.repository;
 
 import com.example.coderlab.entity.Assignment;
 import com.example.coderlab.entity.Language;
+import com.example.coderlab.entity.Level;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,4 +35,18 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
             "OR (:medium = TRUE AND a.level.id = 2) " +
             "OR (:hard = TRUE AND a.level.id = 3))")
     Page<Assignment> filterAssignmentTopic(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("languageId") long languageId, Pageable pageable);
+
+@Query(value = "SELECT * FROM assignments \n" +
+        "WHERE language_id = ?1\n" +
+        "AND mark_as_certification_question is not null\n" +
+        "AND level_id = ?2\n" +
+        "ORDER BY RAND()\n" +
+        "LIMIT ?3", nativeQuery = true)
+  List<Assignment> getRandomAssignments(Long language_id, Long level_id, Integer numberOfRandomAssignment);
+    @Query(value = "SELECT * FROM assignments \n" +
+            "WHERE mark_as_certification_question is not null\n" +
+            "AND level_id = ?1\n" +
+            "ORDER BY RAND()\n" +
+            "LIMIT ?2", nativeQuery = true)
+    List<Assignment> getRandomProblemSolving(Long id, Integer numberOfRandomAssignment);
 }

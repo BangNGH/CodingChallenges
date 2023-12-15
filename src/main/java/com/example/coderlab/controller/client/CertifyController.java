@@ -1,8 +1,6 @@
 package com.example.coderlab.controller.client;
 
-import com.example.coderlab.entity.AssignmentKit;
-import com.example.coderlab.entity.AssignmentKitSubmission;
-import com.example.coderlab.entity.UserEntity;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,11 @@ public class CertifyController {
     private final AssignmentKitSubmissionService assignmentKitSubmissionService;
     private final UserServices userServices;
     private final LanguageService languageService;
+    private final AssignmentService assignmentService;
+    private final QuizService quizService;
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, HttpSession session){
+        clearSession(session);
         model.addAttribute("assignment_kits", assignmentKitService.getAllAssignmentsKit());
         return "client/certify/index";
     }
@@ -76,15 +78,32 @@ public class CertifyController {
 
     }
     @GetMapping("/test/{id}")
-    public String test(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
-
+    public String enrollTest(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
         Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
         if (found_kit_by_id.isPresent()) {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user);
+            AssignmentKit foundAssignmentKit = found_kit_by_id.get();
+            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(foundAssignmentKit, current_user);
+
+            //trường hợp user này chưa làm certify
             if (found_assignments_kit.isEmpty()){
+                List<Assignment> randomAssignments = assignmentService.getRandomAssignments(foundAssignmentKit.getNumberOfAssignment(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
+                List<Question> randomQuizs = quizService.getRandomQuizs(foundAssignmentKit.getNumberOfQuiz(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
+
+                List<Long> idAssignments=new ArrayList<Long>();
+                for (Assignment a : randomAssignments){
+                    idAssignments.add(a.getId());
+                }
+                List<Long> idQuizs=new ArrayList<Long>();
+                for (Question a : randomQuizs){
+                    idQuizs.add(a.getId());
+                }
                 model.addAttribute("assignment_kit", found_kit_by_id.get());
+                model.addAttribute("randomAssignments", randomAssignments);
+                model.addAttribute("idAssignments", idAssignments);
+                model.addAttribute("idQuizs", idQuizs);
+                model.addAttribute("randomQuiz", randomQuizs);
                 model.addAttribute("user_id", current_user.getId());
                 model.addAttribute("languages",languageService.getAllLanguages());
                 return "client/certify/certify";
@@ -97,10 +116,26 @@ public class CertifyController {
                 LocalDate now = LocalDate.now();
                 long daysBetween = DAYS.between(last_attempt_at, now);
                 if (daysBetween>=30) {
+                    List<Assignment> randomAssignments = assignmentService.getRandomAssignments(foundAssignmentKit.getNumberOfAssignment(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
+                    List<Question> randomQuizs = quizService.getRandomQuizs(foundAssignmentKit.getNumberOfQuiz(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
+
+                    List<Long> idAssignments=new ArrayList<Long>();
+                    for (Assignment a : randomAssignments){
+                        idAssignments.add(a.getId());
+                    }
+                    List<Long> idQuizs=new ArrayList<Long>();
+                    for (Question a : randomQuizs){
+                        idQuizs.add(a.getId());
+                    }
                     model.addAttribute("assignment_kit", found_kit_by_id.get());
+                    model.addAttribute("randomAssignments", randomAssignments);
+                    model.addAttribute("idAssignments", idAssignments);
+                    model.addAttribute("idQuizs", idQuizs);
+                    model.addAttribute("randomQuiz", randomQuizs);
                     model.addAttribute("user_id", current_user.getId());
                     model.addAttribute("languages",languageService.getAllLanguages());
                     return "client/certify/certify";
+
                 }else {
                     return "redirect:/skills-verification/details/"+id;
 

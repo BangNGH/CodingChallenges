@@ -52,6 +52,10 @@ public class Submission {
     private Assignment assignment;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "quiz_id")
+    private Question quiz;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignment_kit_submission_id")
     @JsonIgnore
     private AssignmentKitSubmission assignment_kit_submission;

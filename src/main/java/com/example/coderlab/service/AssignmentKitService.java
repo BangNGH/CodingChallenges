@@ -26,24 +26,7 @@ public class AssignmentKitService {
         return assignmentKitRepository.findById(id);
     }
 
-    public void addKit(String title, Integer time, String description, List<Long> assignmentsKit) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        UserEntity user = userServices.findByEmail(email).orElseThrow();
-
-        AssignmentKit assignmentKit = new AssignmentKit();
-        assignmentKit.setTitle(title);
-        assignmentKit.setTime(time);
-        assignmentKit.setDescription(description);
-        assignmentKit.setUser_added(user);
-
-        Set<Assignment> assignments = new HashSet<>();
-        for (Long assignment_id : assignmentsKit
-             ) {
-            Assignment found_assignment = assignmentService.getAssignmentById(assignment_id);
-            assignments.add(found_assignment);
-        }
-        assignmentKit.setAssignments(assignments);
-       assignmentKitRepository.save(assignmentKit);
+    public void save(AssignmentKit assignmentKit) {
+        assignmentKitRepository.save(assignmentKit);
     }
 }

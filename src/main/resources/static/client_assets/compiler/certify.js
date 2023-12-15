@@ -1,84 +1,325 @@
 const testCasesContainer = document.getElementById('test-cases-container');
 const resultSection = document.getElementById('result');
-var run = document.getElementById("run")
-var submit = document.getElementById("submit")
-var theme = document.getElementById("theme")
+var run = document.getElementById("run");
+var submit = document.getElementById("submit");
+var theme = document.getElementById("theme");
 const excuting = document.getElementById('excuting');
 const assignment_id = document.getElementById('hidden_input');
+const current_quiz_id = document.getElementById('current_quiz');
 const assignment_kit_idElement = document.getElementById('assignment_kit_id');
 const number_of_assignments = document.getElementById('number_of_assignments');
+const number_of_quiz = document.getElementById('number_of_quiz');
 const durationElement = document.getElementById('duration');
-let check = 0;
-const submissionValues = [];
+const list_assignment_id = document.getElementById('idAssignments');
+const list_quiz_id = document.getElementById('idQuizs');
+const languageMode = document.getElementById('language_mode');
+const submission_id_4assignment_list = [];
+const submission_id_4quiz_list = [];
+let submitCheck = false;
 
-document.addEventListener("DOMContentLoaded", (event) => {
+function submitQuiz() {
+    const quizId = current_quiz_id.value.replace("quizBtn_", "");
+    const answer = document.querySelector('input[name="answer_radio_'+quizId+'"]:checked');
+    if (answer === null) {
+        alert("Hãy chọn đáp án bạn cho rằng đúng được liệt kê bên dưới.");
+    } else {
+        if (confirm('Bạn có chắc muốn nộp đáp án, bạn sẽ không thể chỉnh sửa sau khi nộp?')) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/submissions/submit-quiz',
+                data: {
+                    answer: answer.value,
+                    quiz_id: quizId
+                },
+                success: function (response) {
+                    console.log(response);
+                    var buttonActive = document.querySelector('button.nav-link.active');
+                    var quizInputsHasValue = document.querySelectorAll('[name="submission_id_4quiz"][value]');
+                    submitCheck = true;
+                    if (quizInputsHasValue.length != number_of_assignments.value) {
+                        const id = 'submission_id_4quiz_' + buttonActive.id.replace("quizBtn_", "");
 
-    const run = document.getElementById('run');
-    const submit = document.getElementById('submit');
-    run.setAttribute("disabled", "");
-    submit.setAttribute("disabled", "");
-    document.getElementById('courseTab').addEventListener('shown.bs.tab', function (event) {
-        const activeTab = event.target; // Tab đang active
-        const previousTab = event.relatedTarget; // Tab trước đó
-        // Kiểm tra tab và enable/disable các nút tương ứng
-        if (activeTab.id === 'description-tab') {
-            run.setAttribute("disabled", "");
-            submit.setAttribute("disabled", "");
-        } else {
-            run.removeAttribute("disabled");
-            submit.removeAttribute("disabled");
+                        const submission_input_found = document.getElementById(id);
+                        submission_input_found.value = response;
+                        buttonActive.setAttribute("disabled", "");
+                        buttonActive.style.background = "lightgreen";
+                        var inputs = document.querySelectorAll('[name="submission_id_4quiz"]:not([value])');
+                        var assignmentInputsHasValue = document.querySelectorAll('[name="submission_id_4assignment"][value]');
+                        //đã làm hết quiz
+                        if (inputs.length == 0) {
+                            //next assignment tab or finish
+                            if (assignmentInputsHasValue.length != number_of_assignments.value) {//chưa làm hết assignment
+                                var inputs = document.querySelectorAll('[name="submission_id_4assignment"]:not([value])');
+                                var id_temp = inputs[0].id;
+                                var idWithoutPrefix = id_temp.replace("submission_id_4assignment_", "");
+                                const button = document.getElementById(idWithoutPrefix);
+                                button.click();
+                            } else { //đã làm hết quiz và assignment
+                                const button = document.getElementById("description-tab");
+                                const description = document.getElementById("description_container");
+                                const btn_endContest =`<button type="button" id="end_test" style="float: right" class="btn btn-outline-primary">Nộp bài</button>`;
+                                description.innerHTML+=btn_endContest;
+                                var btn_id = document.getElementById("end_test");
+                                btn_id.onclick = function() {
+                                    submitTest();
+                                };
+                                button.click();
+                            }
+                        } else {     //chưa làm hết quiz
+                            var id_temp = inputs[0].id;
+                            var idWithoutPrefix = id_temp.replace("submission_id_4quiz_", "quizBtn_");
+                            console.log(idWithoutPrefix);
+                            const button = document.getElementById(idWithoutPrefix);
+                            button.click();
+                        }
+                    }
+                },
+                error: function (error) {
+                    console.error('Error when submit quiz:', error);
+                }
+            });
+
         }
-    });
+    }
+}
+$(document).ready(function () {
+
+    var buttonActive = document.querySelector('button.nav-link.active');
+    const editorDiv = document.getElementById('editor-div');
+    if (buttonActive.name == "quiztab") {
+        editorDiv.style.display = 'none';
+    } else {
+        editorDiv.style.display = 'block';
+    }
 
     document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
         const activeTab = event.target; // Tab đang active
-        if (editor.getValue() != "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}") {
-            if (!confirm('Next tab without saving?')) {
-                event.preventDefault();
+        const previousTab = event.relatedTarget; // Tab trước đó
+        window.location.hash = activeTab.id;
+        const cppValue = "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}";
+        const pythonValue = "print('Hello world!')";
+        const javaValue = 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}';
+        const csharpValue = "using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}";
+
+        if (previousTab.name !== "quiztab") {
+            if (editor.getValue() == cppValue || editor.getValue() == csharpValue || editor.getValue() == javaValue || editor.getValue() == pythonValue) {
+                return;
             } else {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/submissions/clear-session',
-                    success: function (response) {
-                        var dSelectedText = document.querySelector('label.dd-selected-text');
-                        dSelectedText.innerHTML = "C++";
-                        var selectedInput = document.querySelector('a.dd-option-selected');
-                        selectedInput.classList.remove('dd-option-selected');
+                if (submitCheck === false) {
+                    if (!confirm('Next tab without saving?')) {
+                        event.preventDefault();
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/submissions/clear-session',
+                            success: function (response) {
+                                if (languageMode === null) {
+                                    var dSelectedText = document.querySelector('label.dd-selected-text');
+                                    dSelectedText.innerHTML = "C++";
+                                    var selectedInput = document.querySelector('a.dd-option-selected');
+                                    selectedInput.classList.remove('dd-option-selected');
 
-                        const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
-                        var current_input = document.querySelector(current_input_value);
-                        if (current_input) {
-                            var parentA = current_input.closest('a');
-                            if (parentA) {
-                                parentA.classList.add('dd-option-selected');
-                            } else {
-                                console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                    const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
+                                    var current_input = document.querySelector(current_input_value);
+                                    if (current_input) {
+                                        var parentA = current_input.closest('a');
+                                        if (parentA) {
+                                            parentA.classList.add('dd-option-selected');
+                                        } else {
+                                            console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                        }
+                                    } else {
+                                        console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                                    }
+                                    editor.setOption("mode", "text/x-c++src")
+                                    editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                                    option = 54;
+                                    langague_name = 'text/x-c++src';
+                                } else {
+                                    const modeValue = languageMode.value;
+                                    var dSelectedText = document.querySelector('label.dd-selected-text');
+                                    var selectedInput = document.querySelector('a.dd-option-selected');
+                                    selectedInput.classList.remove('dd-option-selected');
+
+                                    const current_input_value = 'input.dd-option-value[value="' + modeValue + '"]';
+                                    var current_input = document.querySelector(current_input_value);
+                                    if (current_input) {
+                                        var parentA = current_input.closest('a');
+                                        if (parentA) {
+                                            parentA.classList.add('dd-option-selected');
+                                        } else {
+                                            console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                        }
+                                    } else {
+                                        console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                                    }
+                                    editor.setOption("mode", modeValue)
+                                    if (modeValue === "text/x-c++src") {
+                                        dSelectedText.innerHTML = "C++";
+                                        editor.setValue(cppValue);
+                                        option = 54;
+
+                                    } else if (modeValue === "text/x-java") {
+                                        dSelectedText.innerHTML = "Java";
+                                        editor.setValue(javaValue);
+                                        option = 91;
+
+                                    } else if (modeValue === "text/x-csharp") {
+                                        dSelectedText.innerHTML = "C#";
+                                        editor.setValue(csharpValue);
+                                        option = 51;
+
+                                    } else {
+                                        dSelectedText.innerHTML = "Python";
+                                        editor.setValue(pythonValue);
+                                        option = 71;
+
+                                    }
+
+                                    langague_name = modeValue;
+                                }
+
+                            },
+                            error: function (error) {
+                                console.error('Error clear session:', error);
                             }
-                        } else {
-                            console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
-                        }
-                        editor.setOption("mode", "text/x-c++src")
-                        editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
-                        option = 54;
-                        langague_name = 'text/x-c++src';
-                    },
-                    error: function (error) {
-                        console.error('Error clear session:', error);
+                        });
                     }
-                });
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/submissions/clear-session',
+                        success: function (response) {
+                            if (languageMode === null) {
+                                var dSelectedText = document.querySelector('label.dd-selected-text');
+                                dSelectedText.innerHTML = "C++";
+                                var selectedInput = document.querySelector('a.dd-option-selected');
+                                selectedInput.classList.remove('dd-option-selected');
 
+                                const current_input_value = 'input.dd-option-value[value="text/x-c++src"]';
+                                var current_input = document.querySelector(current_input_value);
+                                if (current_input) {
+                                    var parentA = current_input.closest('a');
+                                    if (parentA) {
+                                        parentA.classList.add('dd-option-selected');
+                                    } else {
+                                        console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                    }
+                                } else {
+                                    console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                                }
+                                editor.setOption("mode", "text/x-c++src")
+                                editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                                option = 54;
+                                langague_name = 'text/x-c++src';
+                            } else {
+                                const modeValue = languageMode.value;
+                                var dSelectedText = document.querySelector('label.dd-selected-text');
+                                var selectedInput = document.querySelector('a.dd-option-selected');
+                                selectedInput.classList.remove('dd-option-selected');
+
+                                const current_input_value = 'input.dd-option-value[value="' + modeValue + '"]';
+                                var current_input = document.querySelector(current_input_value);
+                                if (current_input) {
+                                    var parentA = current_input.closest('a');
+                                    if (parentA) {
+                                        parentA.classList.add('dd-option-selected');
+                                    } else {
+                                        console.log('Không tìm thấy thẻ a chứa input selec language option.');
+                                    }
+                                } else {
+                                    console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                                }
+                                editor.setOption("mode", modeValue)
+                                if (modeValue === "text/x-c++src") {
+                                    dSelectedText.innerHTML = "C++";
+                                    editor.setValue(cppValue);
+                                    option = 54;
+
+                                } else if (modeValue === "text/x-java") {
+                                    dSelectedText.innerHTML = "Java";
+                                    editor.setValue(javaValue);
+                                    option = 91;
+
+                                } else if (modeValue === "text/x-csharp") {
+                                    dSelectedText.innerHTML = "C#";
+                                    editor.setValue(csharpValue);
+                                    option = 51;
+
+                                } else {
+                                    dSelectedText.innerHTML = "Python";
+                                    editor.setValue(pythonValue);
+                                    option = 71;
+
+                                }
+
+                                langague_name = modeValue;
+                            }
+
+                        },
+                        error: function (error) {
+                            console.error('Error clear session:', error);
+                        }
+                    });
+                }
             }
+        }
+
+    });
+    document.getElementById('courseTab').addEventListener('shown.bs.tab', function (event) {
+        const activeTab = event.target; // Tab đang active
+        const previousTab = event.relatedTarget; // Tab trước đó
+        const editorDiv = document.getElementById('editor-div');
+        // Kiểm tra tab và enable/disable các nút tương ứng
+        if (activeTab.id === 'description-tab' || activeTab.name === 'quiztab') {
+            editorDiv.style.display = 'none';
+            run.setAttribute("disabled", "");
+            submit.setAttribute("disabled", "");
+            current_quiz_id.value = activeTab.id;
+            assignment_id.value = "";
+        } else {
+            editorDiv.style.display = 'block';
+            run.removeAttribute("disabled");
+            submit.removeAttribute("disabled");
+            assignment_id.value = activeTab.id;
+            current_quiz_id.value = "";
         }
     });
 
 
-    for (let i = 1; i <= number_of_assignments.value; i++) {
+});
+document.addEventListener("DOMContentLoaded", (event) => {
+    var hash = window.location.hash;
+    if (hash !== '') {
+        const tabToSelect = document.getElementById(window.location.hash.substr(1));
+        if (tabToSelect) {
+            const tab = new bootstrap.Tab(tabToSelect);
+            tab.show();
+        }
+    }
+    var quizValue = list_quiz_id.value;
+    console.log(quizValue);
+    var quiz_id_list = JSON.parse(quizValue);
+    var assignmentValue = list_assignment_id.value;
+    var assignment_id_list = JSON.parse(assignmentValue);
+
+    for (let i = 0; i < number_of_quiz.value; i++) {
         var input = document.createElement('input');
         input.type = 'hidden';
-        input.name = 'submission_id';
-        input.id = 'submission_id_' + (i);
+        input.name = 'submission_id_4quiz';
+        input.id = 'submission_id_4quiz_' + quiz_id_list[i];
+        document.body.appendChild(input);
+        var quiz_submit = document.getElementById("quiz_submitBtn_"+ quiz_id_list[i]);
+        quiz_submit.addEventListener ("click", submitQuiz);
+    }
+    for (let i = 0; i < number_of_assignments.value; i++) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'submission_id_4assignment';
+        input.id = 'submission_id_4assignment_' + assignment_id_list[i];
         document.body.appendChild(input);
     }
+
 
     const testDuration = durationElement.value;
     updateTimer(testDuration);
@@ -87,89 +328,125 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 $(document).ready(function () {
     editor.on('change', function () {
+        submitCheck = false;
         saveContent(editor.getValue());
     });
-    $.ajax({
-        type: 'GET',
-        url: '/api/submissions/get-content',
-        success: function (response) {
-            if (response) {
-                const dataJson = JSON.parse(response);
-                const mode_receive = dataJson.mode;
-                const current_tab_id = dataJson.current_tab_id;
-                const content_receive = dataJson.content;
-                const language_name_receive = dataJson.language_name;
+    var buttonActive = document.querySelector('button.nav-link.active');
+    if (buttonActive.name !== "quiztab") {
+        console.log("GET CONTENT");
+        $.ajax({
+            type: 'GET',
+            url: '/api/submissions/get-content',
+            success: function (response) {
+                if (response != null) {
+                    const dataJson = JSON.parse(response);
+                    const mode_receive = dataJson.mode;
+                    const current_tab_id = dataJson.current_tab_id;
+                    const content_receive = dataJson.content;
+                    const language_name_receive = dataJson.language_name;
 
 
-                const nextTabButton = document.getElementById(current_tab_id);
-                nextTabButton.click();
+                    const nextTabButton = document.getElementById(current_tab_id);
+                    nextTabButton.click();
 
 
-                const current_input_value = 'input.dd-option-value[value="' + mode_receive + '"]';
-                var input_to_change = document.querySelector(current_input_value);
-                var selectedInput = document.querySelector('a.dd-option-selected');
-                var dSelectedValue = document.querySelector('input.dd-selected-value');
-                var dSelectedText = document.querySelector('label.dd-selected-text');
+                    const current_input_value = 'input.dd-option-value[value="' + mode_receive + '"]';
+                    var input_to_change = document.querySelector(current_input_value);
+                    var selectedInput = document.querySelector('a.dd-option-selected');
+                    var dSelectedValue = document.querySelector('input.dd-selected-value');
+                    var dSelectedText = document.querySelector('label.dd-selected-text');
 
-                if (mode_receive === "text/x-c++src") {
-                    dSelectedText.innerHTML = "C++";
-                }
-                if (mode_receive === "text/x-java") {
-                    dSelectedText.innerHTML = "Java";
-                }
-                if (mode_receive === "text/x-csharp") {
-                    dSelectedText.innerHTML = "C#";
-                }
-                if (mode_receive === "text/x-python") {
-                    dSelectedText.innerHTML = "Python";
-                }
-
-                if (input_to_change) {
-                    var parentA = input_to_change.closest('a');
-                    // Kiểm tra xem có thẻ a được tìm thấy không
-                    if (parentA) {
-                        dSelectedValue.value = mode_receive;
-                        selectedInput.classList.remove('dd-option-selected');
-                        // Xoá class "dd-option-selected" khỏi thẻ a
-                        parentA.classList.add('dd-option-selected');
-                    } else {
-                        console.log('Không tìm thấy thẻ a chứa input.');
+                    if (mode_receive === "text/x-c++src") {
+                        dSelectedText.innerHTML = "C++";
                     }
-                } else {
-                    console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
-                }
+                    if (mode_receive === "text/x-java") {
+                        dSelectedText.innerHTML = "Java";
+                    }
+                    if (mode_receive === "text/x-csharp") {
+                        dSelectedText.innerHTML = "C#";
+                    }
+                    if (mode_receive === "text/x-python") {
+                        dSelectedText.innerHTML = "Python";
+                    }
 
-                editor.setOption("mode", mode_receive);
-                editor.setValue(content_receive);
-                if (mode_receive === "text/x-c++src") {
-                    option = 54;
-                }
-                if (mode_receive === "text/x-java") {
-                    option = 91;
+                    if (input_to_change) {
+                        var parentA = input_to_change.closest('a');
+                        // Kiểm tra xem có thẻ a được tìm thấy không
+                        if (parentA) {
+                            dSelectedValue.value = mode_receive;
+                            selectedInput.classList.remove('dd-option-selected');
+                            // Xoá class "dd-option-selected" khỏi thẻ a
+                            parentA.classList.add('dd-option-selected');
+                        } else {
+                            console.log('Không tìm thấy thẻ a chứa input.');
+                        }
+                    } else {
+                        console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
+                    }
 
+                    editor.setOption("mode", mode_receive);
+                    editor.setValue(content_receive);
+                    if (mode_receive === "text/x-c++src") {
+                        option = 54;
+                    }
+                    if (mode_receive === "text/x-java") {
+                        option = 91;
+
+                    }
+                    if (mode_receive === "text/x-csharp") {
+                        option = 51;
+                    }
+                    if (mode_receive === "text/x-python") {
+                        option = 71;
+                    }
+                    langague_name = language_name_receive;
                 }
-                if (mode_receive === "text/x-csharp") {
-                    option = 51;
-                }
-                if (mode_receive === "text/x-python") {
-                    option = 71;
-                }
-                langague_name = language_name_receive;
+            },
+            error: function (error) {
+                console.error('Error getting content:', error);
             }
-        },
-        error: function (error) {
-            console.error('Error getting content:', error);
-        }
-    });
-});
+        });
 
+    }
+
+});
+async function submitTest() {
+    const submission_id_4assignments = document.querySelectorAll('input[name="submission_id_4assignment"]');
+
+    submission_id_4assignments.forEach(input => {
+        let submission_kit_to_list = input.value;
+        submission_id_4assignment_list.push(submission_kit_to_list);
+    });
+    const submission_id_4quizs = document.querySelectorAll('input[name="submission_id_4quiz"]');
+    submission_id_4quizs.forEach(input => {
+        let submission_kit_to_list = input.value;
+        submission_id_4quiz_list.push(submission_kit_to_list);
+    });
+    console.log(JSON.stringify(submission_id_4assignment_list));
+    console.log(JSON.stringify(submission_id_4quiz_list));
+    const response = await fetch('/api/submissions/end-test', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            submissions_id_ofAssignment: (submission_id_4assignment_list),
+            submissions_id_ofQuiz: (submission_id_4quiz_list),
+            assignment_kit_id: assignment_kit_idElement.value
+        })
+    });
+    const result = await response.text();
+    console.log(result);
+    const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
+    window.location.href = url;
+}
 function saveContent(content) {
     // Lấy thẻ input đầu tiên có class "dd-option-selected" trong thẻ a
     var selectedInput = document.querySelector('a.dd-option-selected input.dd-option-value');
     var current_tab_id = document.querySelector('button.nav-link.active');
     $.ajax({
         type: 'POST',
-        url: '/api/submissions/save-content', // Đổi đường dẫn này thành API của bạn
+        url: '/api/submissions/save-content',
         data: {
             content: content,
             mode: selectedInput.value,
@@ -184,6 +461,7 @@ function saveContent(content) {
         }
     });
 }
+
 function updateTimer(endTime) {
     var timeLimitInMinutes = endTime;
     var timeLimitInSeconds = timeLimitInMinutes * 60;
@@ -268,6 +546,23 @@ theme.addEventListener("change", function () {
 })
 import {MY_API_KEY} from "./config.js"
 
+
+function addEventForContainer(newContainer, count) {
+    // Thêm container vào container chứa test cases
+    testCasesContainer.appendChild(newContainer);
+    Prism.highlightAll();
+    const viewMoreButton = document.getElementById(`view-more-button-${count}`);
+    const testcaseDetails = document.getElementById(`event-details-${count}`);
+    viewMoreButton.addEventListener('click', () => {
+        if (testcaseDetails.style.display === 'block') {
+            testcaseDetails.style.display = 'none';
+        } else {
+            testcaseDetails.style.display = 'block';
+        }
+    });
+    excuting.style.display = 'none';
+    resultSection.style.display = 'block';
+}
 
 //batch submission
 run.addEventListener("click", async function () {
@@ -405,21 +700,17 @@ run.addEventListener("click", async function () {
                     </a>
                 </h3>
             </div>
-             <div class="events__more" style="display: ${isSampleTestCase ? 'block' : 'none'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Xem chi tiết
-                        <i class="far fa-arrow-right"></i>
-                        <i class="far fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="events__more" style="display: ${isSampleTestCase ? 'none' : 'block'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Hidden TestCase
-                        <i style="color: #69b35c;" class="far fa-unlock"></i>
-                        <i style="color: #e65972;" class="far fa-lock"></i>
-                    </a>
-                </div>
-            </div>
+             <div class="events__more">
+                ${isSampleTestCase ? `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                            Xem chi tiết
+                            <i class="far fa-arrow-right"></i>
+                            <i class="far fa-arrow-right"></i>
+                          </a>` : `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                                      Hidden TestCase
+                                      <i style="color: #69b35c;" class="far fa-unlock"></i>
+                                      <i style="color: #e65972;" class="far fa-lock"></i>
+                                   </a>`}
+             </div>
         </div>
         <div id="event-details-${count}" style="display: none; padding: 10px 60px 60px 60px; border-radius: 7px; background-color: white">
             <div class="contact__info white-bg p-relative z-index-1">
@@ -437,7 +728,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                   <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdin}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -445,7 +740,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                    <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -456,19 +755,7 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                    // Thêm container vào container chứa test cases
-                                    testCasesContainer.appendChild(newContainer);
-                                    const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                    const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                    viewMoreButton.addEventListener('click', () => {
-                                        if (testcaseDetails.style.display === 'block') {
-                                            testcaseDetails.style.display = 'none';
-                                        } else {
-                                            testcaseDetails.style.display = 'block';
-                                        }
-                                    });
-                                    excuting.style.display = 'none';
-                                    resultSection.style.display = 'block';
+                                    addEventForContainer(newContainer, count);
                                 } else if (submission.status && submission.status.id === 4) {
                                     //Wrong Answer
                                     var stdin = decode(submission.stdin);
@@ -517,7 +804,12 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Input</h4>
-                                    <pre class="pre-tags" id="input">${stdin}</pre>
+                                      <pre class="pre-tags line-numbers language-markup">
+                                      <code class="language-markup"> 
+                                        ${stdin}
+                                       </code>
+                                    
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -525,7 +817,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Your Output</h4>
-                                    <pre class="pre-tags" id="my_output">${stdout}</pre>
+                                  <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${stdout}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -533,7 +829,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Expected Output</h4>
-                                    <pre class="pre-tags" id="expected_output">${expected_output}</pre>
+                                     <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${expected_output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -543,19 +843,7 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                    // Thêm container vào container chứa test cases
-                                    testCasesContainer.appendChild(newContainer);
-                                    const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                    const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                    viewMoreButton.addEventListener('click', () => {
-                                        if (testcaseDetails.style.display === 'block') {
-                                            testcaseDetails.style.display = 'none';
-                                        } else {
-                                            testcaseDetails.style.display = 'block';
-                                        }
-                                    });
-                                    excuting.style.display = 'none';
-                                    resultSection.style.display = 'block';
+                                    addEventForContainer(newContainer, count);
                                     return false;
                                 } else if (submission.status && submission.status.id === 11) {
                                     var message = decode(submission.message);
@@ -597,8 +885,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
-                                
+                                   <pre style="font-weight: initial class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -610,18 +901,7 @@ run.addEventListener("click", async function () {
  
     `;
                                     // Thêm container vào container chứa test cases
-                                    testCasesContainer.appendChild(newContainer);
-                                    const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                    const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                    viewMoreButton.addEventListener('click', () => {
-                                        if (testcaseDetails.style.display === 'block') {
-                                            testcaseDetails.style.display = 'none';
-                                        } else {
-                                            testcaseDetails.style.display = 'block';
-                                        }
-                                    });
-                                    excuting.style.display = 'none';
-                                    resultSection.style.display = 'block';
+                                    addEventForContainer(newContainer, count);
                                     return false;
                                 } else {
 
@@ -664,8 +944,11 @@ run.addEventListener("click", async function () {
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
                                     <h4 class="blue-grey">Compiler Message</h4>
-                                    <pre class="pre-tags" style="font-weight: initial" id="message">${output}</pre>
-                                 
+                                      <pre class="pre-tags line-numbers language-markup">
+                                       <code class="language-markup">
+                                         ${output}
+                                       </code>
+                                    </pre>
                                 </div>
                             </div>
                         </li>
@@ -676,19 +959,7 @@ run.addEventListener("click", async function () {
         </div>
  
     `;
-                                    // Thêm container vào container chứa test cases
-                                    testCasesContainer.appendChild(newContainer);
-                                    const viewMoreButton = document.getElementById(`view-more-button-${count}`);
-                                    const testcaseDetails = document.getElementById(`event-details-${count}`);
-                                    viewMoreButton.addEventListener('click', () => {
-                                        if (testcaseDetails.style.display === 'block') {
-                                            testcaseDetails.style.display = 'none';
-                                        } else {
-                                            testcaseDetails.style.display = 'block';
-                                        }
-                                    });
-                                    excuting.style.display = 'none';
-                                    resultSection.style.display = 'block';
+                                    addEventForContainer(newContainer, count);
                                     return false;
                                 }
                                 return true;
@@ -716,11 +987,11 @@ run.addEventListener("click", async function () {
 
 submit.addEventListener("click", async function () {
 
-    if (confirm('Are you sure to submit this challenge?')) {
+    if (confirm('Bạn có chắc muốn nộp đáp án này, bạn sẽ không thể chỉnh sửa sau khi nộp?')) {
         testCasesContainer.innerHTML = '';
         let submissions_to_send = [];
         const languageInput = document.querySelector('input.dd-selected-value');
-        const langagueName=languageInput.value;
+        const langagueName = languageInput.value;
         const source_code = editor.getValue();
         excuting.style.display = 'block';
         const bottomElement = document.getElementById('excuting');
@@ -835,19 +1106,15 @@ submit.addEventListener("click", async function () {
                                     let submission_add_to_list = {
                                         executionTime: submission.time,
                                         memory: submission.memory,
-                                        my_output: submission.stdout,
-                                        expected_output: decode(submission.expected_output),
-                                        stdin: decode(submission.stdin),
+                                        my_output: stdout,
+                                        expected_output: expected_output,
+                                        stdin: stdin,
                                         ispassed: true
                                     };
                                     submissions_to_send.push(submission_add_to_list);
 
 
                                     count = count + 1;
-                                    let isSampleTestCase;
-                                    if (count <= testCases.length) {
-                                        isSampleTestCase = true;
-                                    } else isSampleTestCase = false;
                                     /*
                                                                         newContainer.innerHTML = `
                                             <div class="events__item mb-10 hover__active">
@@ -941,9 +1208,9 @@ submit.addEventListener("click", async function () {
                                     let submission_add_to_list = {
                                         executionTime: submission.time,
                                         memory: submission.memory,
-                                        my_output: submission.stdout,
-                                        expected_output: submission.expected_output,
-                                        stdin: submission.stdin,
+                                        my_output: stdout,
+                                        expected_output: expected_output,
+                                        stdin: stdin,
                                         ispassed: false
                                     };
                                     submissions_to_send.push(submission_add_to_list);
@@ -1042,8 +1309,8 @@ submit.addEventListener("click", async function () {
                                         executionTime: submission.time,
                                         memory: submission.memory,
                                         my_output: output,
-                                        expected_output: submission.expected_output,
-                                        stdin: submission.stdin,
+                                        expected_output: decode(submission.expected_output),
+                                        stdin: decode(submission.stdin),
                                         ispassed: false
                                     };
                                     submissions_to_send.push(submission_add_to_list);
@@ -1119,8 +1386,8 @@ submit.addEventListener("click", async function () {
                                         executionTime: submission.time,
                                         memory: submission.memory,
                                         my_output: output,
-                                        expected_output: submission.expected_output,
-                                        stdin: submission.stdin,
+                                        expected_output: decode(submission.expected_output),
+                                        stdin: decode(submission.stdin),
                                         ispassed: false
                                     };
                                     submissions_to_send.push(submission_add_to_list);
@@ -1204,54 +1471,47 @@ submit.addEventListener("click", async function () {
                                 });
 
                                 const result = await response.json();
+                                var buttonActive = document.querySelector('button.nav-link.active');
+                                var inputsHasValue = document.querySelectorAll('[name="submission_id_4assignment"][value]');
                                 console.log("Submission ID return: " + JSON.stringify(result));
-                                if (check != number_of_assignments.value) {
-                                    const id = 'submission_id_' + (check + 1);
+                                submitCheck = true;
+                                if (inputsHasValue.length != number_of_assignments.value) {
+                                    const id = 'submission_id_4assignment_' + buttonActive.id;
                                     const submission_input_found = document.getElementById(id);
                                     submission_input_found.value = JSON.stringify(result);
-                                    check++;
-                                }
-
-                                var currentTab = document.querySelector('.nav-item.activebutton');
-                                // Tìm tab tiếp theo
-                                var nextTab = currentTab.nextElementSibling;
-                                // Kiểm tra nếu không có tab tiếp theo, chọn tab đầu tiên
-                                if (!nextTab) {
-                                    const submissionInputs = document.querySelectorAll('input[name="submission_id"]');
-                                    submissionInputs.forEach(input => {
-                                        let submission_kit_to_list = input.value;
-                                        submissionValues.push(submission_kit_to_list);
-                                    });
-                                    const response = await fetch('/api/submissions/end-contest', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify({
-                                            submissions_id: submissionValues,
-                                            assignment_kit_id: assignment_kit_idElement.value
-                                        })
-                                    });
-
-                                    const result = await response.text();
-                                    console.log("Submission_Kit Status: " + (result));
-                                    if (result == "passed") {
-                                        const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
-                                        window.location.href = url;
-                                    } else if (result == "failed") {
-                                        const url = `/skills-verification/details/${assignment_kit_idElement.value}`;
-                                        window.location.href = url;
-                                    } else {
-
+                                    buttonActive.setAttribute("disabled", "");
+                                    buttonActive.style.background = "lightgreen";
+                                    var inputs = document.querySelectorAll('[name="submission_id_4assignment"]:not([value])');
+                                    //đã làm hết assignment
+                                    if (inputs.length == 0) {
+                                        //next quiz tab or finish
+                                        var quizInputsHasValue = document.querySelectorAll('[name="submission_id_4quiz"][value]');
+                                        if (quizInputsHasValue.length != number_of_quiz.value) {//chưa làm hết quiz
+                                            var inputs = document.querySelectorAll('[name="submission_id_4quiz"]:not([value])');
+                                            var id_temp = inputs[0].id;
+                                            var idWithoutPrefix = id_temp.replace("submission_id_4quiz_", "quizBtn_");
+                                            console.log(idWithoutPrefix);
+                                            const button = document.getElementById(idWithoutPrefix);
+                                            button.click();
+                                        } else { //đã làm hết quiz và assignment
+                                            const button = document.getElementById("description-tab");
+                                            const description = document.getElementById("description_container");
+                                            const btn_endContest =`<button type="button" id="end_test" style="float: right" class="btn btn-outline-primary">Nộp bài</button>`;
+                                            description.innerHTML+=btn_endContest;
+                                            var btn_id = document.getElementById("end_test");
+                                            btn_id.onclick = function() {
+                                                submitTest();
+                                            };
+                                            button.click();
+                                        }
+                                    } else {  //chưa làm hết assignment
+                                        var id_temp = inputs[0].id;
+                                        var idWithoutPrefix = id_temp.replace("submission_id_4assignment_", "");
+                                        var idNumber = parseInt(idWithoutPrefix);
+                                        const button = document.getElementById(idNumber);
+                                        button.click();
                                     }
-
-                                } else {
-                                    nextTab.classList.add("activebutton");
-                                    currentTab.classList.remove("activebutton");
-                                    nextTab.querySelector('button').click();
                                 }
-
-
                             } catch (error) {
                                 console.error("error when call /api/submissions/add: " + error);
                             }

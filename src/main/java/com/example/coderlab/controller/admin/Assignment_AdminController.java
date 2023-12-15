@@ -46,10 +46,9 @@ public class Assignment_AdminController {
                                 @RequestParam(value = "timeLimit", required=false) Integer timeLimit, @RequestParam(value = "memoryLimit", required=false) Integer memoryLimit,
                                 RedirectAttributes redirectAttributes, @RequestParam("TSName[]") List<String> TestCaseNames,
                                 @RequestParam("TSScore[]") List<Integer> TestCaseScores, @RequestParam("TSInput[]") List<String> TestCaseInputs,
-                                @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples, @RequestParam(value = "language_option", required = false) String language_option, @RequestParam(value = "markdown_content", required = false) String solution) throws IOException {
-
-      assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level, language_option, solution);
-       redirectAttributes.addFlashAttribute("message", "Save successfully!");
+                                @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples, @RequestParam(value = "language_option", required = false) String language_option, @RequestParam(value = "isCertificateQuestion", required = false) Boolean isCertificateQuestion, @RequestParam(value = "markdown_content", required = false) String solution) throws IOException {
+     assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level, language_option, solution, isCertificateQuestion);
+      redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }
     @GetMapping("/edit/{id}")

@@ -37,8 +37,6 @@ public class SubmissionService {
         //languageID_id
         String languageValue = submission_sent_form_client.getLanguage();
         Optional<Language> foundLanguage = languageService.findLanguageByValue(languageValue);
-        System.out.println(languageValue);
-        System.out.println(foundLanguage.get());
         if (foundLanguage.isPresent()) {
             submission.setLanguage(foundLanguage.get());
         }else submission.setLanguage(null);
@@ -102,5 +100,9 @@ public class SubmissionService {
 
     public List<Object[]> rankByAssignment() {
         return submissionRepository.rankByAssignment();
+    }
+
+    public Submission saveSubmission(Submission submission) {
+        return submissionRepository.save(submission);
     }
 }

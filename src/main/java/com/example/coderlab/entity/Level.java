@@ -27,5 +27,12 @@ public class Level {
     @OneToMany(mappedBy = "level", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Assignment> assignments;
+    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<AssignmentKit> assignmentKits;
+
+    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Question> questions;
 }
 

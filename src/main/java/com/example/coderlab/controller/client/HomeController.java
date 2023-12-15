@@ -4,7 +4,6 @@ import com.example.coderlab.dto.AssignmentLeaderBoardDTO;
 import com.example.coderlab.entity.Language;
 import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.service.*;
-import com.example.coderlab.dto.LanguagePercentageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

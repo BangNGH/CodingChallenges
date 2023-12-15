@@ -29,5 +29,11 @@ public class Language {
     private List<Assignment> assignments;
     @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<AssignmentKit> assignmentKits;
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Submission> submissions;
+    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Question> questions;
 }

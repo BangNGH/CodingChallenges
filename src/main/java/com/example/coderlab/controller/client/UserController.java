@@ -63,7 +63,6 @@ public class UserController {
             percentage = percentage.setScale(2, RoundingMode.HALF_UP);
             // In ra giá trị hoặc làm gì đó với chúng
             language_percentage.setPercent(String.valueOf(percentage)+"%");
-            System.out.println("Language ID: " + languageId + ", Percentage: " + percentage);
             language_percentages.add(language_percentage);
         }
 

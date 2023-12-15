@@ -41,7 +41,6 @@ $(document).ready(function () {
         } else {
             window.location.hash = activeTab.id;
         }
-        console.log(window.location.hash);
         // Kiểm tra tab và enable/disable các nút tương ứng
         if (activeTab.value === 'locked') {
             if (!confirm("If you unlock the solution, your score will not be counted toward your progress.")) {
@@ -65,8 +64,6 @@ $(document).ready(function () {
             }
         }
     });
-
-
     editor.on('change', function () {
         saveContent(editor.getValue().trim());
     });
@@ -74,13 +71,11 @@ $(document).ready(function () {
         type: 'GET',
         url: '/api/submissions/get-content',
         success: function (response) {
-            if (response) {
-                console.log("GET SESSION");
+            if (response!=null) {
                 const dataJson = JSON.parse(response);
                 const mode_receive = dataJson.mode;
                 const content_receive = dataJson.content;
                 const language_name_receive = dataJson.language_name;
-
                 const current_input_value = 'input.dd-option-value[value="' + mode_receive + '"]';
                 var input_to_change = document.querySelector(current_input_value);
                 var selectedInput = document.querySelector('a.dd-option-selected');
@@ -115,7 +110,8 @@ $(document).ready(function () {
                     console.log('Không tìm thấy thẻ input có giá trị là "input_value".');
                 }
 
-                editor.setOption("mode", mode_receive)
+                editor.setOption("mode", mode_receive);
+                console.log('content_receive');
                 editor.setValue(content_receive);
                 if (mode_receive === "text/x-c++src") {
                     option = 54;
@@ -170,7 +166,7 @@ function decode(bytes) {
 
 }
 async function generateAssessment() {
-    const prompt_text = "Làm thế nào bạn có thể cải thiện hiệu suất của đoạn mã nguồn sau đây. Lưu ý bạn chỉ đưa ra gợi ý và không cung cấp mã nguồn:"
+    const prompt_text = "Hãy đưa ra những gợi ý để có thể cải thiện hiệu suất của đoạn mã nguồn sau đây mà không cần cung cấp cho tôi mã nguồn. Lưu ý bạn chỉ cần đưa ra gợi ý và không được cung cấp mã nguồn:"
     const source = editor.getValue().trim();
     const prompt_send = prompt_text+source;
     const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
@@ -221,7 +217,7 @@ theme.addEventListener("change", function () {
         editor.setOption("theme", "oceanic-next")
     }
 })
-import {MY_API_KEY} from "./config.js"
+import {MY_API_KEY} from "./config.js";
 
 
 //batch submission
@@ -337,35 +333,32 @@ run.addEventListener("click", async function () {
                             newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
               <div class="events__item-inner d-sm-flex align-items-center justify-content-between white-bg">
-            <div class="events__content">
-                <div class="events__meta">
-                   <span>${submission.time}s</span>
-                                                   <span>${submission.memory}KB</span>
-                                                   <span>Success</span>
-                </div>
-                <h3 class="events__title">
-                    <a class="price__features">
-                        <i class="far fa-check" style="background: rgb(48 168 32 / 9%);
-                            border-radius: 50%;
-                            font-size: 25px;"></i> Sample Test case 0${count}
-                    </a>
-                </h3>
-            </div>
-             <div class="events__more" style="display: ${isSampleTestCase ? 'block' : 'none'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Xem chi tiết
-                        <i class="far fa-arrow-right"></i>
-                        <i class="far fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="events__more" style="display: ${isSampleTestCase ? 'none' : 'block'}">
-                    <a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
-                        Hidden TestCase
-                        <i style="color: #69b35c;" class="far fa-unlock"></i>
-                        <i style="color: #e65972;" class="far fa-lock"></i>
-                    </a>
-                </div>
-            </div>
+                  <div class="events__content">
+                        <div class="events__meta">
+                            <span>${submission.time}s</span>
+                            <span>${submission.memory}KB</span>
+                            <span>Success</span>
+                        </div>
+                        <h3 class="events__title">
+                            <a class="price__features">
+                                <i class="far fa-check" style="background: rgb(48 168 32 / 9%);
+                                    border-radius: 50%;
+                                    font-size: 25px;"></i> Sample Test case 0${count}
+                            </a>
+                        </h3>
+                  </div>
+                 <div class="events__more">
+                    ${isSampleTestCase ? `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                                Xem chi tiết
+                                <i class="far fa-arrow-right"></i>
+                                <i class="far fa-arrow-right"></i>
+                              </a>` : `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                                          Hidden TestCase
+                                          <i style="color: #69b35c;" class="far fa-unlock"></i>
+                                          <i style="color: #e65972;" class="far fa-lock"></i>
+                                       </a>`}
+                 </div>
+             </div>
         </div>
         <div id="event-details-${count}" style="display: none; padding: 10px 60px 60px 60px; border-radius: 7px; background-color: white">
             <div class="contact__info white-bg p-relative z-index-1">
@@ -431,7 +424,7 @@ run.addEventListener("click", async function () {
                             var stdin = decode(submission.stdin).trim();
                             var stdout = decode(submission.stdout).trim();
                             var expected_output = decode(submission.expected_output).trim();
-                            console.log("INPUT: " + stdin);
+
                             count = count + 1;
                             newContainer.innerHTML = `
         <div class="events__item mb-10 hover__active">
@@ -837,7 +830,7 @@ submit.addEventListener("click", async function () {
             </div>
           
              <div class="events__more">
-    ${isSampleTestCase ? `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
+                ${isSampleTestCase ? `<a class="link-btn" id="view-more-button-${count}" style="cursor: pointer">
                             Xem chi tiết
                             <i class="far fa-arrow-right"></i>
                             <i class="far fa-arrow-right"></i>
@@ -846,7 +839,7 @@ submit.addEventListener("click", async function () {
                                       <i style="color: #69b35c;" class="far fa-unlock"></i>
                                       <i style="color: #e65972;" class="far fa-lock"></i>
                                    </a>`}
-</div>
+             </div>
 
             
             </div>

@@ -42,12 +42,12 @@ public class Assignment {
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String solution;
-
     //s
     private int timeLimit;
     //KB
     private int memoryLimit;
     private int max_score;
+    private Boolean markAsCertificationQuestion;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lecturer_id")

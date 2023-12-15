@@ -30,14 +30,22 @@ public class AssignmentKit {
     private String title;
     // mins
     private int time;
-    @NotBlank(message = "Description is required")
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
-    private String description;
+    private Integer numberOfQuiz;
+    private Integer numberOfAssignment;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userAdded_id")
     @JsonIgnore
     private UserEntity user_added;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "level_id")
+    private Level level;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "language_id")
+    @JsonIgnore
+    private Language language;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(

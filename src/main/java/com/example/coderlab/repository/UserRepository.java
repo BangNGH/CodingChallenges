@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "SELECT s.language_id as language_id, (COUNT(*) * 100 / SUM(COUNT(*)) OVER (PARTITION BY s.student_id)) AS percentage \n" +
             "FROM submissions AS s\n" +
-            "WHERE s.is_success = true and s.student_id = ?1\n" +
+            "WHERE s.is_success = true and s.student_id = ?1 and s.language_id is not null\n" +
             "GROUP BY s.student_id, s.language_id\n" +
             "ORDER BY s.student_id, percentage DESC", nativeQuery = true)
     List<Object[]> getLanguagePercentageByStudentId(Long id);

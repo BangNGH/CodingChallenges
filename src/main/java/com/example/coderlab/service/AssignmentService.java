@@ -1,9 +1,6 @@
 package com.example.coderlab.service;
 
-import com.example.coderlab.entity.Assignment;
-import com.example.coderlab.entity.Language;
-import com.example.coderlab.entity.TestCase;
-import com.example.coderlab.entity.UserEntity;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.repository.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,15 +35,17 @@ public class AssignmentService {
     public Assignment getAssignmentById(Long id){
         return assignmentRepository.findById(id).orElseThrow();
     }
-    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples, Long level, String languageID, String solution) {
+    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit, List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts, List<Boolean> maskSamples, Long level, String languageID, String solution, Boolean isCertificateQuestion) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Language foundLanguage = null;
         UserEntity user = userServices.findByEmail(email).orElseThrow();
         int max_score=0;
         Assignment assignment = new Assignment();
+        if (isCertificateQuestion!=null) {
+            assignment.setMarkAsCertificationQuestion(true);
+        }else assignment.setMarkAsCertificationQuestion(null);
         assignment.setTitle(title);
-
         if (languageID != null) {
             Optional<Language> findLanguageById = languageService.findByLanguageID(Long.valueOf(languageID));
             if (findLanguageById.isPresent()) {
@@ -245,4 +244,13 @@ public class AssignmentService {
         }
         return 0;
     }
+
+    public List<Assignment> getRandomAssignments(Integer numberOfRandomAssignment, Language language, Level level) {
+        if (language == null) {
+            return assignmentRepository.getRandomProblemSolving(level.getId(), numberOfRandomAssignment);
+        }
+        return assignmentRepository.getRandomAssignments(language.getId(), level.getId(), numberOfRandomAssignment);
+    }
+
+
 }

@@ -72,6 +72,10 @@ public class UserEntity {
     @JsonIgnore
     private List<Assignment> assignments;
 
+    @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Question> questions;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Apply> applies;

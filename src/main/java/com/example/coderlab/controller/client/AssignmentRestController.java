@@ -35,6 +35,8 @@ public class AssignmentRestController {
 
     @Autowired
     private SolutionCheckService solutionCheckService;
+    @Autowired
+    private QuizService quizService;
 
     @PostMapping("/add")
     public String handleSubmission(@RequestBody SubmissionInfoSendDTO submission, Principal principal, HttpSession session) {
@@ -49,13 +51,14 @@ public class AssignmentRestController {
         }
     }
 
-    @PostMapping("/end-contest")
+    @PostMapping("/end-test")
     public String endContest(@RequestBody SubmissionKitInfoSendDTO submissions_id, Principal principal, HttpSession session) {
         try {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
             Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
-            clearSession(session);
+
+          clearSession(session);
             if (status) {
                 return "passed";
             }
@@ -112,12 +115,34 @@ public class AssignmentRestController {
     }
 
     @PostMapping("/save-content")
-    public ResponseEntity<String> saveContent(@RequestParam String content, @RequestParam String mode, @RequestParam String langague_name, @RequestParam String current_tab_id, HttpSession session) {
+    public ResponseEntity<String> saveContent(@RequestParam String content, @RequestParam String mode, @RequestParam String langague_name, @RequestParam String current_tab_id, HttpSession session) throws JsonProcessingException {
         session.setAttribute("editorContent", content);
         session.setAttribute("mode", mode);
         session.setAttribute("language_name", langague_name);
         session.setAttribute("current_tab_id", current_tab_id);
         return ResponseEntity.ok("Content saved successfully!");
+    }
+    @PostMapping("/submit-quiz")
+    public String submitQuiz(@RequestParam String answer, @RequestParam String quiz_id, Principal principal) {
+        Question foundQuiz = quizService.findQuestionById(quiz_id);
+        if (foundQuiz!=null) {
+            String email = principal.getName();
+            UserEntity current_user = userServices.findByEmail(email).get();
+            Submission submission = new Submission();
+            Boolean isSuccess = false;
+            if (foundQuiz.getAnswer().equals(answer)) {
+                isSuccess=true;
+            }
+            submission.setIs_success(isSuccess);
+            if (foundQuiz.getLanguage()!=null){
+                submission.setLanguage(foundQuiz.getLanguage());
+            }
+            submission.setStudent(current_user);
+            submission.setQuiz(foundQuiz);
+            Submission saved = submissionService.saveSubmission(submission);
+            return saved.getId().toString();
+        }
+        return ("Quiz with id:"+quiz_id+" not found!");
     }
 
     @GetMapping("/get-content")
@@ -125,9 +150,9 @@ public class AssignmentRestController {
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(session.getAttribute("editorContent"));
         String mode = objectMapper.writeValueAsString(session.getAttribute("mode"));
-        String language_name = objectMapper.writeValueAsString(session.getAttribute("langague_name"));
+        String language_name = objectMapper.writeValueAsString(session.getAttribute("language_name"));
         String current_tab_id = objectMapper.writeValueAsString(session.getAttribute("current_tab_id"));
-        if (content.isBlank() || mode.isBlank() || language_name.isBlank() || current_tab_id.isBlank()) {
+        if (content.equals("null") || mode.equals("null")  || language_name.equals("null")  || current_tab_id.equals("null")) {
             return null;
         }
         return "{ \"content\":" + content + ", \"mode\":" + mode + ", \"language_name\":" + language_name + ", \"current_tab_id\":" + current_tab_id + " }";

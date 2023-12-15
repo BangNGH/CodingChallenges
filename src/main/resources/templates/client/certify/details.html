@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Coder'sLab</title>
+    <title>Certificate | Coder'sLab</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -21,8 +21,7 @@
                         <div class="course__meta-2 d-sm-flex mb-30">
                             <div class="course__teacher-3 d-flex align-items-center mr-70">
                                 <div class="course__teacher-info-3">
-                                    <p><a href="#">Take the HackerRank Certification Test and showcase your knowledge as
-                                        a HackerRank verified developer.</a></p>
+                                    <p><a href="#">Tham gia Bài kiểm tra Chứng nhận và khoe kiến thức của bạn như một nhà phát triển để nhận được chứng chỉ được xác minh bởi Coder's Lab.</a></p>
                                 </div>
                             </div>
                         </div>
@@ -36,41 +35,25 @@
                                 <div class="tab-pane fade show active" id="description" role="tabpanel"
                                      aria-labelledby="description-tab">
                                     <div class="course__description-list mb-45">
-                                        <h4>Instructions</h4>
+                                        <h4>Vui lòng đọc hướng dẫn bên dưới</h4>
                                         <ol>
-                                            <li>1. This is a timed test. Please make sure you are not interrupted during
-                                                the test, as the timer cannot be paused once started.
+                                            <li>1. Đây là một bài kiểm tra có giới hạn thời gian. Vui lòng đảm bảo bạn không bị gián đoạn trong quá trình làm bài, vì bộ đếm giờ không thể tạm dừng khi đã bắt đầu hoặc bạn sẽ thất bại nếu hết thời gian
                                             </li>
-                                            <li>2. Please ensure you have a stable internet connection.</li>
-                                            <li>3. We recommend you to try the sample test for a couple of minutes,
-                                                before taking the main test.
+                                            <li>2. Vui lòng đảm bảo bạn có kết nối internet ổn định.</li>
+                                            <li>3. Chúng tôi khuyên bạn nên thử bài tập mẫu trước khi vào làm bài kiểm tra này.
                                             </li>
-                                            <li>4. Before taking the test, please go through the FAQs to resolve your
-                                                queries related to the test or the HackerRank platform.
+                                            <li>4. Trước khi làm bài, vui lòng xem qua các câu hỏi thường gặp để giải quyết các thắc mắc liên quan đến bài kiểm tra. Kỹ năng quan trọng hơn bằng cấp Chứng minh Kỹ năng của bạn Gây ấn tượng với các công ty Ai cũng có cơ hội để thăng tiến
                                             </li>
                                         </ol>
                                     </div>
                                     <div class="course__description-list mb-45">
-                                        <h4>Skill over pedigree</h4>
+                                        <h4>Kỹ năng quan trọng hơn bằng cấp</h4>
                                         <ul>
-                                            <li><i class="icon_check"></i> Prove your Skills</li>
-                                            <li><i class="icon_check"></i> Get noticed by companies</li>
-                                            <li><i class="icon_check"></i> Anyone who is finding a chance to get the
-                                                promotion
+                                            <li><i class="icon_check"></i> Chứng minh Kỹ năng của bạn</li>
+                                            <li><i class="icon_check"></i> Gây ấn tượng với các công ty </li>
+                                            <li><i class="icon_check"></i> Cơ hội phát triển sẻ đến với mọi người
                                             </li>
                                         </ul>
-                                    </div>
-                                    <div class="course__description">
-                                        <h3>Overview</h3>
-                                        <p th:utext="${assignment_kit.description}"></p>
-
-                                        <div class="course__tag-2 mb-35 mt-35">
-                                            <i class="fal fa-tag"></i>
-                                            <a href="#">Big data,</a>
-                                            <a href="#">Data analysis,</a>
-                                            <a href="#">Data modeling</a>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -99,8 +82,8 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>No. of questions :</span>[[${assignment_kit.assignments.size()}]]
-                                                    questions</h5>
+                                                <h5><span>Tổng số câu hỏi :</span>[[${assignment_kit.numberOfQuiz + assignment_kit.numberOfAssignment}]]
+                                                    </h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -114,7 +97,7 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Duration :</span>[[${assignment_kit.time}]] mins</h5>
+                                                <h5><span>Thời gian hoàn thành :</span>[[${assignment_kit.time}]] phút</h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -126,7 +109,7 @@
                                                 </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Enrolled :</span>
+                                                <h5><span>Đã tham gia :</span>
                                                     [[${assignment_kit.assignmentKitSubmissions.size()}]] </h5>
                                             </div>
                                         </li>
@@ -140,7 +123,24 @@
                                                 </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Language :</span>Optional</h5>
+                                                <h5 th:if="${assignment_kit.language}"><span>Ngôn ngữ :</span> [[${assignment_kit.language.name}]]</h5>
+                                                <h5 th:unless="${assignment_kit.language}"><span>Ngôn ngữ :</span> Tuỳ chọn</h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                                                     xml:space="preserve">
+
+                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
+                                                    <path class="st0"
+                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Độ khó :</span>[[${assignment_kit.level.name}]]</h5>
                                             </div>
                                         </li>
                                     </ul>
@@ -151,19 +151,15 @@
                                        class="e-btn e-btn-7 w-100">Passed <i class="far fa-check"></i></a>
                                     <th:block th:unless="${is_passed}">
                                         <th:block th:if="${retake}">
-                                            <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Retake the
-                                                test <i class="far fa-arrow-right"></i></a>
-                                            <p class="mt-10"><span class="text-danger">*</span> Last Attempt on <strong>[[${last_attempt}]]</strong>
+                                            <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Làm lại <i class="far fa-arrow-right"></i></a>
+                                            <p class="mt-10"><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
                                             </p>
                                         </th:block>
                                         <th:block th:unless="${retake}">
-                                            <a style="background-color: #e07900" class="e-btn e-btn-7 w-100">Retake the
-                                                test after 30 days <i class="far fa-arrow-right"></i></a>
-                                            <p><span class="text-danger">*</span> Last Attempt on <strong>[[${last_attempt}]]</strong>
+                                            <a style="background-color: #e07900" class="e-btn e-btn-7 w-100">Làm lại bài này sau 30 ngày <i class="far fa-arrow-right"></i></a>
+                                            <p><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
                                             </p>
-                                            <p><span class="text-danger">*</span> Thank you for taking the time to
-                                                attempt. Unfortunately, you did not pass the test in your previous
-                                                attempt. <strong>You can retry the test now if you are ready</strong>
+                                            <p><span class="text-danger">*</span> Cảm ơn bạn đã dành thời gian cho bài thi này. Chúng tôi rất tiếc rằng bạn không vượt qua bài kiểm tra này trước đó. <strong>Bạn vẫn có thể thử lại bài thi này khi bạn sẳn sàng.</strong>
                                             </p>
                                         </th:block>
                                     </th:block>
@@ -171,7 +167,7 @@
 
                                 <div th:unless="${already_tested}" class="course__enroll-btn">
                                     <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}"
-                                       class="e-btn e-btn-7 w-100">Take the test <i class="far fa-arrow-right"></i></a>
+                                       class="e-btn e-btn-7 w-100">Tham gia <i class="far fa-arrow-right"></i></a>
                                 </div>
 
 

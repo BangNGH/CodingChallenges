@@ -4,7 +4,7 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Assignments</title>
+    <title>Quizzs</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         .table td, .table th {
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div style="float: right" class="text-sm-end">
-                                <a style="text-transform: none; font-size: 13px" th:href="@{/admin/assignment-kit/add}" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i style="margin-right: 5px" class="ti-plus"></i>Add new coding question</a>
+                                <a style="text-transform: none; font-size: 13px" th:href="@{/admin/quiz/add}" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i style="margin-right: 5px" class="ti-plus"></i>Add new question</a>
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -59,25 +59,18 @@
                             <thead class="table-light">
                             <tr>
                                 <th class="align-middle">ID</th>
-                                <th class="align-middle">Certificate name</th>
-                                <th class="align-middle">Time</th>
-                                <th class="align-middle">Difficulty</th>
+                                <th class="align-middle">Question</th>
+                                <th class="align-middle">Level</th>
                                 <th class="align-middle">Language</th>
-                                <th class="align-middle">N.O Assignment</th>
-                                <th class="align-middle">N.O Quiz</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="assignment_kit: ${assignment_kits}">
-                                <td><a style="font-weight: bold" class="text-body fw-bold">#<span th:text="${assignment_kit.id}"></span></a> </td>
-                                <td th:text="${assignment_kit.title}"></td>
-                                <td th:text="${assignment_kit.time}"></td>
-                                <td th:text="${assignment_kit.level.name}"></td>
-                                <td th:if="${assignment_kit.language}">[[${assignment_kit.language.name}]]</td>
-                                <td th:unless="${assignment_kit.language}">Optional</td>
-                                <td th:text="${assignment_kit.numberOfAssignment}"></td>
-                                <td th:text="${assignment_kit.numberOfQuiz}"></td>
-
+                            <tr th:each="quiz: ${questions}">
+                                <td><a style="font-weight: bold" class="text-body fw-bold">#<span th:text="${quiz.id}"></span></a> </td>
+                                <td th:text="${quiz.question}"></td>
+                                <td th:text="${quiz.level.name}"></td>
+                                <td th:if="${quiz.language}">[[${quiz.language.name}]]</td>
+                                <td th:unless="${quiz.language}">Câu hỏi ngẫu nhiên</td>
                             </tr>
                             </tbody>
                         </table>

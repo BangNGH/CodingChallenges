@@ -51,69 +51,58 @@
             <div style="background-color: #fff" class="card2">
                 <div class="row">
                     <div class="col-md-12 mx-0">
-                        <form id="msform" th:action="@{/admin/assignment-kit/add}" method="post">
-                            <!-- progressbar -->
-                            <ul id="progressbar">
-                                <li class="active" id="account"><strong>Kit details</strong></li>
-                                <li id="personal"><strong>Add Assignments</strong></li></ul>
-                            <!--problem details -->
+                        <form id="msform" th:action="@{/admin/assignment-kit/add}" th:object="${assignment_kit}" method="post">
                             <fieldset>
                                 <div class="form-card">
-                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Title name: <span class="text-danger">*</span></p>
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 30px" >Lưu ý<span class="text-danger">*</span>: hệ thống sẽ lấy ngẫu nhiên câu hỏi trong ngân hàng câu hỏi dựa trên số lượng câu hỏi và độ khó bạn đưa ra</p>
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Certificate name: <span class="text-danger">*</span></p>
                                     <div style="margin-bottom: 25px">
-                                        <input required class="form-validate" name="title" id="title" style="font-family: 'Montserrat'; margin-bottom: unset" type="text" placeholder="Sample question name"/>
+                                        <input required th:field="*{title}" class="form-validate" name="title" id="title" style="font-family: 'Montserrat'; margin-bottom: unset" type="text" placeholder="Tên chứng chỉ này"/>
                                     </div>
                                     <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px" >Time/mins: <span class="text-danger">*</span></p>
                                     <div style="margin-bottom: 25px">
-                                        <input required class="form-validate" name="time" id="time" style="font-family: 'Montserrat'; margin-bottom: unset" type="number" min="15" placeholder="Time to take this contest/mins"/>
+                                        <input required class="form-validate" name="test_time" id="test_time" th:field="*{time}" style="font-family: 'Montserrat'; margin-bottom: unset" type="number" min="1" placeholder="Thời gian làm bài (phút)"/>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="card card-shadow mb-4">
-                                                <div class="card-header border-0">
-                                                    <div class="custom-title-wrap bar-primary">
-                                                        <div class="custom-title">Kit Description: <span class="text-danger">*</span></div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body">
-                                                        <div id="summernote"></div>
-                                                </div>
-                                            </div>
+                                    <div style="margin-bottom: 25px" class="row">
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">
+                                                Độ khó</p>
+                                            <select th:field="*{level}" style="height: 45px; cursor: pointer; font-size: 15px"
+                                                    class="form-control select2" name="level">
+                                                <option th:each="level: ${levels}" th:value="${level.id}"
+                                                        th:text="${level.name}"></option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                                <input style="border-radius: 5px" id="step-one" type="button" name="next" class="next action-button" value="Next Step"/>
-                            </fieldset>
-<!--                            tescases-->
-                            <fieldset>
-                                <div class="row">
-                                    <div class="col-xl-12">
-                                        <div class="card card-shadow mb-4">
-                                            <div class="card-header border-0">
-                                                <div class="custom-title-wrap bar-primary">
-                                                    <div class="custom-title">Multiple Select</div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <form class="picker-form">
-                                                    <div class="form-group row mb-5">
-                                                        <div class="col-lg-8 col-md-9 col-sm-12">
-                                                            <select name="multi_coding_select[]" class="multi-select" multiple="" id="my_multi_select3" >
-                                                                <option value=""></option>
-                                                                <option th:each="assignment : ${assignments}" th:value="${assignment.id}" th:text="${assignment.title}"></option>
-                                                                <option value="3">Zimbabwe</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                    <div style="margin-bottom: 25px" class="row">
+                                        <div class="col">
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Language
+                                                <span class="text-danger">(*)</span></p>
+                                            <select th:field="*{language}" style="height: 45px; cursor: pointer; font-size: 15px" id="selectBox"
+                                                    class="form-control select2" name="language-selected">
+                                                <option value="">Problem Solving</option>
+                                                <option th:each="language: ${languages}" th:value="${language.id}"
+                                                        th:text="${language.name}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Số bài tập:
+                                        <span class="text-danger">*</span></p>
+                                    <div style="margin-bottom: 25px">
+                                        <input th:field="*{numberOfAssignment}" required class="form-validate" min="1" name="no_assignment" id="no_assignment"
+                                               style="font-family: 'Montserrat'; margin-bottom: unset" type="number"
+                                               placeholder="Nhập số lượng bài tập"/>
+                                    </div>
 
-                                                </form>
-                                            </div>
-                                        </div>
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Số câu hỏi trắc nghiệm:
+                                        <span class="text-danger">*</span></p>
+                                    <div style="margin-bottom: 25px">
+                                        <input th:field="*{numberOfQuiz}" required class="form-validate" min="1" name="no_quiz" id="no_quiz"
+                                               style="font-family: 'Montserrat'; margin-bottom: unset" type="number"
+                                               placeholder="Nhập số lượng câu hỏi trắc nghiệm"/>
                                     </div>
                                 </div>
-                                <input style="border-radius: 5px" type="button" name="previous" class="previous action-button-previous"
-                                       value="Previous"/>
-                                <input style="border-radius: 5px" type="submit" name="next" class="next action-button" value="Save"/>
+                                <button type="submit" class="btn btn-outline-primary" style="float: right;margin-top: 20px;">Save</button>
                             </fieldset>
                         </form>
                     </div>
@@ -121,26 +110,6 @@
             </div>
         </div>
     </div>
-    <!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-    <script th:src="@{/admin_assets/vendor/jquery/jquery.min.js}"></script>
-    <script th:src="@{/admin_assets/js/multi-kit-step-form.js}"></script>
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            document.getElementById('msform').addEventListener('submit', function (e) {
-                e.preventDefault();
-                var form = $('#msform');
-                if (form.valid() === true) {
-                    var description = $('#summernote').summernote('code');
-                    $('<input />').attr('type', 'hidden')
-                        .attr('name', 'description')
-                        .attr('value', description)
-                        .appendTo('#msform');
-                    this.submit();
-                }
-            });
-        });
-    </script>
 </div>
 </body>
 </html>

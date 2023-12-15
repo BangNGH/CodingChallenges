@@ -72,21 +72,25 @@
                                     <div class="course__content">
                                        <div class="course__meta d-flex align-items-center justify-content-between">
                                           <div class="course__lesson">
-                                             <span><i class="far fa-book-alt"></i>43 minutes</span>
+                                             <span><i class="far fa-book-alt"></i>[[${assignment_kit.time}]] minutes</span>
                                           </div>
                                           <div class="course__rating">
                                              <span th:text="${assignment_kit.getAssignmentKitSubmissions().size()}+' join'"></span>
                                           </div>
                                        </div>
-                                       <h3 style="margin-bottom: 0px" class="course__title"><a th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" th:text="${assignment_kit.title}"></a></h3>
+                                       <h3 style="margin-bottom: 0px;text-align: center" class="course__title"><a th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" th:text="${assignment_kit.title}"></a></h3>
+                                      <div class="mt-20">
+                                         <p>Số bài tập: [[${assignment_kit.numberOfAssignment}]]</p>
+                                         <p>Số câu hỏi trắc nghiệm: [[${assignment_kit.numberOfQuiz}]]</p>
+                                      </div>
                                     </div>
                                     <div class="course__more d-flex justify-content-between align-items-center">
                                        <div class="course__status">
-                                          <span>Free</span>
+                                          <span th:text="${assignment_kit.level.name}"></span>
                                        </div>
                                        <div class="course__btn">
                                           <a  th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" class="link-btn">
-                                             Know Details
+                                             Xem chi tiết
                                              <i class="far fa-arrow-right"></i>
                                              <i class="far fa-arrow-right"></i>
                                           </a>

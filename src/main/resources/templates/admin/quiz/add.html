@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .table td, .table th {
+            border-right: 2px solid #efefef;
+        }
+        th{
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- start page title -->
+    <div class="row">
+        <!-- Card body -->
+        <div class="card-body">
+            <div class="mt-5">
+                <form th:action="@{/admin/quiz/add}" th:object="${quiz}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <div style="margin-bottom: 25px" class="row">
+                        <div class="col">
+                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">
+                                Difficulty</p>
+                            <select th:field="*{level}" style="height: 45px; cursor: pointer; font-size: 15px"
+                                    class="form-control select2" name="level">
+                                <option th:each="level: ${levels}" th:value="${level.id}"
+                                        th:text="${level.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 25px" class="row">
+                        <div class="col">
+                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Language
+                                <span class="text-danger">(*)</span></p>
+                            <select th:field="*{language}" style="height: 45px; cursor: pointer; font-size: 15px" id="selectBox"
+                                    class="form-control select2" name="language-selected">
+                                <option value="">Problem Solving</option>
+                                <option th:each="language: ${languages}" th:value="${language.id}"
+                                        th:text="${language.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <h3 class="mb-3 mt-1"><input required name="question" th:field="*{question}" type="text" placeholder="Enter question for this quiz..." style="width: 100%;border: none;padding: 5px;"></h3>
+                    <!-- list group -->
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action " aria-current="true">
+                            <div class="form-check">
+                                <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerA" name="checkboxAnswer">
+                                <input th:field="*{answerA}" required name="answerA" type="text" placeholder="Enter answer A for this choice here" style="width: 100%;border: none;padding: 5px;">
+                            </div>
+                        </div>
+                        <!-- list group -->
+                        <div class="list-group-item list-group-item-action " aria-current="true">
+                            <div class="form-check">
+                                <input class="form-check-input" required th:field="*{answer}" value="answerB" type="radio" name="checkboxAnswer">
+                                <input required th:field="*{answerB}" name="answerB" type="text" placeholder="Enter answer B for this choice here" style="width: 100%;border: none;padding: 5px;">
+                            </div>
+                        </div>
+                        <!-- list group -->
+                        <div class="list-group-item list-group-item-action " aria-current="true">
+                            <div class="form-check">
+                                <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerC" name="checkboxAnswer">
+                                <input required th:field="*{answerC}" name="answerC" type="text" placeholder="Enter answer C for this choice here" style="width: 100%;border: none;padding: 5px;">
+                            </div>
+                        </div>
+                        <!-- list group -->
+                        <div class="list-group-item list-group-item-action " aria-current="true">
+                            <div class="form-check">
+                                <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerD" name="checkboxAnswer">
+                                <input required name="answerD" th:field="*{answerD}" type="text" placeholder="Enter answer D for this choice here" style="width: 100%;border: none;padding: 5px;">
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary" style="
+        float: right;
+        margin-top: 20px;
+    ">Save Question</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- end page title -->
+</div>
+</body>
+</html>

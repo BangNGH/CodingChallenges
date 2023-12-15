@@ -1,9 +1,6 @@
 package com.example.coderlab.service;
 
-import com.example.coderlab.entity.AssignmentKit;
-import com.example.coderlab.entity.AssignmentKitSubmission;
-import com.example.coderlab.entity.Submission;
-import com.example.coderlab.entity.UserEntity;
+import com.example.coderlab.entity.*;
 import com.example.coderlab.repository.AssignmentKitSubmissionRepo;
 import com.example.coderlab.dto.SubmissionKitInfoSendDTO;
 import lombok.RequiredArgsConstructor;
@@ -36,29 +33,36 @@ public class AssignmentKitSubmissionService {
         Boolean is_passed = true;
         if (found_assignment_kit.isPresent()) {
             AssignmentKitSubmission assignmentKitSubmission = new AssignmentKitSubmission();
+            assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
+            assignmentKitSubmission.setUser_submitted(current_user);
+            AssignmentKitSubmission savedAssignmentKitSubmission = assignmentKitSubmissionRepo.save(assignmentKitSubmission);
+
+
             List<Submission> submissions = new ArrayList<>();
-            for (String submission_id : submissionsId.getSubmissions_id()
+            List<String> submissions_id= submissionsId.getSubmissions_id_ofAssignment();
+            List<String> submissions_id_ofQuiz = submissionsId.getSubmissions_id_ofQuiz();
+            submissions_id.addAll(submissions_id_ofQuiz);
+            System.out.println(submissions_id);
+            for (String submission_id : submissions_id
                  ) {
                 Submission found_submission = submissionService.getSubmission(Long.parseLong(submission_id)).get();
-
-                submissions.add(found_submission);
+                found_submission.setAssignment_kit_submission(savedAssignmentKitSubmission);
                 if (found_submission.getIs_success()==false){
                     is_passed= false;
                 }
+                submissionService.saveSubmission(found_submission);
+                submissions.add(found_submission);
             }
-            assignmentKitSubmission.setIs_success(is_passed);
-            assignmentKitSubmission.setUser_submitted(current_user);
-            assignmentKitSubmission.setSubmissions(submissions);
-            assignmentKitSubmission.setAssignment_kit(found_assignment_kit.get());
-            AssignmentKitSubmission saved = assignmentKitSubmissionRepo.save(assignmentKitSubmission);
-            current_user.getAssignmentKitSubmissions().add(saved);
+
+            savedAssignmentKitSubmission.setIs_success(is_passed);
+            savedAssignmentKitSubmission.setSubmissions(submissions);
+            assignmentKitSubmissionRepo.save(savedAssignmentKitSubmission);
+
+            current_user.getAssignmentKitSubmissions().add(savedAssignmentKitSubmission);
             userServices.save(current_user);
-            for (Submission submission : submissions
-            ) {
-                submission.setAssignment_kit_submission(saved);
-                submissionService.save(submission);
-            }
+
         }
+
         if (is_passed) {
             //absolute path to \client_assets\img\certificate.png"
             String templatePath = "D:\\Hutech\\DACN\\project\\src\\main\\resources\\static\\client_assets\\img\\certificate.png";

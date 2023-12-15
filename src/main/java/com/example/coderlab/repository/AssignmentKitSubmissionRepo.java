@@ -1,7 +1,9 @@
 package com.example.coderlab.repository;
 
-import com.example.coderlab.entity.AssignmentKit;
+import com.example.coderlab.entity.Assignment;
 import com.example.coderlab.entity.AssignmentKitSubmission;
+import com.example.coderlab.entity.Language;
+import com.example.coderlab.entity.Level;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

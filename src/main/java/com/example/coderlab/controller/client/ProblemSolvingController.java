@@ -4,6 +4,7 @@ import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -30,14 +31,27 @@ public class ProblemSolvingController {
     private SolutionCheckService solutionCheckService;
     @Autowired
     private LanguageService languageService;
+    private Boolean clearSession(HttpSession session) {
+        if (session != null) {
+            session.removeAttribute("editorContent");
+            session.removeAttribute("mode");
+            session.removeAttribute("option");
+            session.removeAttribute("language_name");
+            session.removeAttribute("current_tab_id");
+            System.out.println("Session cleared successfully!");
+            return true;
+        }
+        return false;
+    }
     @GetMapping()
-    public String index(Model model){
-
+    public String index(HttpSession session){
+        clearSession(session);
         return "client/problem/index";
     }
 
     @GetMapping("/topic/{id}")
-    public String practiceByTopic(Model model, @PathVariable("id") Long id){
+    public String practiceByTopic(Model model, @PathVariable("id") Long id, HttpSession session){
+        clearSession(session);
         model.addAttribute("topicID", id);
         model.addAttribute("language", languageService.findByLanguageID(id).orElseThrow());
         return "client/problem/topic";
