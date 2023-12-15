@@ -16,8 +16,10 @@
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
     <link rel="stylesheet" th:href="@{/admin_assets/vendor/markdown/simplemde.min.css}">
     <!-- Google Fonts Link For Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"/>
     <link rel="stylesheet" th:href="@{/client_assets/css/chatbot.css}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script th:inline="javascript" th:src="@{/client_assets/js/practice.js}"></script>
@@ -38,8 +40,10 @@
                 <div>
                     <div class="course__wrapper">
                         <div class="page__title-content mb-25">
-                            <span class="page__title-pre" th:if="${challenge.language_option}" th:text="${challenge.language_option.name}"></span>
-                            <span class="page__title-pre" th:unless="${challenge.language_option}">Optional Language</span>
+                            <span class="page__title-pre" th:if="${challenge.language_option}"
+                                  th:text="${challenge.language_option.name}"></span>
+                            <span class="page__title-pre"
+                                  th:unless="${challenge.language_option}">Optional Language</span>
                             <h5 class="page__title-3" th:text="${challenge.title}"></h5>
                         </div>
                         <div class="course__meta-2 d-sm-flex mb-30 mt-20">
@@ -92,7 +96,8 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="discussion-tab" data-bs-toggle="tab"
-                                            data-bs-target="#discussion" type="button" role="tab" aria-controls="discussion"
+                                            data-bs-target="#discussion" type="button" role="tab"
+                                            aria-controls="discussion"
                                             aria-selected="false"><i class="icon_star_alt"></i> <span>Discussions</span>
                                     </button>
                                 </li>
@@ -100,12 +105,15 @@
                                     <button th:if="${unlocked}" class="nav-link" th:id="${'solution-tab'}"
                                             data-bs-toggle="tab"
                                             data-bs-target="#solution" type="button" role="tab" aria-controls="solution"
-                                            aria-selected="false"><i class="fal fa-check"></i> <span>Unlocked Solution</span>
+                                            aria-selected="false"><i class="fal fa-check"></i>
+                                        <span>Unlocked Solution</span>
                                     </button>
-                                    <button th:unless="${unlocked}" class="nav-link" value="locked" th:id="${'solution-tab'}"
+                                    <button th:unless="${unlocked}" class="nav-link" value="locked"
+                                            th:id="${'solution-tab'}"
                                             data-bs-toggle="tab"
                                             data-bs-target="#solution" type="button" role="tab" aria-controls="solution"
-                                            aria-selected="false"><i class="fal fa-question-circle"></i> <span>Solution</span>
+                                            aria-selected="false"><i class="fal fa-question-circle"></i>
+                                        <span>Solution</span>
                                     </button>
                                 </li>
                             </ul>
@@ -132,13 +140,16 @@
                                             <div>
                                                 <label class="visually-hidden"
                                                        th:for="${'inlineFormSelectPref'}">Preference</label>
-                                                <select th:if="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
+                                                <select th:if="${challenge.getLanguage_option()}"
+                                                        style="cursor: pointer;" class="form-select"
                                                         th:id="${'inlineFormSelectPref'}">
-                                                    <option selected th:text="${challenge.getLanguage_option().getName()}"
+                                                    <option selected
+                                                            th:text="${challenge.getLanguage_option().getName()}"
                                                             th:value="${challenge.getLanguage_option().getValue()}">
                                                     </option>
                                                 </select>
-                                                <select th:unless="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
+                                                <select th:unless="${challenge.getLanguage_option()}"
+                                                        style="cursor: pointer;" class="form-select"
                                                         th:id="${'inlineFormSelectPref'}">
                                                     <option th:each="language :${languages}" th:text="${language.name}"
                                                             th:value="${language.value}">
@@ -256,12 +267,15 @@
                                                                           th:text="${submission.language.name}"></span>
                                                                 </div>
                                                             </div>
-                                                            <div th:if="${unlocked}" class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
+                                                            <div th:if="${unlocked}"
+                                                                 class="course__curriculum-content d-sm-flex justify-content-between align-items-center">
                                                                 <div class="course__curriculum-info"
                                                                      style="width: 100%">
                                                                     <i class="fal fa-unlock"></i>
                                                                     <h3
-                                                                        class="text-warning ml-10" ><span>Unlocked:</span> Your score will not be counted.
+                                                                            class="text-warning ml-10">
+                                                                        <span>Unlocked:</span> Your score will not be
+                                                                        counted.
                                                                     </h3>
                                                                 </div>
                                                             </div>
@@ -269,10 +283,12 @@
                                                                 <div class="course__curriculum-info"
                                                                      style="width: 100%">
                                                                     <i class="fal fa-code"></i>
-                                                                    <h3 class="ml-10"><span>Submitted Code: </span> Click editor below
+                                                                    <h3 class="ml-10"><span>Submitted Code: </span>
+                                                                        Click editor below
                                                                         to see your submission</h3>
                                                                     <pre class="line-numbers language-java">
-                                                                        <code class="language-java" th:id="${'src_submission-'+submission.id}">
+                                                                        <code class="language-java"
+                                                                              th:id="${'src_submission-'+submission.id}">
 
                                                                         </code>
                                                                     </pre>
@@ -510,7 +526,8 @@
                                         </th:block>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="discussion" role="tabpanel" aria-labelledby="discussion-tab">
+                                <div class="tab-pane fade" id="discussion" role="tabpanel"
+                                     aria-labelledby="discussion-tab">
                                     <div class="course__review">
                                         <div class="course__comment mb-75">
                                             <h3>[[${comments.size()}]] Comments</h3>
@@ -679,36 +696,231 @@
     </button>
     <div class="chatbot">
         <header>
-            <h2 style="font-size: 20px; color: #fff">CodeHelper</h2>
+            <h2 style="font-size: 20px; color: #fff">Code Helper</h2>
             <span class="close-btn material-symbols-outlined">close</span>
         </header>
         <ul class="chatbox">
-            <li class="chat incoming">
-                <span class="material-symbols-outlined">smart_toy</span>
-                <p>Hi there 👋<br>How can I help you today?</p>
+            <li class="incoming">
+                <p style=" white-space: break-spaces; padding: 15px;">Xin chào👋<br>Tôi ở đây để giúp bạn hoàn thành bài tập này tốt nhất.</p>
             </li>
         </ul>
-        <div class="chat-input">
-            <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
-            <span id="send-btn" class="material-symbols-rounded">send</span>
-        </div>
     </div>
-    <!-- page title area end -->
+
     <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/addon/edit/closebrackets.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
-    <script th:src="@{/client_assets/js/chatbot.js}"></script>
+    <script>
+        const chatbotToggler = document.querySelector(".chatbot-toggler");
+        const closeBtn = document.querySelector(".close-btn");
+        closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+        chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));</script>
     <script th:inline="javascript">
+        const myApiKey = '6984bdd544msh3d3fdce8861538fp11c2f0jsnd28103cc1b98';
+        const createChatLi = (message, className) => {
+            // Create a chat <li> element with passed message and className
+            const chatLi = document.createElement("li");
+            chatLi.classList.add(`${className}`);
+            let chatContent = className === "outgoing" ? `<p style="white-space: break-spaces;
+                        padding: 15px;"></p>` : `<span class="material-symbols-outlined">smart_toy</span><p style="white-space: break-spaces;
+                        padding: 15px;></p>`;
+            chatLi.innerHTML = chatContent;
+            chatLi.querySelector("p").textContent = message;
+            return chatLi; // return chat <li> element
+        }
+        async function explainCode(selectedCode) {
+            const prompt_text = "Hãy giải thích về cách hoạt động của đoạn mã nguồn sau đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result.answer);
+                const incomingChatLi = createChatLi("Thinking...", "incoming");
+                const chatbox = document.querySelector(".chatbox");
+                chatbox.appendChild(incomingChatLi);
+                const messageElement = incomingChatLi.querySelector("p");
+                messageElement.textContent = result.answer;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function addComments(selectedCode) {
+            const prompt_text = "Hãy thêm vào đoạn mã sau đây với các comment để giải thích từng phần:"
+            const source =selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result.answer);
+                const incomingChatLi = createChatLi("Thinking...", "incoming");
+                const chatbox = document.querySelector(".chatbox");
+                chatbox.appendChild(incomingChatLi);
+                const messageElement = incomingChatLi.querySelector("p");
+                messageElement.textContent = result.answer;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function findBugs(selectedCode) {
+            const prompt_text = "Hãy tìm những lỗi có thể xuất hiện trong đoạn code dưới đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result.answer);
+                const incomingChatLi = createChatLi("Thinking...", "incoming");
+                const chatbox = document.querySelector(".chatbox");
+                chatbox.appendChild(incomingChatLi);
+                const messageElement = incomingChatLi.querySelector("p");
+                messageElement.textContent = result.answer;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function optimize(selectedCode) {
+            const prompt_text = "Hãy đưa ra những gợi ý để có thể cải thiện hiệu suất của đoạn mã nguồn sau đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result.answer);
+                const incomingChatLi = createChatLi("Thinking...", "incoming");
+                const chatbox = document.querySelector(".chatbox");
+                chatbox.appendChild(incomingChatLi);
+                const messageElement = incomingChatLi.querySelector("p");
+                messageElement.textContent = result.answer;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+
+        // Tạo một menu ngữ cảnh tùy chỉnh với một tùy chọn "explain this code"
+        var contextMenu = "<div class='dropdown-menu dropdown-menu-sm' id='context-menu'>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='findBugs'>Find bugs</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='explain'>Explain</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='addComments'>Add comments</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='optimize'>Optimize</a>" +
+            "</div>";
+        // Thêm menu ngữ cảnh vào trang web
+        $("body").append(contextMenu);
+
+
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "text/x-c++src",
             theme: "dracula",
             lineNumbers: true,
             autoCloseBrackets: true,
-        })
-        editor.setSize("initial", "450")
+        });
+        $(".CodeMirror").on("contextmenu", function (e) {
+            // Lấy vị trí của con trỏ chuột
+            var top = e.pageY - 10;
+            var left = e.pageX - 90;
+            // Hiển thị menu ngữ cảnh tại vị trí đó
+            $("#context-menu").css({
+                display: "block",
+                top: top,
+                left: left
+            }).addClass("show");
+            // Ngăn chặn menu ngữ cảnh mặc định của trình duyệt
+            return false;
+        }).on("click", function () {
+            // Ẩn menu ngữ cảnh khi người dùng nhấp chuột trái
+            $("#context-menu").removeClass("show").hide();
+        });
+        // Bắt sự kiện click trên tùy chọn "explain this code"
+        $("#explain").on("click", function () {
+            // Lấy văn bản được chọn trên trình soạn thảo
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            explainCode(selectedText);
+        });
+        $("#findBugs").on("click", function () {
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+
+            findBugs(selectedText);
+        });
+        $("#addComments").on("click", function () {
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            addComments(selectedText);
+        });
+        $("#optimize").on("click", function () {
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            optimize(selectedText);
+        });
+        editor.setSize("initial", "");
         var option;
         var langague_name;
         $("#inlineFormSelectPref").ddslick({
@@ -727,6 +939,7 @@
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
+
                 }
                 if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
@@ -734,6 +947,7 @@
                     option = 71;
                 }
                 langague_name = selectedData.selectedData.value;
+
             }
         });
     </script>

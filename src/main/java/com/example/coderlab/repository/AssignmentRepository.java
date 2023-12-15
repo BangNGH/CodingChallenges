@@ -49,16 +49,4 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
             "ORDER BY RAND()\n" +
             "LIMIT ?2", nativeQuery = true)
     List<Assignment> getRandomProblemSolving(Long id, Integer numberOfRandomAssignment);
-    @Query(value = "SELECT * FROM questions \n" +
-            "WHERE language_id = ?1\n" +
-            "AND level_id = ?2\n" +
-            "ORDER BY RAND()\n" +
-            "LIMIT ?3", nativeQuery = true)
-    List<Question> getRandomQuizs(Long language_id, Long level_id, Integer numberOfQuiz);
-    @Query(value = "SELECT * FROM questions \n" +
-            "WHERE level_id = ?1\n" +
-            "AND language_id is null\n" +
-            "ORDER BY RAND()\n" +
-            "LIMIT ?2", nativeQuery = true)
-    List<Question> getRandomProblemSolvingQuiz(Long id, Integer numberOfQuiz);
 }

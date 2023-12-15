@@ -166,7 +166,7 @@ function decode(bytes) {
 
 }
 async function generateAssessment() {
-    const prompt_text = "Hãy đưa ra những gợi ý để có thể cải thiện hiệu suất của đoạn mã nguồn sau đây mà không cần cung cấp cho tôi mã nguồn. Lưu ý bạn chỉ cần đưa ra gợi ý và không được cung cấp mã nguồn:"
+    const prompt_text = "Hãy đưa ra nhận xét về đoạn code sau đây:"
     const source = editor.getValue().trim();
     const prompt_send = prompt_text+source;
     const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
