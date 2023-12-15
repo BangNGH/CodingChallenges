@@ -45,6 +45,7 @@
                 <div class="col-xxl-8 col-xl-8 col-lg-8">
                     <div class="course__tab-conent">
                         <div class="tab-content" id="courseTabContent">
+                            <input id="userID" type="hidden" th:value="${UserID}">
                             <input id="languageId" type="hidden" th:value="${topicID}">
                             <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
                                 <div class="row" id="assignments">
@@ -155,14 +156,14 @@
                                 <ul>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-eng">
-                                            <label class="m-check-label" for="m-eng">Solved</label>
+                                            <input class="m-check-input" type="checkbox" id="solved">
+                                            <label class="m-check-label" for="solved">Solved</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-edu">
-                                            <label class="m-check-label" for="m-edu">Unsolved</label>
+                                            <input class="m-check-input" type="checkbox" id="unsolved">
+                                            <label class="m-check-label" for="unsolved">Unsolved</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -320,6 +321,9 @@
                 const easyChecked = document.getElementById('easy').checked;
                 const mediumChecked = document.getElementById('medium').checked;
                 const hardChecked = document.getElementById('hard').checked;
+                const solved = document.getElementById('solved').checked;
+                const unsolved = document.getElementById('unsolved').checked;
+                const userID = document.getElementById('userID').value;
                 $.ajax({
                     url:'/api/problemSolving/filterOfTopic',
                     type: 'GET',
@@ -330,6 +334,9 @@
                         mediumChecked: mediumChecked,
                         hardChecked: hardChecked,
                         languageId: languageId,
+                        solved : solved,
+                        unsolved: unsolved,
+                        userID: userID,
                     },
                     success: function (response){
                         // alert(response.content);

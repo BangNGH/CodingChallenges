@@ -15,11 +15,13 @@
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
     <link rel="stylesheet" th:href="@{/admin_assets/vendor/markdown/simplemde.min.css}">
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet" th:href="@{/client_assets/css/chatbot.css}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script th:inline="javascript" th:src="@{/client_assets/js/practice.js}"></script>
     <script type="module" src="https://md-block.verou.me/md-block.js"></script>
-
-
 </head>
 <body>
 <div layout:fragment="content">
@@ -95,12 +97,12 @@
                                     </button>
                                 </li>
                                 <li th:if="${challenge.getSolution() != null}" class="nav-item" role="presentation">
-                                    <button th:if="${unlocked}" class="nav-link" th:id="solution-tab"
+                                    <button th:if="${unlocked}" class="nav-link" th:id="${'solution-tab'}"
                                             data-bs-toggle="tab"
                                             data-bs-target="#solution" type="button" role="tab" aria-controls="solution"
                                             aria-selected="false"><i class="fal fa-check"></i> <span>Unlocked Solution</span>
                                     </button>
-                                    <button th:unless="${unlocked}" class="nav-link" value="locked" th:id="solution-tab"
+                                    <button th:unless="${unlocked}" class="nav-link" value="locked" th:id="${'solution-tab'}"
                                             data-bs-toggle="tab"
                                             data-bs-target="#solution" type="button" role="tab" aria-controls="solution"
                                             aria-selected="false"><i class="fal fa-question-circle"></i> <span>Solution</span>
@@ -129,15 +131,15 @@
                                              class="d-flex justify-content-between mb-2 rounded p-2">
                                             <div>
                                                 <label class="visually-hidden"
-                                                       th:for="inlineFormSelectPref">Preference</label>
+                                                       th:for="${'inlineFormSelectPref'}">Preference</label>
                                                 <select th:if="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
-                                                        th:id="inlineFormSelectPref">
-                                                    <option th:text="${challenge.getLanguage_option().getName()}"
+                                                        th:id="${'inlineFormSelectPref'}">
+                                                    <option selected th:text="${challenge.getLanguage_option().getName()}"
                                                             th:value="${challenge.getLanguage_option().getValue()}">
                                                     </option>
                                                 </select>
                                                 <select th:unless="${challenge.getLanguage_option()}" style="cursor: pointer;" class="form-select"
-                                                        th:id="inlineFormSelectPref">
+                                                        th:id="${'inlineFormSelectPref'}">
                                                     <option th:each="language :${languages}" th:text="${language.name}"
                                                             th:value="${language.value}">
                                                     </option>
@@ -671,13 +673,34 @@
             </div>
         </div>
     </section>
+    <button class="chatbot-toggler">
+        <span class="material-symbols-rounded">mode_comment</span>
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="chatbot">
+        <header>
+            <h2 style="font-size: 20px; color: #fff">CodeHelper</h2>
+            <span class="close-btn material-symbols-outlined">close</span>
+        </header>
+        <ul class="chatbox">
+            <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <p>Hi there 👋<br>How can I help you today?</p>
+            </li>
+        </ul>
+        <div class="chat-input">
+            <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+            <span id="send-btn" class="material-symbols-rounded">send</span>
+        </div>
+    </div>
     <!-- page title area end -->
-    <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/addon/edit/closebrackets.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
+    <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
+    <script th:src="@{/client_assets/js/chatbot.js}"></script>
     <script th:inline="javascript">
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "text/x-c++src",
@@ -685,7 +708,7 @@
             lineNumbers: true,
             autoCloseBrackets: true,
         })
-        editor.setSize("initial", "")
+        editor.setSize("initial", "450")
         var option;
         var langague_name;
         $("#inlineFormSelectPref").ddslick({
@@ -704,7 +727,6 @@
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
-
                 }
                 if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
@@ -712,11 +734,11 @@
                     option = 71;
                 }
                 langague_name = selectedData.selectedData.value;
-
             }
         });
     </script>
     <script type="module" th:src="@{/client_assets/compiler/practice.js}"></script>
+
 
 </div>
 </body>

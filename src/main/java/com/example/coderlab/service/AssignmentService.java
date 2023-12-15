@@ -224,11 +224,11 @@ public class AssignmentService {
     public Page<Assignment> listAssignmentByTopic(Long languageId, Pageable pageable){
         return assignmentRepository.findAssignmentByLanguageID(languageId, pageable);
     }
-    public Page<Assignment> filterAssignment(boolean easy, boolean medium, boolean hard, Pageable pageable){
-        return assignmentRepository.filterAssignment(easy, medium, hard, pageable);
+    public Page<Assignment> filterAssignment(boolean easy, boolean medium, boolean hard, boolean solved, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignment(easy, medium, hard, solved, userID, pageable);
     }
-    public Page<Assignment> filterAssignmentTopic(boolean easy, boolean medium, boolean hard,long languageId ,Pageable pageable){
-        return assignmentRepository.filterAssignmentTopic(easy, medium, hard, languageId, pageable);
+    public Page<Assignment> filterAssignmentTopic(boolean easy, boolean medium, boolean hard, long languageId, boolean solved, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignmentTopic(easy, medium, hard, languageId, solved, userID, pageable);
     }
 
     public Page<Assignment> findProblemSolvingAssignments(Pageable pageable) {
@@ -251,6 +251,4 @@ public class AssignmentService {
         }
         return assignmentRepository.getRandomAssignments(language.getId(), level.getId(), numberOfRandomAssignment);
     }
-
-
 }

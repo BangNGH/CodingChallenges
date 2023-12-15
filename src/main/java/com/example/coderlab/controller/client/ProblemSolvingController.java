@@ -4,9 +4,9 @@ import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,27 +31,21 @@ public class ProblemSolvingController {
     private SolutionCheckService solutionCheckService;
     @Autowired
     private LanguageService languageService;
-    private Boolean clearSession(HttpSession session) {
-        if (session != null) {
-            session.removeAttribute("editorContent");
-            session.removeAttribute("mode");
-            session.removeAttribute("option");
-            session.removeAttribute("language_name");
-            session.removeAttribute("current_tab_id");
-            System.out.println("Session cleared successfully!");
-            return true;
-        }
-        return false;
+
+    public UserEntity getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userServices.findByEmail(email).orElseThrow();
     }
     @GetMapping()
-    public String index(HttpSession session){
-        clearSession(session);
+    public String index(Model model){
+        model.addAttribute("UserID", getUser().getId());
         return "client/problem/index";
     }
 
     @GetMapping("/topic/{id}")
-    public String practiceByTopic(Model model, @PathVariable("id") Long id, HttpSession session){
-        clearSession(session);
+    public String practiceByTopic(Model model, @PathVariable("id") Long id){
+        model.addAttribute("UserID", getUser().getId());
         model.addAttribute("topicID", id);
         model.addAttribute("language", languageService.findByLanguageID(id).orElseThrow());
         return "client/problem/topic";

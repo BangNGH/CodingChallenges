@@ -37,19 +37,23 @@ public class ProblemSolvingRestController {
     @GetMapping("/filter")
     public Page<Assignment> filterAssignment(@RequestParam("easyChecked") Boolean easy,
                                              @RequestParam("mediumChecked") Boolean medium,
-                                             @RequestParam("hardChecked") Boolean hard, Pageable pageable){
-        if(!easy && !medium && !hard){
+                                             @RequestParam("hardChecked") Boolean hard,
+                                             @RequestParam("solved") Boolean solved ,
+                                            /* @RequestParam("unsolved") Boolean unsolved,*/
+                                             @RequestParam("userID") Long userID, Pageable pageable){
+        if(!easy && !medium && !hard && !solved){
             return assignmentService.findProblemSolvingAssignments(pageable);
         }
-        return assignmentService.filterAssignment(easy,medium,hard,pageable);
+        return assignmentService.filterAssignment(easy, medium, hard, solved, userID, pageable);
     }
     @GetMapping("/filterOfTopic")
     public Page<Assignment> filterAssignmentTopic(@RequestParam("easyChecked") Boolean easy,
-                                                @RequestParam("mediumChecked") Boolean medium,
-                                                @RequestParam("hardChecked") Boolean hard, @RequestParam("languageId") Long languageId, Pageable pageable){
-        if(!easy && !medium && !hard){
+                                                  @RequestParam("mediumChecked") Boolean medium,
+                                                  @RequestParam("hardChecked") Boolean hard, @RequestParam("languageId") Long languageId,
+                                                  @RequestParam("solved") Boolean solved , @RequestParam("userID") Long userID, Pageable pageable){
+        if(!easy && !medium && !hard && !solved){
             return assignmentService.listAssignmentByTopic(languageId, pageable);
         }
-        return assignmentService.filterAssignmentTopic(easy,medium,hard,languageId,pageable);
+        return assignmentService.filterAssignmentTopic(easy,medium,hard,languageId, solved, userID, pageable);
     }
 }
