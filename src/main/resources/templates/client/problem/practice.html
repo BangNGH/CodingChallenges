@@ -55,27 +55,27 @@
                                          src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                                 </div>
                                 <div class="course__teacher-info-3">
-                                    <h5>Author</h5>
+                                    <h5>Tạo bởi</h5>
                                     <p><a href="#" th:text="${challenge.lecturer.fullName}"></a></p>
                                 </div>
                                 <div style="margin-left: 40px" th:if="${challenge.level.id != null}"
                                      class="course__teacher-info-3">
-                                    <h5>Difficulty</h5>
+                                    <h5>Độ khó</h5>
                                     <p th:text="${challenge.level.name}"></p>
                                 </div>
                                 <div style="margin-left: 40px" th:if="${challenge.getSubmissions() != null}"
                                      class="course__teacher-info-3">
-                                    <h5>Submitted By</h5>
+                                    <h5>Đã nộp</h5>
                                     <p>[[${challenge.getSubmissions().size()}]] submitted</p>
                                 </div>
                                 <div style="margin-left: 40px" th:if="${challenge.memoryLimit != 0}"
                                      class="course__teacher-info-3">
-                                    <h5>Memory Limit:</h5>
+                                    <h5>Bộ nhớ:</h5>
                                     <p>[[${challenge.memoryLimit}]] KB</p>
                                 </div>
                                 <div style="margin-left: 40px" th:if="${challenge.timeLimit != 0}"
                                      class="course__teacher-info-3">
-                                    <h5>Time Limit:</h5>
+                                    <h5>Thời gian</h5>
                                     <p>[[${challenge.timeLimit}]]s</p>
                                 </div>
                             </div>
@@ -86,19 +86,19 @@
                                     <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
                                             data-bs-target="#description" type="button" role="tab"
                                             aria-controls="description" aria-selected="true"><i
-                                            class="icon_ribbon_alt"></i> <span>Description</span></button>
+                                            class="icon_ribbon_alt"></i> <span>Mô tả</span></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link " id="submission-tab" data-bs-toggle="tab"
                                             data-bs-target="#submission" type="button" role="tab"
                                             aria-controls="submission" aria-selected="false"><i
-                                            class="icon_book_alt"></i> <span>Submissions</span></button>
+                                            class="icon_book_alt"></i> <span>Đã nộp</span></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="discussion-tab" data-bs-toggle="tab"
                                             data-bs-target="#discussion" type="button" role="tab"
                                             aria-controls="discussion"
-                                            aria-selected="false"><i class="icon_star_alt"></i> <span>Discussions</span>
+                                            aria-selected="false"><i class="icon_star_alt"></i> <span>Thảo luận</span>
                                     </button>
                                 </li>
                                 <li th:if="${challenge.getSolution() != null}" class="nav-item" role="presentation">
@@ -131,7 +131,7 @@
                                            th:value="${challenge.memoryLimit}">
 
                                     <div class="course__description">
-                                        <h3 style="font-size: 23px">Description:</h3>
+                                        <h3 style="font-size: 23px">Mô tả:</h3>
                                         <p th:utext="${challenge.description}"></p>
                                     </div>
                                     <div class="col">

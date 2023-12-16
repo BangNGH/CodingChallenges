@@ -12,10 +12,10 @@ function assignmentContent(assignment){
                                             <div class="course__content">
                                                 <div class="course__meta d-flex align-items-center justify-content-between">
                                                     <div class="course__lesson">
-                                                        <span><i class="far fa-book-alt"></i>Max score: ${assignment.max_score} </span>
+                                                        <span><i class="far fa-book-alt"></i>Điểm tối đa: ${assignment.max_score} </span>
                                                     </div>
                                                     <div class="course__rating">
-                                                        <span><i class="icon_star"></i>Success Rate: ${assignment.successRate}%</span>
+                                                        <span><i class="icon_star"></i>Tỉ lệ thành công: ${assignment.successRate}%</span>
                                                     </div>
                                                 </div>
                                                 <h3 style="margin-top: 20px; font-size: 23px !important;" class="course__title"><a href="/problemSolving/${assignment.id}">${assignment.title}</a></h3>
@@ -33,7 +33,7 @@ function assignmentContent(assignment){
                                                 </div>
                                                 <div class="course__btn">
                                                     <a href="/problemSolving/${assignment.id}" class="link-btn">
-                                                        Solve Challenge
+                                                        Giải bài tập
                                                         <i class="far fa-arrow-right"></i>
                                                         <i class="far fa-arrow-right"></i>
                                                     </a>
