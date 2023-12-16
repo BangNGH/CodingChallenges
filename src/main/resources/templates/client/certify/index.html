@@ -72,10 +72,10 @@
                                     <div class="course__content">
                                        <div class="course__meta d-flex align-items-center justify-content-between">
                                           <div class="course__lesson">
-                                             <span><i class="far fa-book-alt"></i>[[${assignment_kit.time}]] minutes</span>
+                                             <span><i class="far fa-book-alt"></i>[[${assignment_kit.time}]] phút</span>
                                           </div>
                                           <div class="course__rating">
-                                             <span th:text="${assignment_kit.getAssignmentKitSubmissions().size()}+' join'"></span>
+                                             <span th:text="${assignment_kit.getAssignmentKitSubmissions().size()}+' tham gia'"></span>
                                           </div>
                                        </div>
                                        <h3 style="margin-bottom: 0px;text-align: center" class="course__title"><a th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" th:text="${assignment_kit.title}"></a></h3>
@@ -144,7 +144,7 @@
                   <div class="course__sidebar pl-70">
                      <div class="course__sidebar-search mb-50">
                         <form action="#">
-                           <input type="text" placeholder="Search for courses...">
+                           <input type="text" placeholder="Tìm kiếm chứng chỉ...">
                            <button type="submit">
                               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 584.4 584.4" style="enable-background:new 0 0 584.4 584.4;" xml:space="preserve">
                                     <g>
@@ -159,36 +159,18 @@
                      </div>
                      <div class="course__sidebar-widget grey-bg">
                         <div class="course__sidebar-info">
-                           <h3 class="course__sidebar-title">Categories</h3>
+                           <h3 class="course__sidebar-title">Trạng Thái</h3>
                            <ul>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-eng">
-                                    <label class="m-check-label" for="m-eng">English  (6)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-edu">
-                                    <label class="m-check-label" for="m-edu">Education  (8)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-bus">
-                                    <label class="m-check-label" for="m-bus">Business  (5)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                     <input class="m-check-input" type="checkbox" id="m-design">
-                                    <label class="m-check-label" for="m-design">UX Design  (3)</label>
+                                    <label class="m-check-label" for="m-design">Bài đã làm</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                     <input class="m-check-input" type="checkbox" id="m-math">
-                                    <label class="m-check-label" for="m-math">Mathematics  (3)</label>
+                                    <label class="m-check-label" for="m-math">Bài chưa làm</label>
                                  </div>
                               </li>
                            </ul>
@@ -207,69 +189,25 @@
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                     <input class="m-check-input" type="checkbox" id="m-eng-2">
-                                    <label class="m-check-label" for="m-eng-2">English</label>
+                                    <label class="m-check-label" for="m-eng-2">Java</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
                                     <input class="m-check-input" type="checkbox" id="m-russ">
-                                    <label class="m-check-label" for="m-russ">Russian</label>
-                                 </div>
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
-                     <div class="course__sidebar-widget grey-bg">
-                        <div class="course__sidebar-info">
-                           <h3 class="course__sidebar-title">Price Filter</h3>
-                           <ul>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-all-course">
-                                    <label class="m-check-label" for="m-all-course">All  (204)</label>
+                                    <label class="m-check-label" for="m-russ">C#</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-free">
-                                    <label class="m-check-label" for="m-free">Free Courses  (36)</label>
+                                    <input class="m-check-input" type="checkbox">
+                                    <label class="m-check-label" for="m-russ">Python</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-premium">
-                                    <label class="m-check-label" for="m-premium">Premium Courses  (184)</label>
-                                 </div>
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
-                     <div class="course__sidebar-widget grey-bg">
-                        <div class="course__sidebar-info">
-                           <h3 class="course__sidebar-title">Skill level</h3>
-                           <ul>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-level">
-                                    <label class="m-check-label" for="m-level">All Levels  (50)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-beginner">
-                                    <label class="m-check-label" for="m-beginner">Beginner  (32)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-intermediate">
-                                    <label class="m-check-label" for="m-intermediate">Intermediate  (17)</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-expert">
-                                    <label class="m-check-label" for="m-expert">Expert  (2)</label>
+                                    <input class="m-check-input" type="checkbox">
+                                    <label class="m-check-label" for="m-russ">C++</label>
                                  </div>
                               </li>
                            </ul>

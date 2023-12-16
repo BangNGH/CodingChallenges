@@ -164,4 +164,5 @@ public class UserServices {
     public List<Object[]> getLanguagePercentageByStudentId(Long id) {
         return userRepository.getLanguagePercentageByStudentId(id);
     }
+
 }

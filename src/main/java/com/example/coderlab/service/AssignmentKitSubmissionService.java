@@ -135,4 +135,17 @@ public class AssignmentKitSubmissionService {
             assignmentKitSubmissionRepo.save(assignmentKitSubmission);
         }
     }
+
+    public List<AssignmentKit> getCertifyPassed(Long id) {
+        List<Long> assignmentsKitID= assignmentKitSubmissionRepo.getCertifyPassed(id);
+        List<AssignmentKit> certifyPassedList=new ArrayList<AssignmentKit>();
+        for (Long assignmentKitID : assignmentsKitID
+        ) {
+            Optional<AssignmentKit> foundAssignmentKit = assignmentKitService.findById(assignmentKitID);
+            if (foundAssignmentKit.isPresent()) {
+                certifyPassedList.add(foundAssignmentKit.get());
+            }
+        }
+        return certifyPassedList;
+    }
 }

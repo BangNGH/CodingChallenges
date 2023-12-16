@@ -1,10 +1,10 @@
 package com.example.coderlab.controller.client;
 
+import com.example.coderlab.entity.AssignmentKit;
+import com.example.coderlab.entity.AssignmentKitSubmission;
 import com.example.coderlab.entity.Language;
 import com.example.coderlab.entity.UserEntity;
-import com.example.coderlab.service.AssignmentService;
-import com.example.coderlab.service.LanguageService;
-import com.example.coderlab.service.UserServices;
+import com.example.coderlab.service.*;
 import com.example.coderlab.dto.LanguagePercentageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,6 +30,8 @@ public class UserController {
     private LanguageService languageService;
     @Autowired
     private AssignmentService assignmentService;
+    @Autowired
+    private AssignmentKitSubmissionService assignmentKitSubmissionService;
     public UserEntity getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -52,6 +54,7 @@ public class UserController {
         }
         List<Object[]> results = userServices.getLanguagePercentageByStudentId(user.getId());
         List<LanguagePercentageDTO> language_percentages = new ArrayList<LanguagePercentageDTO>();
+        List<AssignmentKit> certifyPassedList = assignmentKitSubmissionService.getCertifyPassed(user.getId());
         for (Object[] result : results) {
             LanguagePercentageDTO language_percentage = new LanguagePercentageDTO();
             Long languageId = (Long) result[0];
@@ -66,6 +69,10 @@ public class UserController {
             language_percentages.add(language_percentage);
         }
 
+        model.addAttribute("user", user);
+        if (!certifyPassedList.isEmpty()) {
+            model.addAttribute("certifyPassedList", certifyPassedList);
+        }
         model.addAttribute("user", user);
         model.addAttribute("language_percentages", language_percentages);
         return "client/user/profile";

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/home_layout}"
+      layout:decorate="~{layouts/chatbox_layout}"
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
@@ -712,24 +712,26 @@
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
-    <script>
+
+    <script th:inline="javascript">
+        const myApiKey = '6984bdd544msh3d3fdce8861538fp11c2f0jsnd28103cc1b98';
         const chatbotToggler = document.querySelector(".chatbot-toggler");
         const closeBtn = document.querySelector(".close-btn");
         closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
-        chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));</script>
-    <script th:inline="javascript">
-        const myApiKey = '6984bdd544msh3d3fdce8861538fp11c2f0jsnd28103cc1b98';
-        const createChatLi = (message, className) => {
-            // Create a chat <li> element with passed message and className
+        chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+        function addResponseGPT(result) {
+            console.log(result.answer);
+            const loading_gpt = document.querySelector(".loading_gpt");
+            loading_gpt.remove();
+
             const chatLi = document.createElement("li");
-            chatLi.classList.add(`${className}`);
-            let chatContent = className === "outgoing" ? `<p style="white-space: break-spaces;
-                        padding: 15px;"></p>` : `<span class="material-symbols-outlined">smart_toy</span><p style="white-space: break-spaces;
-                        padding: 15px;></p>`;
-            chatLi.innerHTML = chatContent;
-            chatLi.querySelector("p").textContent = message;
-            return chatLi; // return chat <li> element
+            chatLi.classList.add("incoming");
+            let chatContent = `<p style="white-space: break-spaces;padding: 15px;">`+ result.answer +`</p>`;
+            chatLi.innerHTML += chatContent;
+            const chatbox = document.querySelector(".chatbox");
+            chatbox.appendChild(chatLi);
         }
+
         async function explainCode(selectedCode) {
             const prompt_text = "Hãy giải thích về cách hoạt động của đoạn mã nguồn sau đây:"
             const source = selectedCode;
@@ -750,13 +752,10 @@
             try {
                 const response = await fetch(url, options);
                 const result = await response.json();
-                console.log(result.answer);
-                const incomingChatLi = createChatLi("Thinking...", "incoming");
-                const chatbox = document.querySelector(".chatbox");
-                chatbox.appendChild(incomingChatLi);
-                const messageElement = incomingChatLi.querySelector("p");
-                messageElement.textContent = result.answer;
-
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -781,12 +780,10 @@
             try {
                 const response = await fetch(url, options);
                 const result = await response.json();
-                console.log(result.answer);
-                const incomingChatLi = createChatLi("Thinking...", "incoming");
-                const chatbox = document.querySelector(".chatbox");
-                chatbox.appendChild(incomingChatLi);
-                const messageElement = incomingChatLi.querySelector("p");
-                messageElement.textContent = result.answer;
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
 
             } catch (error) {
                 console.error(error);
@@ -812,12 +809,10 @@
             try {
                 const response = await fetch(url, options);
                 const result = await response.json();
-                console.log(result.answer);
-                const incomingChatLi = createChatLi("Thinking...", "incoming");
-                const chatbox = document.querySelector(".chatbox");
-                chatbox.appendChild(incomingChatLi);
-                const messageElement = incomingChatLi.querySelector("p");
-                messageElement.textContent = result.answer;
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
 
             } catch (error) {
                 console.error(error);
@@ -843,12 +838,10 @@
             try {
                 const response = await fetch(url, options);
                 const result = await response.json();
-                console.log(result.answer);
-                const incomingChatLi = createChatLi("Thinking...", "incoming");
-                const chatbox = document.querySelector(".chatbox");
-                chatbox.appendChild(incomingChatLi);
-                const messageElement = incomingChatLi.querySelector("p");
-                messageElement.textContent = result.answer;
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
 
             } catch (error) {
                 console.error(error);
@@ -889,8 +882,20 @@
             // Ẩn menu ngữ cảnh khi người dùng nhấp chuột trái
             $("#context-menu").removeClass("show").hide();
         });
+        function addLoadingGPT() {
+            chatbotToggler.click();
+            const chatLi = document.createElement("li");
+            chatLi.classList.add("incoming");
+            chatLi.classList.add("loading_gpt");
+            let chatContent = '<p style="white-space: break-spaces;padding: 15px;">Đang phân tích code của bạn...</p> ';
+            chatLi.innerHTML += chatContent;
+            const chatbox = document.querySelector(".chatbox");
+            chatbox.appendChild(chatLi);
+        }
         // Bắt sự kiện click trên tùy chọn "explain this code"
         $("#explain").on("click", function () {
+            addLoadingGPT();
+
             // Lấy văn bản được chọn trên trình soạn thảo
             var selectedText = editor.getSelection();
             if (selectedText == "") {
@@ -899,6 +904,7 @@
             explainCode(selectedText);
         });
         $("#findBugs").on("click", function () {
+            addLoadingGPT();
             var selectedText = editor.getSelection();
             if (selectedText == "") {
                 selectedText = editor.getValue();
@@ -907,6 +913,7 @@
             findBugs(selectedText);
         });
         $("#addComments").on("click", function () {
+            addLoadingGPT();
             var selectedText = editor.getSelection();
             if (selectedText == "") {
                 selectedText = editor.getValue();
@@ -914,6 +921,7 @@
             addComments(selectedText);
         });
         $("#optimize").on("click", function () {
+            addLoadingGPT();
             var selectedText = editor.getSelection();
             if (selectedText == "") {
                 selectedText = editor.getValue();

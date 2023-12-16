@@ -30,19 +30,19 @@ public class LanguageService {
 
             java_language.setName("Java");
             java_language.setValue("text/x-java");
-            java_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+            java_language.setDescription(" Java là một ngôn ngữ miễn phí và linh hoạt được sử dụng rộng rãi!");
 
             csharp_language.setName("C#");
-            csharp_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+            csharp_language.setDescription("C# là một ngôn ngữ lập trình hướng đối tượng đa năng, là khởi đầu cho .NET");
             csharp_language.setValue("text/x-csharp");
 
             python_language.setName("Python");
             python_language.setValue("text/x-python");
-            python_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+            python_language.setDescription("Python là một ngôn ngữ lập trình bậc cao cho các mục đích lập trình đa năng!");
 
             cpp_language.setName("C++");
             cpp_language.setValue("text/x-c++src");
-            cpp_language.setDescription("Problem-solving skills can be learned and improved with practice.!");
+            cpp_language.setDescription("C++ là một ngôn ngữ lập trình bậc cao   là phần mở rộng của ngôn ngữ C!");
 
             languageRepository.save(java_language);
             languageRepository.save(csharp_language);

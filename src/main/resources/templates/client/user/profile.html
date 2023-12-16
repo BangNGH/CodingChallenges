@@ -52,15 +52,14 @@
                 <div class="card card-shadow mb-4">
                   <div class="card-header border-0">
                     <div class="custom-title-wrap bar-success">
-                      <div class="custom-title">Badges</div>
+                      <div class="custom-title">Chứng chỉ đã nhận</div>
                     </div>
                   </div>
-                  <div class="card-body" style="text-align: center">
+                  <div th:if="${certifyPassedList}" class="card-body" th:each ="certify : ${certifyPassedList}" style="text-align: center">
                     <div class="media text-muted mb-3">
                       <i class="ti-medall-alt" style="color: rgb(240 193 56);font-size: 30px;"></i>
-
                         <a href="#" class="d-block text-secondary">
-                          <strong class="">Java</strong>
+                          <strong class="" th:text="${certify.title}"></strong>
                         </a>
 
                       <span>
@@ -71,9 +70,9 @@
                               <i class="fa fa-star text-warning"></i>
                             </span>
                     </div>
-                    <div class="text-center mt-4">
-                      <a href="#" class="btn btn-sm btn-pill btn-outline-success">View All</a>
-                    </div>
+                  </div>
+                  <div class="text-center mt-4">
+                    <a href="#" class="btn btn-sm btn-pill btn-outline-success">Xem thêm</a>
                   </div>
                 </div>
 
@@ -122,9 +121,6 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="text-center mt-4">
-                      <a href="#" class="btn btn-sm btn-pill btn-outline-primary">View All</a>
                     </div>
                   </div>
                 </div>

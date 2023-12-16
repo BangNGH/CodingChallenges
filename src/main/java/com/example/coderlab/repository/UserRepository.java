@@ -41,7 +41,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "  GROUP BY s.student.id, s.assignment.id) AS sub")
     Integer getSovledAssignment(Long id);
 
-
     @Query(value = "SELECT s.language_id as language_id, (COUNT(*) * 100 / SUM(COUNT(*)) OVER (PARTITION BY s.student_id)) AS percentage \n" +
             "FROM submissions AS s\n" +
             "WHERE s.is_success = true and s.student_id = ?1 and s.language_id is not null\n" +
