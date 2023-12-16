@@ -60,7 +60,7 @@
                             </div>
                             <!-- progressbar -->
                             <ul id="progressbar">
-                                <li class="active" id="account"><strong>Problem details</strong></li>
+                                <li class="active" id="account"><strong>Chi tiết bài tập</strong></li>
                                 <li id="personal"><strong>Test cases</strong></li>
                             </ul>
                             <!--problem details -->
@@ -70,9 +70,9 @@
                                         <input name="isCertificateQuestion"
                                                style="width: unset; margin-bottom: unset; cursor: pointer"
                                                type="checkbox" value="true" class="iCheck-flat-green">
-                                        <label class="control-label">Mark as Certificate Question</label>
+                                        <label class="control-label">Đánh dấu là câu hỏi cho giấy chứng nhận</label>
                                     </div>
-                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Question name: <span
+                                    <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Tên bài tập: <span
                                             class="text-danger">*</span></p>
                                     <div style="margin-bottom: 25px">
                                         <input required class="form-validate" name="title" id="title"
@@ -81,22 +81,22 @@
                                     </div>
                                     <div style="margin-bottom: 25px" class="row">
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Time
-                                                limit/s: <span class="text-warning">(Optional)</span></p>
+                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">Thời gian
+                                                giới hạn/s: <span class="text-warning">(Optional)</span></p>
                                             <input style="margin-bottom: unset" name="timeLimit" class="form-validate"
-                                                   placeholder="Time limit">
+                                                   placeholder="Thời gian giới hạn">
                                         </div>
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Memory
-                                                limit/KB: <span class="text-warning">(Optional)</span></p>
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Bộ nhớ
+                                                giới hạn/KB: <span class="text-warning">(Optional)</span></p>
                                             <input style="margin-bottom: unset" name="memoryLimit" min="2048"
-                                                   class="form-validate" placeholder="Memory limit">
+                                                   class="form-validate" placeholder="Giới hạn bộ nhớ">
                                         </div>
                                     </div>
                                     <div style="margin-bottom: 25px" class="row">
                                         <div class="col">
                                             <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">
-                                                Difficulty</p>
+                                                Độ khó</p>
                                             <select style="height: 45px; cursor: pointer; font-size: 15px"
                                                     class="form-control select2" name="level">
                                                 <option th:each="level: ${levels}" th:value="${level.id}"
@@ -106,7 +106,7 @@
                                     </div>
                                     <div style="margin-bottom: 25px" class="row">
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Language
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Ngôn Ngữ
                                                 <span class="text-warning">(Optional)</span></p>
                                             <select style="height: 45px; cursor: pointer; font-size: 15px" id="selectBox" onchange="displayEditor()"
                                                     class="form-control select2" name="language-selected">
@@ -121,7 +121,7 @@
                                             <div class="card card-shadow mb-4">
                                                 <div class="card-header border-0">
                                                     <div class="custom-title-wrap bar-primary">
-                                                        <div class="custom-title">Problem Description: <span
+                                                        <div class="custom-title">Mô tả bài toán: <span
                                                                 class="text-danger">*</span></div>
                                                     </div>
                                                 </div>
@@ -166,9 +166,10 @@
                                     </script>
                                 </div>
                                 <input style="border-radius: 5px" id="step-one" type="button" name="next"
-                                       class="next action-button" value="Next Step"/>
+                                       class="next action-button" value="Tiếp theo"/>
                             </fieldset>
                             <!--                            tescases-->
+                            <fieldset>
                             <fieldset>
                                 <div class="form-card">
                                     <h2 class="fs-title">Testcases</h2>
@@ -223,9 +224,9 @@
                                 </div>
                                 <input style="border-radius: 5px" type="button" name="previous"
                                        class="previous action-button-previous"
-                                       value="Previous"/>
+                                       value="Trở lại"/>
                                 <input style="border-radius: 5px" type="submit" name="next" class="next action-button"
-                                       value="Save"/>
+                                       value="Lưu"/>
                             </fieldset>
                         </form>
                     </div>
