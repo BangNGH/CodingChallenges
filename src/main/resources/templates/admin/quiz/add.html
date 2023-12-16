@@ -27,7 +27,7 @@
                     <div style="margin-bottom: 25px" class="row">
                         <div class="col">
                             <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">
-                                Difficulty</p>
+                            Độ khó</p>
                             <select th:field="*{level}" style="height: 45px; cursor: pointer; font-size: 15px"
                                     class="form-control select2" name="level">
                                 <option th:each="level: ${levels}" th:value="${level.id}"
@@ -37,7 +37,7 @@
                     </div>
                     <div style="margin-bottom: 25px" class="row">
                         <div class="col">
-                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Language
+                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Ngôn ngữ
                                 <span class="text-danger">(*)</span></p>
                             <select th:field="*{language}" style="height: 45px; cursor: pointer; font-size: 15px" id="selectBox"
                                     class="form-control select2" name="language-selected">
@@ -47,34 +47,34 @@
                             </select>
                         </div>
                     </div>
-                    <h3 class="mb-3 mt-1"><input required name="question" th:field="*{question}" type="text" placeholder="Enter question for this quiz..." style="width: 100%;border: none;padding: 5px;"></h3>
+                    <h3 class="mb-3 mt-1"><input required name="question" th:field="*{question}" type="text" placeholder="Nhập câu hỏi cho bài trắc nghiệm" style="width: 100%;border: none;padding: 5px;"></h3>
                     <!-- list group -->
                     <div class="list-group">
                         <div class="list-group-item list-group-item-action " aria-current="true">
                             <div class="form-check">
                                 <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerA" name="checkboxAnswer">
-                                <input th:field="*{answerA}" required name="answerA" type="text" placeholder="Enter answer A for this choice here" style="width: 100%;border: none;padding: 5px;">
+                                <input th:field="*{answerA}" required name="answerA" type="text" placeholder="Câu A" style="width: 100%;border: none;padding: 5px;">
                             </div>
                         </div>
                         <!-- list group -->
                         <div class="list-group-item list-group-item-action " aria-current="true">
                             <div class="form-check">
                                 <input class="form-check-input" required th:field="*{answer}" value="answerB" type="radio" name="checkboxAnswer">
-                                <input required th:field="*{answerB}" name="answerB" type="text" placeholder="Enter answer B for this choice here" style="width: 100%;border: none;padding: 5px;">
+                                <input required th:field="*{answerB}" name="answerB" type="text" placeholder="Câu B" style="width: 100%;border: none;padding: 5px;">
                             </div>
                         </div>
                         <!-- list group -->
                         <div class="list-group-item list-group-item-action " aria-current="true">
                             <div class="form-check">
                                 <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerC" name="checkboxAnswer">
-                                <input required th:field="*{answerC}" name="answerC" type="text" placeholder="Enter answer C for this choice here" style="width: 100%;border: none;padding: 5px;">
+                                <input required th:field="*{answerC}" name="answerC" type="text" placeholder="Câu C" style="width: 100%;border: none;padding: 5px;">
                             </div>
                         </div>
                         <!-- list group -->
                         <div class="list-group-item list-group-item-action " aria-current="true">
                             <div class="form-check">
                                 <input class="form-check-input" required th:field="*{answer}" type="radio" value="answerD" name="checkboxAnswer">
-                                <input required name="answerD" th:field="*{answerD}" type="text" placeholder="Enter answer D for this choice here" style="width: 100%;border: none;padding: 5px;">
+                                <input required name="answerD" th:field="*{answerD}" type="text" placeholder="Câu D" style="width: 100%;border: none;padding: 5px;">
                             </div>
                         </div>
 
@@ -82,7 +82,7 @@
                     <button type="submit" class="btn btn-outline-primary" style="
         float: right;
         margin-top: 20px;
-    ">Save Question</button>
+    ">Lưu</button>
                 </form>
             </div>
 
