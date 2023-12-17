@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/client_layout}"
+      layout:decorate="~{layouts/chatbox_layout}"
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +14,12 @@
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/night.css}">
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
     <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"/>
+    <link rel="stylesheet" th:href="@{/client_assets/css/chatbot.css}">
 
     <style>
         .CodeMirror {
@@ -51,39 +57,20 @@
             <img class="page-title-shape-6" th:src="@{/client_assets/img/page-title/page-title-shape-6.png}" alt="">
             <img class="page-title-shape-7" th:src="@{/client_assets/img/page-title/page-title-shape-4.png}" alt="">
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xxl-8 col-xl-8 col-lg-8">
-                    <div class="course__wrapper">
-                        <div class="page__title-content mb-25">
-                            <div class="page__title-breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-<!--                                        <li class="breadcrumb-item"><a href="course-grid.html">Courses</a></li>-->
-                                        <li class="breadcrumb-item active" aria-current="page">Online compiler</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                            <span class="page__title-pre">Development</span>
-                            <h5 class="page__title-3">Online Compiler</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
     <div style="margin-bottom: 70px !important;" class="row m-3">
         <div class="col">
             <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
                 <div>
-                    <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
-                    <select style="cursor: pointer;" class="form-select" id="inlineFormSelectPref">
-                        <option data-imagesrc="/client_assets/lang-icon/cpp.png" selected value="cpp">C-C++</option>
-                        <option data-imagesrc="/client_assets/lang-icon/java.png" value="java">Java</option>
-                        <option data-imagesrc="/client_assets/lang-icon/csharp.png" value="cs">C#</option>
-                        <option data-imagesrc="/client_assets/lang-icon/python.png" value="python">Python</option>
+                    <label class="visually-hidden"
+                           th:for="${'inlineFormSelectPref'}">Preference</label>
+                    <select style="cursor: pointer;" class="form-select"
+                            th:id="${'inlineFormSelectPref'}">
+                        <option th:each="language :${languages}" th:text="${language.name}"
+                                th:value="${language.value}">
+                        </option>
                     </select>
+
                 </div>
                 <div>
                     <!-- <label style="color: #fff;" for="theme">Theme</label> -->
@@ -103,20 +90,42 @@
                 <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
             </div>
         </div>
-        <div class="col d-flex flex-column rounded bg-dark px-4">
-            <div class="h-50">
-                <label for="Input" class="text-light mt-4 mb-2">Input</label>
-                <textarea type="text" id="input" class="form-control h-75" aria-label="Last name"></textarea>
+        <section id="excuting" style="display: none"
+                 class="events__area pt-115 pb-120 p-relative">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-4 offset-xxl-4">
+                        <div class="section__title-wrapper mb-60 text-center">
+                            <h2 class="section__title" id="loadingText">
+                                                            <span style="color: #002795"
+                                                                  class="yellow-bg yellow-bg-big"> đang thực thi...</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div style="position: relative;" class="h-50">
-                <label for="Output" class="text-light mb-2">Output</label>
-                <textarea type="text" id="output" class="form-control h-75" aria-label="Last name"></textarea>
-                <div id="water-loading" class="water-cup"></div>
-            </div>
+        </section>
+        <div>
+                <label for="Input" class="text-light mt-4 mb-2"></label>
+                <textarea type="text" id="input" placeholder="Nhập input (nếu có)" class="form-control h-75" aria-label="Last name"></textarea>
         </div>
     </div>
     <!-- page title area end -->
-
+    <button class="chatbot-toggler">
+        <span class="material-symbols-rounded">mode_comment</span>
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="chatbot">
+        <header>
+            <h2 style="font-size: 20px; color: #fff">Code Helper</h2>
+            <span class="close-btn material-symbols-outlined">close</span>
+        </header>
+        <ul class="chatbox">
+            <li class="incoming">
+                <p style=" white-space: break-spaces; padding: 15px;">Xin chào👋<br>Tôi ở đây để giúp bạn hoàn thành bài tập này tốt nhất.</p>
+            </li>
+        </ul>
+    </div>
 
     <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
     <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
@@ -125,38 +134,248 @@
     <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
     <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
     <script th:inline="javascript">
+        const myApiKey = '6984bdd544msh3d3fdce8861538fp11c2f0jsnd28103cc1b98';
+        const chatbotToggler = document.querySelector(".chatbot-toggler");
+        const closeBtn = document.querySelector(".close-btn");
+        closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+        chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+        function addResponseGPT(result) {
+            console.log(result.answer);
+            const loading_gpt = document.querySelector(".loading_gpt");
+            loading_gpt.remove();
+
+            const chatLi = document.createElement("li");
+            chatLi.classList.add("incoming");
+            let chatContent = `<p style="white-space: break-spaces;padding: 15px;">`+ result.answer +`</p>`;
+            chatLi.innerHTML += chatContent;
+            const chatbox = document.querySelector(".chatbox");
+            chatbox.appendChild(chatLi);
+        }
+
+        async function explainCode(selectedCode) {
+            const prompt_text = "Hãy giải thích về cách hoạt động của đoạn mã nguồn sau đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function addComments(selectedCode) {
+            const prompt_text = "Hãy thêm vào đoạn mã sau đây với các comment để giải thích từng phần:"
+            const source =selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function findBugs(selectedCode) {
+            const prompt_text = "Hãy tìm những lỗi có thể xuất hiện trong đoạn code dưới đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function optimize(selectedCode) {
+            const prompt_text = "Hãy đưa ra những gợi ý để có thể cải thiện hiệu suất của đoạn mã nguồn sau đây:"
+            const source = selectedCode;
+            const prompt_send = prompt_text + source;
+            const url = 'https://simple-chatgpt-api.p.rapidapi.com/ask';
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RapidAPI-Key': myApiKey,
+                    'X-RapidAPI-Host': 'simple-chatgpt-api.p.rapidapi.com'
+                },
+                body: JSON.stringify({
+                    question: prompt_send
+                })
+            };
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                console.log(result);
+                if (result){
+                    addResponseGPT(result);
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+
+        // Tạo một menu ngữ cảnh tùy chỉnh với một tùy chọn "explain this code"
+        var contextMenu = "<div class='dropdown-menu dropdown-menu-sm' id='context-menu'>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='findBugs'>Tìm lỗi</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='explain'>Giải thích code</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='addComments'>Thêm chú thích</a>" +
+            "<a class='dropdown-item' style='cursor: pointer' id='optimize'>Tối ưu code</a>" +
+            "</div>";
+        // Thêm menu ngữ cảnh vào trang web
+        $("body").append(contextMenu);
+
+
         var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
             mode: "text/x-c++src",
             theme: "dracula",
             lineNumbers: true,
             autoCloseBrackets: true,
-        })
+        });
+        $(".CodeMirror").on("contextmenu", function (e) {
+            // Lấy vị trí của con trỏ chuột
+            var top = e.pageY - 10;
+            var left = e.pageX - 90;
+            // Hiển thị menu ngữ cảnh tại vị trí đó
+            $("#context-menu").css({
+                display: "block",
+                top: top,
+                left: left
+            }).addClass("show");
+            // Ngăn chặn menu ngữ cảnh mặc định của trình duyệt
+            return false;
+        }).on("click", function () {
+            // Ẩn menu ngữ cảnh khi người dùng nhấp chuột trái
+            $("#context-menu").removeClass("show").hide();
+        });
+        function addLoadingGPT() {
+            chatbotToggler.click();
+            const chatLi = document.createElement("li");
+            chatLi.classList.add("incoming");
+            chatLi.classList.add("loading_gpt");
+            let chatContent = '<p style="white-space: break-spaces;padding: 15px;">Đang phân tích code của bạn...</p> ';
+            chatLi.innerHTML += chatContent;
+            const chatbox = document.querySelector(".chatbox");
+            chatbox.appendChild(chatLi);
+        }
+        // Bắt sự kiện click trên tùy chọn "explain this code"
+        $("#explain").on("click", function () {
+            addLoadingGPT();
 
-        var width = window.innerWidth
-        editor.setSize(0.7 * width, "550")
+            // Lấy văn bản được chọn trên trình soạn thảo
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            explainCode(selectedText);
+        });
+        $("#findBugs").on("click", function () {
+            addLoadingGPT();
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+
+            findBugs(selectedText);
+        });
+        $("#addComments").on("click", function () {
+            addLoadingGPT();
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            addComments(selectedText);
+        });
+        $("#optimize").on("click", function () {
+            addLoadingGPT();
+            var selectedText = editor.getSelection();
+            if (selectedText == "") {
+                selectedText = editor.getValue();
+            }
+            optimize(selectedText);
+        });
+        editor.setSize("initial", "");
         var option;
+        var langague_name;
         $("#inlineFormSelectPref").ddslick({
             onSelected: function (selectedData) {
-                if (selectedData.selectedData.value === "java") {
-                    editor.setOption("mode", "text/x-java")
-                    editor.setOption("value", 'import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
-                    option = 91;
-                }
-                if (selectedData.selectedData.value === "cpp") {
+                if (selectedData.selectedData.value === "text/x-c++src") {
                     editor.setOption("mode", "text/x-c++src")
-                    editor.setOption("value", "#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                    editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
                     option = 54;
                 }
-                if (selectedData.selectedData.value === "cs") {
+                if (selectedData.selectedData.value === "text/x-java") {
+                    editor.setOption("mode", "text/x-java")
+                    editor.setValue('import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
+                    option = 91;
+                }
+                if (selectedData.selectedData.value === "text/x-csharp") {
                     editor.setOption("mode", "text/x-csharp");
                     editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
                     option = 51;
+
                 }
-                if (selectedData.selectedData.value === "python") {
+                if (selectedData.selectedData.value === "text/x-python") {
                     editor.setOption("mode", "text/x-python")
-                    editor.setOption("value", "print('Hello world!')")
+                    editor.setValue("print('Hello world!')")
                     option = 71;
                 }
+                langague_name = selectedData.selectedData.value;
+
             }
         });
     </script>

@@ -53,28 +53,31 @@ public class UserController {
             model.addAttribute("myTotalScore", 0);
         }
         List<Object[]> results = userServices.getLanguagePercentageByStudentId(user.getId());
-        List<LanguagePercentageDTO> language_percentages = new ArrayList<LanguagePercentageDTO>();
         List<AssignmentKit> certifyPassedList = assignmentKitSubmissionService.getCertifyPassed(user.getId());
-        for (Object[] result : results) {
-            LanguagePercentageDTO language_percentage = new LanguagePercentageDTO();
-            Long languageId = (Long) result[0];
-            Language foundLanguage = languageService.findByLanguageID(languageId).get();
-            language_percentage.setLanguage(foundLanguage);
+      if (!results.isEmpty()){
+          List<LanguagePercentageDTO> language_percentages = new ArrayList<LanguagePercentageDTO>();
+          for (Object[] result : results) {
+              LanguagePercentageDTO language_percentage = new LanguagePercentageDTO();
+              Long languageId = (Long) result[0];
+              Language foundLanguage = languageService.findByLanguageID(languageId).get();
+              language_percentage.setLanguage(foundLanguage);
 
-            BigDecimal percentage = (BigDecimal) result[1];
-            // Làm tròn percentage đến 2 chữ số thập phân bằng phương thức setScale
-            percentage = percentage.setScale(2, RoundingMode.HALF_UP);
-            // In ra giá trị hoặc làm gì đó với chúng
-            language_percentage.setPercent(String.valueOf(percentage)+"%");
-            language_percentages.add(language_percentage);
-        }
+              BigDecimal percentage = (BigDecimal) result[1];
+              // Làm tròn percentage đến 2 chữ số thập phân bằng phương thức setScale
+              percentage = percentage.setScale(2, RoundingMode.HALF_UP);
+              // In ra giá trị hoặc làm gì đó với chúng
+              language_percentage.setPercent(String.valueOf(percentage)+"%");
+              language_percentages.add(language_percentage);
+          }
+          model.addAttribute("language_percentages", language_percentages);
+      }
+
 
         model.addAttribute("user", user);
         if (!certifyPassedList.isEmpty()) {
             model.addAttribute("certifyPassedList", certifyPassedList);
         }
         model.addAttribute("user", user);
-        model.addAttribute("language_percentages", language_percentages);
         return "client/user/profile";
     }    @GetMapping("/settings")
     public String userSettings(Model model){

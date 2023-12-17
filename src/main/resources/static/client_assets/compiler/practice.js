@@ -367,7 +367,7 @@ run.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                     <pre class="pre-tags" style="font-weight: initial; text-align: center">Thành công</pre>
                                 </div>
                             </div>
@@ -459,7 +459,7 @@ run.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                     <pre class="pre-tags" style="font-weight: initial;text-align: center">Kết quả không trùng khớp</pre>
                                 </div>
                             </div>
@@ -564,7 +564,7 @@ run.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                      <pre style="font-weight: initial class="pre-tags line-numbers language-markup">
                                        <code class="language-markup">
                                          ${output}
@@ -635,7 +635,7 @@ run.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                               
                                   <pre class="pre-tags line-numbers language-markup">
                                        <code class="language-markup">
@@ -851,7 +851,7 @@ submit.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                     <pre class="pre-tags" style="font-weight: initial; text-align: center">Thành công</pre>
                                 </div>
                             </div>
@@ -958,7 +958,7 @@ submit.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                     <pre class="pre-tags" style="font-weight: initial; text-align: center">Kết quả không trùng khớp</pre>
                                 </div>
                             </div>
@@ -1070,7 +1070,7 @@ submit.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                 
                                         <pre style="font-weight: initial" class="pre-tags line-numbers language-markup">
                                        <code class="language-markup">
@@ -1152,7 +1152,7 @@ submit.addEventListener("click", async function () {
                         <li>
                             <div class="contact__info-item d-flex align-items-start mb-20">
                                 <div class="contact__info-text" style="width: 100%">
-                                    <h4 class="blue-grey">Compiler Message</h4>
+                                    <h4 class="blue-grey">Trạng Thái</h4>
                                  
                                      <pre style="font-weight: initial" class="pre-tags line-numbers language-markup">
                                        <code class="language-markup">

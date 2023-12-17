@@ -29,6 +29,11 @@ public class HomeController {
         model.addAttribute("languages", languageService.getAllLanguages());
         return "client/prepare/index";
     }
+    @GetMapping("/online-compiler")
+    public String onlineCompiler(Model model){
+        model.addAttribute("languages", languageService.getAllLanguages());
+        return "client/online_compiler/index";
+    }
     @GetMapping("/rank")
     public String rank(Model model){
         List<Object[]> rankByAssignment = submissionService.rankByAssignment();
@@ -57,8 +62,9 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(){
-        return "client/home/index";
+    public String home(Model model){
+        model.addAttribute("languages", languageService.getAllLanguages());
+        return "client/prepare/index";
     }
 
     @GetMapping("/login-access-account")
