@@ -30,8 +30,17 @@ public class AssignmentKit {
     private String title;
     // mins
     private int time;
+
     private Integer numberOfQuiz;
+    @OneToMany(mappedBy = "assignmentKit", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Question> quizQuestions;
+
     private Integer numberOfAssignment;
+
+    @OneToMany(mappedBy = "assignmentKit", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Assignment> assignments;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userAdded_id")
@@ -46,13 +55,6 @@ public class AssignmentKit {
     @JoinColumn(name = "language_id")
     @JsonIgnore
     private Language language;
-
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "assignment_kit_assignments",
-            joinColumns = @JoinColumn(name = "assignment_kit_id"),
-            inverseJoinColumns = @JoinColumn(name = "assignment_id"))
-    private Set<Assignment> assignments;
 
     @OneToMany(mappedBy = "assignment_kit", cascade = CascadeType.ALL)
     @JsonIgnore

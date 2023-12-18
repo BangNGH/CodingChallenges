@@ -49,4 +49,10 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
             "ORDER BY RAND()\n" +
             "LIMIT ?2", nativeQuery = true)
     List<Assignment> getRandomProblemSolving(Long id, Integer numberOfRandomAssignment);
+
+    @Query("SELECT p FROM Assignment p WHERE p.markAsCertificationQuestion is null")
+    List<Assignment> getPracticeAssignment();
+
+    @Query("SELECT p FROM Assignment p WHERE p.markAsCertificationQuestion is not null")
+    List<Assignment> getContestAssignment();
 }

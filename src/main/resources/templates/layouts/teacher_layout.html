@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+
+    <!--favicon icon-->
+    <link rel="icon" type="image/png" th:href="@{/admin_assets/img/favicon.html}">
+
+    <title>Home</title>
+    <!--web fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <!--bootstrap styles-->
+    <link th:href="@{/admin_assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!--icon font-->
+    <link th:href="@{/admin_assets/vendor/font-awesome/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/dashlab-icon/dashlab-icon.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/simple-line-icons/css/simple-line-icons.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/themify-icons/css/themify-icons.css}" rel="stylesheet">
+    <link th:href="@{/admin_assets/vendor/weather-icons/css/weather-icons.min.css}" rel="stylesheet">
+    <!--jquery ui-->
+    <link th:href="@{/admin_assets/vendor/jquery-ui/jquery-ui.min.css}" rel="stylesheet">
+    <!--iCheck-->
+    <link th:href="@{/admin_assets/vendor/icheck/skins/all.css}" rel="stylesheet">
+    <!--toastr-->
+    <link th:href="@{/admin_assets/vendor/toastr-master/toastr.css}" rel="stylesheet">
+    <!--custom styles-->
+    <link th:href="@{/admin_assets/css/main.css}" rel="stylesheet">
+
+    <!--multiple select-->
+    <link th:href="@{/admin_assets/vendor/multi-select/css/multi-select.css}" rel="stylesheet">
+</head>
+
+<body class="left-sidebar-fixed">
+<!--header start-->
+<header class="app-header">
+    <div class="branding-wrap">
+        <!--left nav toggler start-->
+        <a class="nav-link mt-2 float-left js_left-nav-toggler pos-fixed" href="javaScript:;">
+            <i class=" ti-align-right"></i>
+        </a>
+        <!--left nav toggler end-->
+
+        <!--brand start-->
+        <div class="navbar-brand pos-fixed">
+            <a class="" href="index.html">
+                <img th:src="@{/admin_assets/img/logo.png}" th:attr="srcset=@{/admin_assets/img/logo.jpg 2x}" alt="CodeLab">
+            </a>
+        </div>
+        <!--brand end-->
+    </div>
+
+    <!--header rightside links-->
+    <ul class="header-links hide-arrow navbar">
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" id="userNav" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="user-thumb">
+                    <img class="rounded-circle" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" alt=""/>
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userNav">
+                <div class="dropdown-item- px-3 py-2">
+                    <img class="rounded-circle mr-2" th:src="@{/admin_assets/img/avatar/avatar2.jpg}" width="35" alt=""/>
+                    <span class="text-muted">Administrator</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/">Trang Chủ</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Đăng Xuất</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:;" class="nav-link right_side_toggle">
+                <i class="icon-options-vertical"> </i>
+            </a>
+        </li>
+    </ul>
+    <!--/header rightside links-->
+</header>
+<!--search modal start-->
+<div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="text" class="form-control" placeholder="Search...">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--search modal start-->
+<!--header end-->
+
+<div class="app-body">
+
+        <div layout:fragment="content" class="container-fluid">
+
+        </div>
+
+</div>
+
+<!--basic scripts-->
+<script th:src="@{/admin_assets/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/popper.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery.dcjqaccordion.2.7.js}"></script>
+<script th:src="@{/admin_assets/vendor/jquery.nicescroll.min.js}"></script>
+
+<!--summernote-->
+<script th:src="@{/admin_assets/vendor/summernote/summernote-bs4.min.js}"></script>
+<!--init-->
+<script th:src="@{/admin_assets/vendor/js-init/init-summernote.js}"></script>
+<!--toastr-->
+<script th:src="@{/admin_assets/vendor/toastr-master/toastr.js}"></script>
+<!--init toastr-->
+<script th:src="@{/admin_assets/vendor/js-init/init-toastr.js}"></script>
+<!--validation-->
+<script type="text/javascript" th:src="@{/admin_assets/js/validate.js}"></script>
+<script type="text/javascript" th:src="@{/admin_assets/js/additional-methods.js}"></script>
+
+<!--multiple select-->
+<script th:src="@{/admin_assets/vendor/multi-select/js/jquery.multi-select.js}"></script>
+<script th:src="@{/admin_assets/vendor/multi-select/js/jquery.quicksearch.js}"></script>
+<!--init multiple select-->
+<script th:src="@{/admin_assets/vendor/js-init/init-multiple-select.js}"></script>
+
+<!--basic scripts initialization-->
+<script th:src="@{/admin_assets/js/scripts.js}"></script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating coding question</title>
+    <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">-->
+    <!--summernote-->
+    <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <style>
+        .modal-backdrop {
+            position: unset !important;
+        }
+
+        .modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+
+        .has-error {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+
+    <!-- end page title -->
+    <div class="row">
+        <div style="width: 50%; margin: auto">
+            <div style="background-color: #fff" class="card2">
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form id="msform" th:action="@{/admin/user-management/edit}" th:object="${user}" method="post">
+                            <input type="hidden" name="user_id" th:value="${user.id}"/>
+                            <fieldset>
+                                <div class="form-card">
+                                    <div class="d-flex">
+                                        <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Trạng Thái</p>
+                                        <div class="btn-group mb-4" style="margin-left: 50%">
+                                            <button type="button" class="btn btn-outline-primary" th:if="${user.isActive()}">Hoạt động</button>
+                                            <button type="button" class="btn btn-outline-primary" th:unless="${user.isActive()}">Chưa kích hoạt</button>
+                                            <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(92px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                <a class="dropdown-item" th:if="${user.isActive()}" href="#">Huỷ Kích Hoạt</a>
+                                                <a class="dropdown-item" th:unless="${user.isActive()}" href="#">Hoạt động</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Cấp Quyền</p>
+                                        <div class="dropdown" style="margin-left: 50%">
+                                            <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button"
+                                               id="dropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true"
+                                               aria-expanded="false">
+                                                Thêm Quyền
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                                                <a th:each="role:${roles}" class="dropdown-item" href="#"
+                                                   style="display: flex;">
+                                                    <input type="checkbox" th:id="'role_'+${role.id}"
+                                                           name="role[]" th:value="${role.id}">
+                                                    <label th:for="'role_'+${role.id}" th:text="${role.name}"></label>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <p>Đang chỉnh sửa tài khoản: <strong>[[${user.email}]] - [[${user.fullName}]]</strong></p>
+                                    <button type="submit" class="btn btn-outline-primary"
+                                            style="float: right;margin-top: 20px;margin-right: 8px;">Lưu
+                                    </button>
+
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

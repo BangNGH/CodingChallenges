@@ -30,7 +30,7 @@ public class Assignment_AdminController {
         if(model.containsAttribute("message")){
             model.addAttribute("message", model.getAttribute("message"));
         }
-        model.addAttribute("assignments", assignmentService.getAllAssignments());
+        model.addAttribute("assignments", assignmentService.getPracticeAssignment());
         return "admin/assignment/index";
     }
     @GetMapping("/add")

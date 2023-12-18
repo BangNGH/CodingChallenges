@@ -57,9 +57,10 @@ public class Assignment {
     @JoinColumn(name = "level_id")
     private Level level;
 
-    @ManyToMany(mappedBy = "assignments", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<AssignmentKit> assignmentKits;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assignmentKit_id")
+    private AssignmentKit assignmentKit;
+
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore

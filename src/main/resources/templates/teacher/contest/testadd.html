@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/teacher_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating coding question</title>
+    <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <style>
+        .modal-backdrop {
+            position: unset !important;
+        }
+        .modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+        .has-error{
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-12">
+            <div style="background-color: #fff" class="card2">
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form id="msform" th:action="@{/teacher/contest/add-assignment}" method="post">
+                            <input type="hidden" name="contest_id" th:value="${contest.id}">
+                            <fieldset>
+                                <div class="form-card">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Cuộc Thi <strong>(#[[${contest.id}]])</strong> :</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-validate" name="name" readonly th:value="${contest.contestName}" style="font-family: 'Montserrat'; margin-bottom: unset" type="text" placeholder="Tên cho cuộc thi này"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Giáo viên phụ trách:</label>
+                                        <div class="col-sm-9">
+                                            <p>
+                                                <th:block th:each="teacher : ${contest.teachers}" th:text="${' | '+teacher.fullName}"></th:block>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-10">
+                                        <label class="col-form-label col-sm-3">Số bài tập lập trình:</label>
+                                        <div class="col-sm-9">
+                                            <input min="1" name="no_assignment" id="no_assignment" required
+                                                   type="number"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-10">
+                                        <label class="col-form-label col-sm-3">Số câu hỏi trắc nghiệm:</label>
+                                        <div class="col-sm-9">
+                                            <input min="1" name="no_quiz" id="no_quiz" required type="number"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-10">
+                                        <label class="col-form-label col-sm-3">Chọn ngẫu nhiên câu hỏi:</label>
+                                        <div class="col-sm-9">
+                                            <label class="switch size-sm">
+                                                <input id="random_question" name="isRandomQuestion" type="checkbox" onclick="myFunction()">
+                                                <span class="slider round primary"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        function myFunction() {
+                                            var checkBox = document.getElementById("random_question");
+                                            var select = document.getElementById("select_assignment");
+                                            if (checkBox.checked == true){
+                                                select.style.display = "block";
+                                            } else {
+                                                select.style.display = "none";
+                                            }
+                                        }
+                                    </script>
+                                    <div id="select_assignment" style="display: none">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Ngân hàng đề:</label>
+                                        <div class="col-sm-9">
+                                            <div class="card card-shadow mb-4">
+                                                <div class="card-header border-0">
+                                                    <div class="custom-title-wrap bar-primary">
+                                                        <div class="custom-title">Chọn Bài Tập Code</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form class="picker-form">
+                                                        <div class="form-group row mb-5">
+                                                            <div class="col-lg-8 col-md-9 col-sm-12">
+                                                                <select name="assignments[]" class="multi-select" multiple="" id="my_multi_select3" >
+                                                                    <option th:each="assignment : ${assignments}" th:value="${assignment.id}" th:text="${assignment.title}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div> <div class="card card-shadow mb-4">
+                                                <div class="card-header border-0">
+                                                    <div class="custom-title-wrap bar-primary">
+                                                        <div class="custom-title">Chọn Câu Hỏi Trắc Nghiệm</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form class="picker-form">
+                                                        <div class="form-group row mb-5">
+                                                            <div class="col-lg-8 col-md-9 col-sm-12">
+                                                                <select name="quizList[]" class="multi-select" multiple="" id="my_multi_select4" >
+                                                                    <option th:each="quiz : ${quiz_list}" th:value="${quiz.id}" th:text="${quiz.question}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary" style="float: right;margin-top: 20px;">Lưu chỉnh sửa</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

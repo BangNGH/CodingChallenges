@@ -165,4 +165,7 @@ public class UserServices {
         return userRepository.getLanguagePercentageByStudentId(id);
     }
 
+    public List<UserEntity> getListRole(Role teacherRole) {
+        return userRepository.getListRole(teacherRole);
+    }
 }

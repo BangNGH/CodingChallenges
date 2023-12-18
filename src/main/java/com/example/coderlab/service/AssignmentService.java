@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,8 +27,11 @@ public class AssignmentService {
     private LanguageService languageService;
     @Autowired
     private UserServices userServices;
-    public List<Assignment> getAllAssignments(){
-        return assignmentRepository.findAll();
+    public List<Assignment> getPracticeAssignment(){
+        return assignmentRepository.getPracticeAssignment();
+    }
+    public List<Assignment> getContestAssignment(){
+        return assignmentRepository.getContestAssignment();
     }
     public void save(Assignment assignment){
         assignmentRepository.save(assignment);
@@ -250,5 +254,9 @@ public class AssignmentService {
             return assignmentRepository.getRandomProblemSolving(level.getId(), numberOfRandomAssignment);
         }
         return assignmentRepository.getRandomAssignments(language.getId(), level.getId(), numberOfRandomAssignment);
+    }
+
+    public List<Assignment> getAllAssignments() {
+        return assignmentRepository.findAll();
     }
 }

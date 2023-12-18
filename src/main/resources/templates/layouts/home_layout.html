@@ -86,13 +86,11 @@
                           </g>
                         </svg>
                       </div>
-                      <span>Category</span>
+                      <span>Công Cụ</span>
                     </a>
                     <ul class="cat-submenu">
-                      <li><a th:href="@{/online-compiler}">Online compiler</a></li>
-                      <li><a href="course-details.html">English Learning</a></li>
-                      <li><a href="course-details.html">Web Development</a></li>
-                      <li><a href="course-details.html">Logo Design</a></li>
+                      <li><a th:href="@{/online-compiler}">Biên Dịch Trực Tuyến</a></li>
+                      <li sec:authorize="hasAnyAuthority('TEACHER')"><a href="/teacher/contest">Tạo Cuộc Thi</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -115,7 +113,7 @@
             </div>
             <div class="header__btn header__btn-2 ml-50 d-none d-sm-block">
               <div sec:authorize="!isAuthenticated()">
-                <a href="/register-access-account" class="e-btn">Đăng ký</a>
+                <a href="/register" class="e-btn">Đăng ký</a>
                 <a href="/login" class="e-btn" style="background-color: #e8e8e8;color: black">Đăng nhập</a>
               </div>
               <div class="dropdown" sec:authorize="isAuthenticated()">

@@ -1,5 +1,6 @@
 package com.example.coderlab.repository;
 
+import com.example.coderlab.entity.Role;
 import com.example.coderlab.entity.Submission;
 import com.example.coderlab.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,4 +48,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "GROUP BY s.student_id, s.language_id\n" +
             "ORDER BY s.student_id, percentage DESC", nativeQuery = true)
     List<Object[]> getLanguagePercentageByStudentId(Long id);
+
+    @Query("SELECT u.user FROM UserRole u where u.role = ?1")
+    List<UserEntity> getListRole(Role teacherRole);
 }

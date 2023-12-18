@@ -80,13 +80,11 @@
                           </g>
                         </svg>
                       </div>
-                      <span>Category</span>
+                      <span>Công Cụ</span>
                     </a>
                     <ul class="cat-submenu">
-                      <li><a th:href="@{/online-compiler}">Online compiler</a></li>
-                      <li><a href="course-details.html">English Learning</a></li>
-                      <li><a href="course-details.html">Web Development</a></li>
-                      <li><a href="course-details.html">Logo Design</a></li>
+                      <li><a th:href="@{/online-compiler}">Trình biên dịch</a></li>
+                      <li sec:authorize="hasAnyAuthority('TEACHER')"><a href="/teacher/contest">Tạo cuộc thi</a></li>
                     </ul>
                   </li>
                 </ul>

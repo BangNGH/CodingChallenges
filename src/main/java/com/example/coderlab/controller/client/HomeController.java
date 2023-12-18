@@ -60,40 +60,14 @@ public class HomeController {
         roleService.addRole();
         languageService.addLanguage();
     }
-
     @GetMapping("/")
     public String home(Model model){
         model.addAttribute("languages", languageService.getAllLanguages());
         return "client/prepare/index";
     }
-
-    @GetMapping("/login-access-account")
-    public String loginAccessAccount(Model model){
-        model.addAttribute("dev", "For Developers");
-        model.addAttribute("devInfo", "We are the market–leading technical interview platform to identify and hire developers with the right skills.");
-        model.addAttribute("bus", "For Companies");
-        model.addAttribute("busInfo", "We are the market–leading technical interview platform to identify and hire developers with the right skills.");
-        model.addAttribute("btnLg", true);
-        return "access-account";
-    }
-    @GetMapping("/register-access-account")
-    public String registerAccessAccount(Model model){
-        model.addAttribute("dev", "I'm here to practice and prepare");
-        model.addAttribute("devInfo", "Solve problems and learn new skills");
-        model.addAttribute("bus", "I'm here to hire tech talent");
-        model.addAttribute("busInfo", "Evaluate tech skill at scale");
-        model.addAttribute("btnRg", true);
-        return "access-account";
-    }
     @GetMapping("/login")
     public String login(){
         return "sign-in";
     }
-    @GetMapping("/company-register")
-    public String companyRegistrationForm(Model model) {
-        model.addAttribute("registrationRequest", new RegistrationRequest("COMPANY", "", "", ""));
-        return "sign-up";
-    }
-
 
 }

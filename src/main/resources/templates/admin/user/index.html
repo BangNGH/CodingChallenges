@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Người Dùng</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .table td, .table th {
+            border-right: 2px solid #efefef;
+        }
+        th{
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <p style="font-size: 20px" class="mb-sm-0 font-size-18">Người Dùng Hệ Thống</p>
+
+                <div class="page-title-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <span class="d-none" id="messageSuccess" th:text="${message}"></span>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <div class="search-box me-2 mb-2 d-inline-block">
+                                <div class="position-relative">
+                                    <input style="font-size: 14px" type="text" class="form-control" placeholder="Tìm kiếm...">
+<!--                                    <i class="bx bx-search-alt search-icon"></i>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap table-check">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="align-middle">ID</th>
+                                <th class="align-middle">Email</th>
+                                <th class="align-middle">Tên</th>
+                                <th class="align-middle">Trạng Thái</th>
+                                <th class="align-middle">Phân Quyền</th>
+                                <th class="align-middle">Chỉnh Sửa</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user: ${users}">
+                                <td><a style="font-weight: bold" class="text-body fw-bold">#<span th:text="${user.id}"></span></a> </td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text ="${user.fullName}"></td>
+                                <td th:if="${user.isActive()}" class="text-success">Hoạt Động</td>
+                                <td th:unless="${user.isActive()}" class="text-danger">Chưa kích hoạt</td>
+                                <td>
+                                    <p th:each="role:${user.roles}" th:text="${role.name}"></p>
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/user-management/edit/{id}(id=${user.id})}" title="Edit" class="text-success"><i style="font-size: 18px" class='bx bxs-edit-alt'></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if = "${totalPages > 1}">
+                        <div class = "row col-sm-11">
+                            <div class = "col-sm-2">
+                                Total Items: [[${totalItems}]]
+                            </div>
+                            <div class = "col-sm-2">
+					            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                    <a th:if="${currentPage != i}" th:href="@{'/admin/product/page/' + ${i}}">[[${i}]]</a>
+						        <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					            </span>
+                            </div>
+                            <div class = "col-sm-1">
+                                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/page/' + ${currentPage + 1}}">Next</a>
+                                <span th:unless="${currentPage < totalPages}">Next</span>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/page/' + ${totalPages}}">Last</a>
+                                <span th:unless="${currentPage < totalPages}">Last</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var message = $('#messageSuccess').text();
+            toastr.options = {
+                "closeButton": true,
+            }
+            if (message !== '') {
+                toastr.success(message);
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

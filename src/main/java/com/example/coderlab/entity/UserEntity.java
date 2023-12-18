@@ -72,6 +72,10 @@ public class UserEntity {
     @JsonIgnore
     private List<Assignment> assignments;
 
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Contest> createdContests;
+
     @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Question> questions;
@@ -100,6 +104,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<SolutionCheck> solutionChecks = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "teachers")
+    private Set<Contest> contests = new HashSet<>();
 
     public String getImagesPath(){
         if(avatarUrl == null || id == null) return null;

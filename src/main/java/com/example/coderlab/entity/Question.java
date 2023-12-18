@@ -52,6 +52,10 @@ public class Question {
     @JoinColumn(name = "level_id")
     private Level level;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assignmentKit_id")
+    private AssignmentKit assignmentKit;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Submission> submissions;

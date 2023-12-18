@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating coding question</title>
+    <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <style>
+        .modal-backdrop {
+            position: unset !important;
+        }
+        .modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+        .has-error{
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-12">
+            <div style="background-color: #fff" class="card2">
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form id="msform" th:action="@{/admin/contest/add}" th:object="${contest}" method="post">
+                            <fieldset>
+                                <div class="form-card">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Tên Cuộc Thi :</label>
+                                        <div class="col-sm-9">
+                                            <input required class="form-validate" name="name" id="title" style="font-family: 'Montserrat'; margin-bottom: unset" type="text" placeholder="Tên cho cuộc thi này"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Thời gian bắt đầu :</label>
+                                        <div class="col-sm-9">
+                                            <input type="datetime-local" id="startTime" class="form-control" required name="startTime">
+                                        </div>
+                                        <input type="hidden" id="formattedStartTime" name="formattedStartTime" value="">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Thời gian kết thúc:</label>
+                                        <div class="col-sm-9">
+                                            <input type="datetime-local" class="form-control" id="endTime" name="endTime">
+                                        </div>
+                                        <input type="hidden" id="formattedEndTime" name="formattedEndTime" value="">
+                                    </div>
+                                    <script>
+                                        // Lấy ngày hiện tại
+                                        var now = new Date();
+                                        var dateString02 =new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+                                        const startTime = document.getElementById('startTime');
+                                        const endTime = document.getElementById('endTime');
+
+                                        startTime.setAttribute('min', dateString02);
+
+                                        function updateEndTime() {
+                                            const startTimeValue = document.getElementById("startTime").value;
+                                            document.getElementById('endTime').setAttribute('min', startTimeValue);
+                                            document.getElementById("endTime").value = startTimeValue;
+                                        }
+
+                                        startTime.onchange = () => {
+                                            // Lấy giá trị từ input datetime-local
+                                            const dateTimeSLocalValue = document.getElementById('startTime').value;
+                                            const formattedStartTime = dateTimeSLocalValue.replace('T', ' ');
+                                            document.getElementById('formattedStartTime').value = formattedStartTime;
+                                            updateEndTime();
+                                        }
+                                        endTime.onchange = () => {
+                                            const dateTimeLocalValue = document.getElementById('endTime').value;
+                                            const formattedDateTime = dateTimeLocalValue.replace('T', ' ');
+                                            document.getElementById('formattedEndTime').value = formattedDateTime;
+                                        }
+                                    </script>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Giáo viên:</label>
+                                        <div class="col-sm-9">
+                                            <div class="card card-shadow mb-4">
+                                                <div class="card-header border-0">
+                                                    <div class="custom-title-wrap bar-primary">
+                                                        <div class="custom-title">Chọn giáo viên quản lý cuộc thi</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form class="picker-form">
+                                                        <div class="form-group row mb-5">
+                                                            <div class="col-lg-8 col-md-9 col-sm-12">
+                                                                <select name="multi_coding_select[]" class="multi-select" multiple="" id="my_multi_select3" >
+                                                                    <option value="allTeacher">Tất cả giáo viên</option>
+                                                                    <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.fullName}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary" style="float: right;margin-top: 20px;">Tạo cuộc thi</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

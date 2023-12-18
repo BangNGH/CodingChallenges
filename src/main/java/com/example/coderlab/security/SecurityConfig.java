@@ -29,13 +29,15 @@ public class SecurityConfig{
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/company-register", "/onlineCompiler","/admin_assets/**","/client_assets/**","/client_assets/img/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/certify-images/**"
+                        .requestMatchers("/company-register", "/online-compiler","/admin_assets/**","/client_assets/**","/client_assets/img/**", "/register/**", "/login", "/register-access-account","/login-access-account","/error", "/resources/**","/","/certify-images/**"
                         ,"/webjars/jquery/3.6.4/jquery.min.js", "/assignment-images/**")
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAnyAuthority("ADMIN")
+                        .requestMatchers("/teacher/**")
+                        .hasAnyAuthority("TEACHER")
                         .requestMatchers("/**")
-                        .hasAnyAuthority("ADMIN", "DEVELOPER", "COMPANY")
+                        .hasAnyAuthority("ADMIN", "DEVELOPER", "TEACHER")
                         .requestMatchers("/api/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/submissions/**").permitAll()
@@ -43,7 +45,7 @@ public class SecurityConfig{
                         .anyRequest().authenticated()
                 ).logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login-access-account?message=logout")
+                        .logoutSuccessUrl("/login?logout")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
