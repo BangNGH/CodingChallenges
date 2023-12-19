@@ -80,9 +80,6 @@ public class RegisterController {
             if (verificationResult.equalsIgnoreCase("Valid")) {
                 model.addAttribute("success", "Đăng ký thành công.");
             }
-            else if (verificationResult.equalsIgnoreCase("Waiting")){
-                model.addAttribute("success", "Đăng ký thành công. Vui lòng chờ xác nhận từ phía quản trị viên về tài khoản của bạn.");
-            }
             else {
                 model.addAttribute("error", "Đường dẫn này đã hết hạn, hãy <a style=\"color:#0b5ed7\" href=\"" + url + "\">lấy đường dẫn mới </a>để kích hoạt tài khoản của bạn!");
             }

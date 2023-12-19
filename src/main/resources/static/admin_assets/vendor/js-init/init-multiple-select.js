@@ -7,8 +7,8 @@ $(function(){
     });
 
     $('#my_multi_select3').multiSelect({
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm bài tập code...'>",
+        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm câu đã chọn...'>",
         afterInit: function (ms) {
             var that = this,
                 $selectableSearch = that.$selectableUl.prev(),
@@ -42,8 +42,8 @@ $(function(){
         }
     });
     $('#my_multi_select4').multiSelect({
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm câu hỏi trắc nghiệm...'>",
+        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm câu đã chọn...'>",
         afterInit: function (ms) {
             var that = this,
                 $selectableSearch = that.$selectableUl.prev(),

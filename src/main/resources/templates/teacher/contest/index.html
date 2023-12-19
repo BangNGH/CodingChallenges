@@ -10,6 +10,18 @@
 <body>
 <div layout:fragment="content">
     <!-- services area start -->
+    <span class="d-none" id="messageSuccess" th:text="${message}"></span>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var message = $('#messageSuccess').text();
+            toastr.options = {
+                "closeButton": true,
+            }
+            if (message !== '') {
+                toastr.success(message);
+            }
+        });
+    </script>
     <section class="services__area pt-115 pb-40">
         <div class="container">
             <div class="row">

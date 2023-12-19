@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +36,10 @@ public class AssignmentService {
         assignmentRepository.save(assignment);
     }
     public Assignment getAssignmentById(Long id){
-        return assignmentRepository.findById(id).orElseThrow();
+        Optional<Assignment> foundAssignment = assignmentRepository.findById(id);
+        if (foundAssignment.isPresent()){
+            return foundAssignment.get();
+        }else return null;
     }
     public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit, List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts, List<Boolean> maskSamples, Long level, String languageID, String solution, Boolean isCertificateQuestion) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -254,6 +256,9 @@ public class AssignmentService {
             return assignmentRepository.getRandomProblemSolving(level.getId(), numberOfRandomAssignment);
         }
         return assignmentRepository.getRandomAssignments(language.getId(), level.getId(), numberOfRandomAssignment);
+    }
+    public List<Assignment> getRandomAssignments(Integer numberOfRandomAssignment) {
+        return assignmentRepository.getRandomAssignments(numberOfRandomAssignment);
     }
 
     public List<Assignment> getAllAssignments() {

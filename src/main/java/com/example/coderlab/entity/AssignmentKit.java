@@ -32,15 +32,8 @@ public class AssignmentKit {
     private int time;
 
     private Integer numberOfQuiz;
-    @OneToMany(mappedBy = "assignmentKit", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Question> quizQuestions;
 
     private Integer numberOfAssignment;
-
-    @OneToMany(mappedBy = "assignmentKit", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Assignment> assignments;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userAdded_id")

@@ -37,4 +37,8 @@ public class QuizService {
             return foundQuestion.get();
         }else {return null;}
     }
+
+    public List<Question> getRandomQuizs(Integer number) {
+        return quizRepository.getRandomQuizs(number);
+    }
 }

@@ -137,10 +137,6 @@ public class UserServices {
             //tokenRepository.delete(token);
             return "Token already expired!";
         }
-        Role companyRole = roleService.getRoleByName("COMPANY");
-        if (user.getRoles().contains(companyRole)){
-            return "Waiting";
-        }
         user.setActive(true);
         userRepository.save(user);
         return "Valid";

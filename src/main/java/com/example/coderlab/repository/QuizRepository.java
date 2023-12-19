@@ -22,4 +22,8 @@ public interface QuizRepository extends JpaRepository<Question, Long> {
             "ORDER BY RAND()\n" +
             "LIMIT ?2", nativeQuery = true)
     List<Question> getRandomProblemSolvingQuiz(Long id, Integer numberOfQuiz);
+    @Query(value = "SELECT * FROM questions \n" +
+            "ORDER BY RAND()\n" +
+            "LIMIT ?1", nativeQuery = true)
+    List<Question> getRandomQuizs(Integer number);
 }

@@ -41,6 +41,7 @@ public class SecurityConfig{
                         .requestMatchers("/api/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/submissions/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/teacher/**").hasAnyAuthority("TEACHER")
                         .requestMatchers(HttpMethod.GET,"/api/submissions/**").permitAll()
                         .anyRequest().authenticated()
                 ).logout(logout -> logout

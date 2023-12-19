@@ -27,6 +27,14 @@ public class Contest {
 
     private String contestName;
 
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assignment> assignments;
+
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Question> quizQuestions;
+
     @Column(name = "start_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
@@ -39,6 +47,10 @@ public class Contest {
     @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date latestUpdate;
+
+    private String latestUserUpdate;
+
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
