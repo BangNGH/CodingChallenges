@@ -82,14 +82,14 @@ public class Contest {
         return (convertSecondsToDaysOrHours(duration.toSeconds()));
 
     }
-    public Integer maxScore() {
-       Integer maxScore = 0;
-        for (Assignment assignment : assignments
-             ) {
-            maxScore = maxScore + assignment.getMax_score();
-        }
-        return maxScore;
-    }
+//    public Integer maxScore() {
+//       Integer maxScore = 0;
+//        for (Assignment assignment : assignments
+//             ) {
+//            maxScore = maxScore + assignment.getMax_score();
+//        }
+//        return maxScore;
+//    }
     public String convertSecondsToDaysOrHours(long seconds) {
         Duration duration = Duration.ofSeconds(seconds);
         long seconds_per_day = 86400L;

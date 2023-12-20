@@ -58,6 +58,7 @@ public class Assignment {
     private Level level;
 
     @ManyToMany(mappedBy = "assignments")
+    @JsonIgnore
     private List<Contest> contest;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)

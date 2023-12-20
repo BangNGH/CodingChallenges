@@ -41,8 +41,6 @@ public class ProblemSolvingController {
     @GetMapping()
     public String index(Model model){
         model.addAttribute("UserID", getUser().getId());
-        Assignment assignment = assignmentService.getAssignmentById(53L);
-        var temp = assignment.getTags();
         return "client/problem/index";
     }
     @GetMapping("/topic/{id}")

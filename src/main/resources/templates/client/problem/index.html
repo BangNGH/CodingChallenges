@@ -341,13 +341,17 @@
                     success: function (response){
                         // alert(response.content);
                         $('#assignments').empty();
-                        // add table rows
-                        $.each(response.content, (i, assignment) => {
-                            assignmentContent(assignment)
-                        });
-                        // Update pagination
-                        $('#pagination').empty();
-                        buildPaginationForFilter(response)
+                        if(response.content.length === 0) {
+                            notFoundResult();
+                        }else{
+                            // add table rows
+                            $.each(response.content, (i, assignment) => {
+                                assignmentContent(assignment)
+                            });
+                            // Update pagination
+                            $('#pagination').empty();
+                            buildPaginationForFilter(response)
+                        }
                     },
                     error: function (){
                         console.log("error");
