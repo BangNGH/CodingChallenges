@@ -37,6 +37,8 @@ public class AssignmentRestController {
     private SolutionCheckService solutionCheckService;
     @Autowired
     private QuizService quizService;
+    @Autowired
+    private ContestSubmissionService contestSubmissionService;
 
     @PostMapping("/add")
     public String handleSubmission(@RequestBody SubmissionInfoSendDTO submission, Principal principal, HttpSession session) {
@@ -57,6 +59,21 @@ public class AssignmentRestController {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
             Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
+          clearSession(session);
+            if (status) {
+                return "passed";
+            }
+            return "failed";
+        } catch (Exception e) {
+            return "Error " + e.getMessage();
+        }
+    }
+    @PostMapping("/submit-contest")
+    public String submitTest(@RequestBody SubmissionKitInfoSendDTO submissions_id, Principal principal, HttpSession session) {
+        try {
+            String email = principal.getName();
+            UserEntity current_user = userServices.findByEmail(email).get();
+            Boolean status = contestSubmissionService.save(submissions_id, current_user);
 
           clearSession(session);
             if (status) {

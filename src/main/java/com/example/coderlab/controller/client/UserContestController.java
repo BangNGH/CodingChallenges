@@ -29,10 +29,11 @@ public class UserContestController {
     private final UserServices userServices;
     private final LanguageService languageService;
     private final AssignmentService assignmentService;
-    private final QuizService quizService;
+    private final ContestSubmissionService contestSubmissionService;
     private final ContestService contestService;
+
     @GetMapping
-    public String index(Model model, HttpSession session){
+    public String index(Model model, HttpSession session) {
         clearSession(session);
         model.addAttribute("contests", contestService.getContests());
         return "client/contest/index";
@@ -41,109 +42,75 @@ public class UserContestController {
     @GetMapping("/details/{id}")
     public String details(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal, HttpSession session) {
         clearSession(session);
-        Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
-        if (found_kit_by_id.isPresent()) {
+        Optional<Contest> foundContestByID = contestService.findById(id);
+        if (foundContestByID.isPresent()) {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(found_kit_by_id.get(), current_user).stream().sorted(Comparator.comparing(AssignmentKitSubmission::getSubmitted_at)).toList();
+            Contest foundContest = foundContestByID.get();
 
-            if (!found_assignments_kit.isEmpty()){
+            List<ContestSubmission> findContestSubmissions = contestSubmissionService.getContestSubmissions(foundContest, current_user);
+            if (!findContestSubmissions.isEmpty()) {
+                List<ContestSubmission> contestSubmissions = contestSubmissionService.getCorrectContestAnswer(foundContest, current_user);
+               if (contestSubmissions.size()==0) {
+                   model.addAttribute("correctAnswer", 0);
+                   model.addAttribute("myTestScore", 0);
+               }else {
+                   Integer correctAnswer = contestSubmissions.size();
+                   Integer myTestScore = 0;
+                   for (ContestSubmission contestSubmission : contestSubmissions
+                   ) {
+                       for (Submission submission : contestSubmission.getSubmissions()
+                       ) {
+                           myTestScore+=submission.getTotal_score();
+                       }
+                       contestSubmission.getSubmissions();
+                   }
+                   model.addAttribute("correctAnswer", correctAnswer);
+                   model.addAttribute("myTestScore", myTestScore);
+               }
                 model.addAttribute("already_tested", true);
-                Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
-                LocalDate last_attempt_at = LocalDate.from(found_assignments_kit.get(found_assignments_kit.size()-1).getSubmitted_at());
-                if (is_passed == false){
-                    LocalDate now = LocalDate.now();
-                    long daysBetween = DAYS.between(last_attempt_at, now);
-                    if (daysBetween>=30){
-                        model.addAttribute("retake", true);
-                    }else{
-                        model.addAttribute("retake", false);
-                    }
-                    model.addAttribute("is_passed", false);
-                    model.addAttribute("last_attempt", last_attempt_at);
-                }else {
-                    model.addAttribute("is_passed", true);
-                    model.addAttribute("last_attempt", last_attempt_at);
-                }
+
             } else {
                 model.addAttribute("already_tested", false);
             }
 
-            model.addAttribute("assignment_kit", found_kit_by_id.get());
-            return "client/certify/details";
+            model.addAttribute("contest", foundContest);
+
+            return "client/contest/details";
         }
         redirectAttributes.addFlashAttribute("message", "Not found certify with ID: " + id);
-        return "redirect:/skills-verification";
+        return "redirect:/contest";
 
     }
-    @GetMapping("/test/{id}")
+
+    @GetMapping("/join/{id}")
     public String enrollTest(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
-        Optional<AssignmentKit> found_kit_by_id = assignmentKitService.findById(id);
-        if (found_kit_by_id.isPresent()) {
+        Optional<Contest> foundContestByID = contestService.findById(id);
+        if (foundContestByID.isPresent()) {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
-            AssignmentKit foundAssignmentKit = found_kit_by_id.get();
-            List<AssignmentKitSubmission> found_assignments_kit = assignmentKitSubmissionService.getByAssignmentKit_User_Id(foundAssignmentKit, current_user);
-
-            //trường hợp user này chưa làm certify
-            if (found_assignments_kit.isEmpty()){
-                List<Assignment> randomAssignments = assignmentService.getRandomAssignments(foundAssignmentKit.getNumberOfAssignment(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
-                List<Question> randomQuizs = quizService.getRandomQuizs(foundAssignmentKit.getNumberOfQuiz(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
-
-                List<Long> idAssignments=new ArrayList<Long>();
-                for (Assignment a : randomAssignments){
-                    idAssignments.add(a.getId());
-                }
-                List<Long> idQuizs=new ArrayList<Long>();
-                for (Question a : randomQuizs){
-                    idQuizs.add(a.getId());
-                }
-                model.addAttribute("assignment_kit", found_kit_by_id.get());
-                model.addAttribute("randomAssignments", randomAssignments);
-                model.addAttribute("idAssignments", idAssignments);
-                model.addAttribute("idQuizs", idQuizs);
-                model.addAttribute("randomQuiz", randomQuizs);
-                model.addAttribute("user_id", current_user.getId());
-                model.addAttribute("languages",languageService.getAllLanguages());
-                return "client/certify/certify";
+            Contest foundContest = foundContestByID.get();
+            List<Assignment> assignments = new ArrayList<>();
+            if (foundContest.getIsRandomAssignment()) {
+                assignments = assignmentService.getRandomAssignments(foundContest.getNumberOfAssignment());
+            } else {
+                assignments = foundContest.getAssignments();
             }
-            Boolean is_passed = found_assignments_kit.get(found_assignments_kit.size()-1).getIs_success();
-            if (is_passed) {
-                return "redirect:/skills-verification/details/"+id;
-            }else {
-                LocalDate last_attempt_at = LocalDate.from(found_assignments_kit.get(found_assignments_kit.size()-1).getSubmitted_at());
-                LocalDate now = LocalDate.now();
-                long daysBetween = DAYS.between(last_attempt_at, now);
-                if (daysBetween>=30) {
-                    List<Assignment> randomAssignments = assignmentService.getRandomAssignments(foundAssignmentKit.getNumberOfAssignment(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
-                    List<Question> randomQuizs = quizService.getRandomQuizs(foundAssignmentKit.getNumberOfQuiz(),foundAssignmentKit.getLanguage(), foundAssignmentKit.getLevel());
-
-                    List<Long> idAssignments=new ArrayList<Long>();
-                    for (Assignment a : randomAssignments){
-                        idAssignments.add(a.getId());
-                    }
-                    List<Long> idQuizs=new ArrayList<Long>();
-                    for (Question a : randomQuizs){
-                        idQuizs.add(a.getId());
-                    }
-                    model.addAttribute("assignment_kit", found_kit_by_id.get());
-                    model.addAttribute("randomAssignments", randomAssignments);
-                    model.addAttribute("idAssignments", idAssignments);
-                    model.addAttribute("idQuizs", idQuizs);
-                    model.addAttribute("randomQuiz", randomQuizs);
-                    model.addAttribute("user_id", current_user.getId());
-                    model.addAttribute("languages",languageService.getAllLanguages());
-                    return "client/certify/certify";
-
-                }else {
-                    return "redirect:/skills-verification/details/"+id;
-
-                }
+            List<Long> idAssignments = new ArrayList<Long>();
+            for (Assignment a : assignments) {
+                idAssignments.add(a.getId());
             }
+            model.addAttribute("idAssignments", idAssignments);
+            model.addAttribute("assignments", assignments);
+            model.addAttribute("contest", foundContest);
+            model.addAttribute("user_id", current_user.getId());
+            model.addAttribute("languages", languageService.getAllLanguages());
+            return "client/contest/join_contest";
         }
         redirectAttributes.addFlashAttribute("message", "Not found certify with ID: " + id);
-        return "redirect:/skills-verification";
+        return "redirect:/contest";
     }
+
     private Boolean clearSession(HttpSession session) {
         if (session != null) {
             session.removeAttribute("editorContent");

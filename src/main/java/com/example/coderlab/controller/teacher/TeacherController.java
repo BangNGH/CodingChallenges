@@ -28,8 +28,10 @@ public class TeacherController {
 
     private final UserServices userServices;
     @GetMapping("")
-    public String myContest(Model model) {
-        model.addAttribute("contests", contestService.getContests());
+    public String myContest(Model model, Principal principal) {
+        String email = principal.getName();
+        UserEntity current_user = userServices.findByEmail(email).get();
+        model.addAttribute("contests", current_user.getContests());
         return "teacher/index";
     }
 
@@ -62,10 +64,10 @@ public class TeacherController {
         Optional<Contest> foundByIDContest = contestService.findById(contest.getId());
         if (foundByIDContest.isPresent()) {
             Contest foundContest = foundByIDContest.get();
-            if (isRandomQuestion){
-                foundContest.setIsRandomAssignment(false);
-            }else{
+            if (isRandomQuestion==null){
                 foundContest.setIsRandomAssignment(true);
+            }else{
+                foundContest.setIsRandomAssignment(false);
             }
             String lastedUpdate = "(ID:"+current_user.getId()+"): "+ current_user.getFullName();
             foundContest.setLatestUserUpdate(lastedUpdate);

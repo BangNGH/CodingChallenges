@@ -1,6 +1,7 @@
 package com.example.coderlab.service;
 
 import com.example.coderlab.entity.Contest;
+import com.example.coderlab.entity.UserEntity;
 import com.example.coderlab.repository.ContestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,6 @@ public class ContestService {
     public Optional<Contest> findById(Long contestID) {
         return contestRepository.findById(contestID);
     }
+
 }
 

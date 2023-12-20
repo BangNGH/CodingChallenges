@@ -16,45 +16,60 @@
                 <div class="col-xxl-8 col-xl-8 col-lg-8">
                     <div class="course__wrapper">
                         <div class="page__title-content mb-25">
-                            <h5 class="page__title-3" th:text="${assignment_kit.title}"></h5>
-                        </div>
-                        <div class="course__meta-2 d-sm-flex mb-30">
-                            <div class="course__teacher-3 d-flex align-items-center mr-70">
-                                <div class="course__teacher-info-3">
-                                    <p><a href="#">Tham gia Bài kiểm tra Chứng nhận và khoe kiến thức của bạn như một nhà phát triển để nhận được chứng chỉ được xác minh bởi Coder's Lab.</a></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div th:if="${already_tested}" class="course__img w-img mb-30">
-                            <img th:if="${is_passed}"
-                                 th:src="@{'/certify-images/' + ${#authentication.principal.getID()} + '/certify_' + ${assignment_kit.id} + '.png'}"
-                                 alt="">
+                            <h5 class="page__title-3" th:text="${contest.contestName}"></h5>
                         </div>
                         <div class="course__tab-content mb-95">
                             <div class="tab-content" id="courseTabContent">
                                 <div class="tab-pane fade show active" id="description" role="tabpanel"
                                      aria-labelledby="description-tab">
-                                    <div class="course__description-list mb-45">
+                                    <div class="course__description-list mb-20">
+                                        <div class="form-group row mt-10">
+                                            <div>
+                                                <div class="card card-shadow mb-4">
+                                                    <div class="card-header border-0">
+                                                        <div class="custom-title-wrap bar-warning">
+                                                            <div class="custom-title">Bài tập cho lần thi này</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">Tên bài</th>
+                                                                <th scope="col">Điểm</th>
+                                                                <th scope="col">Tỉ lệ thành công</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody style="color: black">
+                                                            <tr th:each="assignment:${contest.assignments}">
+                                                                <td th:text="${assignment.title}"></td>
+                                                                <td th:text="${assignment.max_score}"></td>
+                                                                <td>[[${assignment.getSuccessRate()}]]%</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="course__description-list">
                                         <h4>Vui lòng đọc hướng dẫn bên dưới</h4>
                                         <ol>
                                             <li>1. Đây là một bài kiểm tra có giới hạn thời gian. Vui lòng đảm bảo bạn không bị gián đoạn trong quá trình làm bài, vì bộ đếm giờ không thể tạm dừng khi đã bắt đầu hoặc bạn sẽ thất bại nếu hết thời gian
                                             </li>
                                             <li>2. Vui lòng đảm bảo bạn có kết nối internet ổn định.</li>
-                                            <li>3. Chúng tôi khuyên bạn nên thử bài tập mẫu trước khi vào làm bài kiểm tra này.
+                                            <li>3. Mỗi bài có số điểm tối đa nhất định.
                                             </li>
-                                            <li>4. Trước khi làm bài, vui lòng xem qua các câu hỏi thường gặp để giải quyết các thắc mắc liên quan đến bài kiểm tra. Kỹ năng quan trọng hơn bằng cấp Chứng minh Kỹ năng của bạn Gây ấn tượng với các công ty Ai cũng có cơ hội để thăng tiến
+                                            <li>4. Điểm của một thí sinh phụ thuộc vào số testcase mà thí sinh giải đúng.
+                                            </li>
+                                            <li>5. Xếp hạng thí sinh theo điểm đạt được. Nếu 2 thí sinh cùng số điểm thì thí sinh có giải thuật hơn, lời giải sớm hơn, sẽ đạt hạng cao hơn.
+                                            </li>
+                                            <li>6. Bạn chỉ có thể tham gia và giải bi 1 lần duy nhất
                                             </li>
                                         </ol>
                                     </div>
-                                    <div class="course__description-list mb-45">
-                                        <h4>Kỹ năng quan trọng hơn bằng cấp</h4>
-                                        <ul>
-                                            <li><i class="icon_check"></i> Chứng minh Kỹ năng của bạn</li>
-                                            <li><i class="icon_check"></i> Gây ấn tượng với các công ty </li>
-                                            <li><i class="icon_check"></i> Cơ hội phát triển sẻ đến với mọi người
-                                            </li>
-                                        </ul>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -66,7 +81,55 @@
                             <img class="course-dot" src="assets/img/course/course-dot.png" alt="">
                         </div>
                         <div class="course__sidebar-widget-2 white-bg mb-20">
-                            <div class="course__video">
+                            <div class="course__video" th:if="${already_tested}">
+                                <p class="text-success"><span class="text-danger">*</span>Cảm ơn bạn đã dành thời gian cho bài thi này. Dưới đây là <strong>kết quả</strong> bài thi của bạn
+                                </p>
+                                <div class="course__video-content mb-35">
+                                  <ul>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                                                     xml:space="preserve">
+
+                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
+                                                    <path class="st0"
+                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Số câu đúng :</span>[[${contest.assignments.size()}]]/[[${contest.assignments.size()}]]
+                                                    </h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                                                     xml:space="preserve">
+
+                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
+                                                    <path class="st0"
+                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Điểm đạt:</span>[[${contest.maxScore()}]]/[[${contest.maxScore()}]]
+                                                </h5>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                                <div class="course__enroll-btn">
+                                    <a style="background-color: #e07900" th:href="@{'/contest/leader-board/' + ${contest.id}}"
+                                       class="e-btn e-btn-7 w-100">Xem bảng xếp hạng <i class="far fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="course__video" th:unless="${already_tested}">
                                 <div class="course__video-content mb-35">
                                     <ul>
                                         <li class="d-flex align-items-center">
@@ -82,22 +145,8 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Tổng số câu hỏi :</span>[[${assignment_kit.numberOfQuiz + assignment_kit.numberOfAssignment}]]
+                                                <h5><span>Số câu hỏi :</span>[[${contest.assignments.size()}]]
                                                     </h5>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex align-items-center">
-                                            <div class="course__video-icon">
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                                     viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;"
-                                                     xml:space="preserve">
-                                             <circle class="st0" cx="8" cy="8" r="6.7"/>
-                                                    <polyline class="st0" points="8,4 8,8 10.7,9.3 "/>
-                                          </svg>
-                                            </div>
-                                            <div class="course__video-info">
-                                                <h5><span>Thời gian hoàn thành :</span>[[${assignment_kit.time}]] phút</h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -110,7 +159,7 @@
                                             </div>
                                             <div class="course__video-info">
                                                 <h5><span>Đã tham gia :</span>
-                                                    [[${assignment_kit.assignmentKitSubmissions.size()}]] </h5>
+                                                    </h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -123,8 +172,7 @@
                                                 </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5 th:if="${assignment_kit.language}"><span>Ngôn ngữ :</span> [[${assignment_kit.language.name}]]</h5>
-                                                <h5 th:unless="${assignment_kit.language}"><span>Ngôn ngữ :</span> Tuỳ chọn</h5>
+                                                <h5><span>Ngôn ngữ :</span> Tuỳ chọn</h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -140,37 +188,16 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Độ khó :</span>[[${assignment_kit.level.name}]]</h5>
+                                                <h5><span>Tổng Điểm :</span>[[${contest.maxScore()}]]
+                                                </h5>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
-
-                                <div th:if="${already_tested}" class="course__enroll-btn">
-                                    <a th:if="${is_passed}" style="background-color: #39732f"
-                                       class="e-btn e-btn-7 w-100">Passed <i class="far fa-check"></i></a>
-                                    <th:block th:unless="${is_passed}">
-                                        <th:block th:if="${retake}">
-                                            <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Làm lại <i class="far fa-arrow-right"></i></a>
-                                            <p class="mt-10"><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
-                                            </p>
-                                        </th:block>
-                                        <th:block th:unless="${retake}">
-                                            <a style="background-color: #e07900" class="e-btn e-btn-7 w-100">Làm lại bài này sau 30 ngày <i class="far fa-arrow-right"></i></a>
-                                            <p><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
-                                            </p>
-                                            <p><span class="text-danger">*</span> Cảm ơn bạn đã dành thời gian cho bài thi này. Chúng tôi rất tiếc rằng bạn không vượt qua bài kiểm tra này trước đó. <strong>Bạn vẫn có thể thử lại bài thi này khi bạn sẳn sàng.</strong>
-                                            </p>
-                                        </th:block>
-                                    </th:block>
+                                <div class="course__enroll-btn">
+                                    <a th:href="@{'/contest/join/' + ${contest.id}}"
+                                       class="e-btn e-btn-7 w-100">Bắt đầu thi <i class="far fa-arrow-right"></i></a>
                                 </div>
-
-                                <div th:unless="${already_tested}" class="course__enroll-btn">
-                                    <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}"
-                                       class="e-btn e-btn-7 w-100">Tham gia <i class="far fa-arrow-right"></i></a>
-                                </div>
-
-
                             </div>
                         </div>
                     </div>

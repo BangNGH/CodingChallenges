@@ -92,6 +92,10 @@ public class UserEntity {
     @JsonIgnore
     private List<AssignmentKitSubmission> assignmentKitSubmissions;
 
+    @OneToMany(mappedBy = "user_submitted", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ContestSubmission> contestSubmissions;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments;

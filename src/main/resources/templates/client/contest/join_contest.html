@@ -83,28 +83,20 @@
                     <div class="course__wrapper">
                         <div class="course__tab-content mb-95">
                             <input type="hidden" id="number_of_assignments"
-                                   th:value="${assignment_kit.numberOfAssignment}">
-                            <input type="hidden" id="number_of_quiz"
-                                   th:value="${assignment_kit.numberOfQuiz}">
-                            <input type="hidden" id="assignment_kit_id" th:value="${assignment_kit.getId()}">
-                            <input type="hidden" id="duration" th:value="${assignment_kit.time}">
+                                   th:value="${contest.numberOfAssignment}">
+                            <input type="hidden" id="contest_id" th:value="${contest.getId()}">
                             <input type="hidden" id="idAssignments" th:value="${idAssignments}">
-                            <input type="hidden" id="idQuizs" th:value="${idQuizs}">
-
 
                             <div class="tab-content" id="courseTabContent">
                                 <div class="tab-pane fade show active" id="description" role="tabpanel"
                                      aria-labelledby="description-tab">
                                     <div id="description_container" class="course__description">
-                                        <h3 style="text-align: center" th:text="'Bài Thi '+ ${assignment_kit.title}">
+                                        <h3 style="text-align: center" th:text="'Bài Thi '+ ${contest.contestName}">
                                         </h3>
                                         <br>
                                         <div style="text-align: center">
-                                            <p th:text="'Số câu bài tập: '+ ${assignment_kit.numberOfAssignment}"></p>
-                                            <p th:text="'Số câu hỏi trắc nghiệm: '+ ${assignment_kit.numberOfQuiz}"></p>
-                                            <p>Bạn có <span class="text-success"
-                                            >[[${assignment_kit.time}]] phút</span> để hoàn thành các câu hỏi bên dưới
-                                            </p>
+                                            <p th:text="'Số câu bài tập: '+ ${contest.numberOfAssignment}"></p>
+
                                         </div>
                                         <p class="mt-20"><span class="text-danger">Lưu ý(*)</span></p>
                                         <p class="mt-20"><span class="text-danger">*</span> Bài thi sẽ đóng khi hết thời
@@ -118,68 +110,7 @@
 
                                 </div>
 
-                                <th:block th:each="quiz : ${randomQuiz}">
-                                    <div class="tab-pane fade" th:id="${'quiz'+quiz.id}" role="tabpanel"
-                                         aria-labelledby="curriculum-tab">
-                                        <div class="course__description">
-                                            <h3>Câu hỏi trắc nghiệm</h3>
-                                            <!-- Card body -->
-                                            <div class="card-body">
-                                                <!-- text -->
-                                                <button type="button" th:id="'quiz_submitBtn_'+${quiz.id}" style="float: right" class="btn btn-outline-primary">Submit</button>
-                                                <div class="mt-5">
-                                                    <h3 class="mb-3 mt-1" th:text="${quiz.question}"></h3>
-                                                    <!-- list group -->
-                                                    <div class="list-group">
-                                                        <div class="list-group-item list-group-item-action "
-                                                             aria-current="true">
-                                                            <!-- form check -->
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerA">
-                                                                    <span th:text="${quiz.answerA}" class="form-check-label stretched-link"></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <!-- list group -->
-                                                        <div class="list-group-item list-group-item-action">
-                                                            <!-- form check -->
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerB">
-                                                                    <span th:text="${quiz.answerB}" class="form-check-label stretched-link"></span>
-                                                                </label>
-
-                                                            </div>
-                                                        </div>
-                                                        <!-- list group -->
-                                                        <div class="list-group-item list-group-item-action">
-                                                            <!-- form check -->
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerC">
-                                                                    <span th:text="${quiz.answerC}" class="form-check-label stretched-link"></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <!-- list group -->
-                                                        <div class="list-group-item list-group-item-action">
-                                                            <!-- form check -->
-                                                            <div class="form-check">
-                                                                <label>
-                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerD">
-                                                                    <span th:text="${quiz.answerD}" class="form-check-label stretched-link"></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th:block>
-
-                                <th:block th:each="assignment : ${randomAssignments}">
+                                <th:block th:each="assignment : ${assignments}">
                                     <div class="tab-pane fade" th:id="${'challenge'+assignment.id}" role="tabpanel"
                                          aria-labelledby="curriculum-tab">
                                         <div class="course__description">
@@ -191,7 +122,6 @@
                                 <div class="course__tab-2 mb-45">
                                     <div style="display: none">
                                         <input type="hidden" id="hidden_input" name="current_assignment">
-                                        <input type="hidden" id="current_quiz">
                                     </div>
                                     <ul class="nav nav-tabs" id="courseTab" role="tablist">
                                         <li class="nav-item" role="presentation">
@@ -199,10 +129,10 @@
                                                     id="description-tab" data-bs-toggle="tab" name="quiztab"
                                                     data-bs-target="#description" type="button" role="tab"
                                                     aria-controls="description" aria-selected="true"><i
-                                                    class="icon_ribbon_alt"></i> <span>Description</span></button>
+                                                    class="icon_ribbon_alt"></i> <span>Hướng dẫn</span></button>
                                         </li>
                                         <li class="nav-item" role="presentation"
-                                            th:each="assignment, itrStat  : ${randomAssignments}">
+                                            th:each="assignment, itrStat  : ${assignments}">
                                             <button class="nav-link " th:id="${assignment.id}"
                                                     data-bs-toggle="tab"
                                                     th:data-bs-target="${'#challenge'+assignment.id}" type="button"
@@ -211,23 +141,6 @@
                                                     class="icon_book_alt"></i> <span
                                                     th:text="'Chanllenge 0'+${itrStat.index+1}"></span></button>
                                         </li>
-                                        <li class="nav-item" role="presentation"
-                                            th:each="quiz, itrStat  : ${randomQuiz}">
-                                            <button class="nav-link "
-                                                    th:id="'quizBtn_'+${quiz.id}" name="quiztab"
-                                                    data-bs-toggle="tab"
-                                                    th:data-bs-target="${'#quiz'+quiz.id}" type="button"
-                                                    role="tab"
-                                                    aria-selected="false"><i
-                                                    class="icon_book_alt"></i> <span
-                                                    th:text="'Quiz 0'+${itrStat.index+1}"></span></button>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <button style="cursor: initial" id="countdown" class="nav-link "
-                                                    type="button"><i
-                                                    class="icon_clock_alt"></i><span class="text-success" id="timer">00:00</span>
-                                            </button>
-                                        </li>
                                     </ul>
                                 </div>
 
@@ -235,27 +148,14 @@
                                     <div style="background-color: #f3f7f7"
                                          class="d-flex justify-content-between mb-2 rounded p-2">
                                         <div>
-                                            <th:block th:if="${assignment_kit.getLanguage()}">
-                                                <input type="hidden" id="language_mode"
-                                                       th:value="${assignment_kit.getLanguage().value}">
-                                                <label class="visually-hidden"
-                                                       th:for="inlineFormSelectPref">Preference</label>
-                                                <select style="cursor: pointer;" class="form-select"
-                                                        th:id="inlineFormSelectPref">
-                                                    <option th:each="language :${assignment_kit.getLanguage()}"
-                                                            th:text="${language.name}"
-                                                            th:value="${language.value}">
-                                                    </option>
-                                                </select>
-                                            </th:block>
-                                            <th:block th:unless="${assignment_kit.getLanguage()}">
+
                                             <select style="cursor: pointer;" class="form-select"
-                                                    th:id="inlineFormSelectPref">
+                                                    id="inlineFormSelectPref">
                                                 <option th:each="language :${languages}" th:text="${language.name}"
                                                         th:value="${language.value}">
                                                 </option>
                                             </select>
-                                            </th:block>
+
                                         </div>
                                         <div>
                                             <!-- <label style="color: #fff;" for="theme">Theme</label> -->
@@ -269,13 +169,9 @@
 
                                             </select>
                                         </div>
-                                        <button style="margin-left: 20px;cursor: pointer;background-color: #f3f7f7;color: black"
-                                                type="button" id="run" class="btn btn-success">Run
-                                            <i style="margin-left: 10px; font-size: 17px;"
-                                               class="bx bx-play"></i></button>
                                         <button style="cursor: pointer;background-color: #00751f" type="button"
-                                                id="submit" class="btn btn-success">Submit<i style="font-size: 17px;"
-                                                                                             class="bx bx-play"></i>
+                                                id="submit" class="btn btn-success">Nộp bài<i style="font-size: 17px;"
+                                                                                             class="fa fa-send"></i>
                                         </button>
                                     </div>
                                     <div style="border-color: #eee; border-style: solid; border-width: 5px;">
@@ -292,7 +188,7 @@
                                                 <div class="section__title-wrapper mb-60 text-center">
                                                     <h2 class="section__title" id="loadingText">
                                                                 <span style="color: #002795"
-                                                                      class="yellow-bg yellow-bg-big"> đang thực thi...</span>
+                                                                      class="yellow-bg yellow-bg-big"> Đang chấm điểm...</span>
                                                     </h2>
                                                 </div>
                                             </div>
@@ -365,7 +261,7 @@
             }
         });
     </script>
-    <script type="module" th:src="@{/client_assets/compiler/certify.js}"></script>
+    <script type="module" th:src="@{/client_assets/compiler/contest.js}"></script>
 </div>
 </body>
 </html>

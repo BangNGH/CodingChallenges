@@ -71,13 +71,24 @@ public class Contest {
     @JoinColumn(name = "created_user_id")
     private UserEntity createdBy;
 
-    // Hàm tính khoảng thời gian giữa startTime và endTime
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ContestSubmission> contestSubmissions;
+
     public String timeRemain() {
         LocalDateTime start = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault());
         LocalDateTime end = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault());
         Duration duration = Duration.between(start, end);
         return (convertSecondsToDaysOrHours(duration.toSeconds()));
 
+    }
+    public Integer maxScore() {
+       Integer maxScore = 0;
+        for (Assignment assignment : assignments
+             ) {
+            maxScore = maxScore + assignment.getMax_score();
+        }
+        return maxScore;
     }
     public String convertSecondsToDaysOrHours(long seconds) {
         Duration duration = Duration.ofSeconds(seconds);
