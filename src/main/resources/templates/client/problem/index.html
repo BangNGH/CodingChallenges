@@ -196,6 +196,37 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="course__sidebar-widget grey-bg">
+                            <div class="course__sidebar-info">
+                                <h3 class="course__sidebar-title">SUBDOMAINS</h3>
+                                <ul>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="sort">
+                                            <label class="m-check-label" for="sort">Sort</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="search">
+                                            <label class="m-check-label" for="search">Search</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="recursion">
+                                            <label class="m-check-label" for="recursion">Recursion</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                            <input class="m-check-input" type="checkbox" id="graph">
+                                            <label class="m-check-label" for="graph">Graph Theory</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,6 +316,10 @@
                 const solved = document.getElementById('solved').checked;
                 const unsolved = document.getElementById('unsolved').checked;
                 const userID = document.getElementById('userID').value;
+                // const sort = document.getElementById('sort').checked;
+                // const search = document.getElementById('search').checked;
+                // const recursion = document.getElementById('recursion').checked;
+                // const graph = document.getElementById('graph').checked;
 
                 $.ajax({
                     url:'/api/problemSolving/filter',
@@ -298,6 +333,10 @@
                         solved : solved,
                         unsolved: unsolved,
                         userID: userID,
+                        // sort: sort,
+                        // search: search,
+                        // recursion: recursion,
+                        // graph: graph,
                     },
                     success: function (response){
                         // alert(response.content);

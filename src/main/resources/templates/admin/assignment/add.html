@@ -12,6 +12,7 @@
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">-->
     <!--summernote-->
     <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/admin_assets/css/multiSelect.css}">
     <style>
         .modal-backdrop {
             position: unset !important;
@@ -28,6 +29,10 @@
 
         .has-error {
             border: 1px solid #a94442 !important;
+        }
+        .mbsc-textfield.mbsc-textfield-tags.mbsc-textarea {
+            height: 42px !important;
+            border-color: #e5e8eb;
         }
     </style>
 </head>
@@ -95,12 +100,19 @@
                                     </div>
                                     <div style="margin-bottom: 25px" class="row">
                                         <div class="col">
-                                            <p style="font-weight: 600; color:#2f3c4b;; margin-bottom: 2px">
-                                                Độ khó</p>
-                                            <select style="height: 45px; cursor: pointer; font-size: 15px"
-                                                    class="form-control select2" name="level">
+                                            <p style="font-weight: 600; color:#2f3c4b; margin-bottom: 2px">Độ khó:</p>
+                                            <select style="height: 45px; cursor: pointer; font-size: 15px" class="form-control select2" name="level">
                                                 <option th:each="level: ${levels}" th:value="${level.id}"
                                                         th:text="${level.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+
+                                            <label style="margin:0;">
+                                                Tag:<span class="text-warning">(Optional)</span><input mbsc-input id="my-input" data-dropdown="true" data-tags="true" />
+                                            </label>
+                                            <select style="height: 45px; cursor: pointer; font-size: 15px" class="form-control select2" name="taqs[]" id="multiple-select" multiple>
+                                                <option th:each="tag: ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -192,16 +204,16 @@
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col">
-                                                    <label>Đầu vào:<span class="text-danger">*</span></label>
-                                                    <textarea id="input" style="margin-bottom: unset; height: 140px"
+                                                    <label>Input:<span class="text-danger">*</span></label>
+                                                    <textarea id="Input" style="margin-bottom: unset; height: 140px"
                                                               name="TSInput[]" class="form-validate"
-                                                              placeholder="Đầu vào..."></textarea>
+                                                              placeholder="Input..."></textarea>
                                                 </div>
                                                 <div class="col">
-                                                    <label>Kê quả mong đợi:<span class="text-danger">*</span></label>
+                                                    <label>Output:<span class="text-danger">*</span></label>
                                                     <textarea id="output" style="margin-bottom: unset; height: 140px"
                                                               name="TSOutput[]" class="form-validate"
-                                                              placeholder="kết quả mong đợi"></textarea>
+                                                              placeholder="Output..."></textarea>
                                                 </div>
                                             </div>
                                             <div style="margin-bottom: unset" class="form-group">
@@ -237,6 +249,7 @@
     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script th:src="@{/admin_assets/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/admin_assets/js/multl-step-form.js}"></script>
+    <script th:src="@{/admin_assets/js/multiSelect.js}"></script>
     <script th:inline="javascript">
         $(document).ready(function () {
             document.getElementById('msform').addEventListener('submit', function (e) {
@@ -248,8 +261,21 @@
                         .attr('name', 'description')
                         .attr('value', description)
                         .appendTo('#msform');
+                    var selectDropdown = document.getElementById('multiple-select');
+                    if (selectDropdown.selectedOptions.length === 0) {
+                        var defaultValue = '0';
+                        var defaultOption = document.createElement('option');
+                        defaultOption.value = defaultValue;
+                        defaultOption.selected = true;
+                        selectDropdown.appendChild(defaultOption);
+                    }
                     this.submit();
+
                 }
+            });
+            mobiscroll.select('#multiple-select', {
+                inputElement: document.getElementById('my-input'),
+                touchUi: false
             });
         });
     </script>

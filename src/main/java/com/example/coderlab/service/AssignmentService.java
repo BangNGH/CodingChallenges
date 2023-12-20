@@ -2,6 +2,7 @@ package com.example.coderlab.service;
 
 import com.example.coderlab.entity.*;
 import com.example.coderlab.repository.AssignmentRepository;
+import com.example.coderlab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +29,8 @@ public class AssignmentService {
     private LanguageService languageService;
     @Autowired
     private UserServices userServices;
+    @Autowired
+    private TagRepository tagRepository;
     public List<Assignment> getPracticeAssignment(){
         return assignmentRepository.getPracticeAssignment();
     }
@@ -35,13 +40,19 @@ public class AssignmentService {
     public void save(Assignment assignment){
         assignmentRepository.save(assignment);
     }
-    public Assignment getAssignmentById(Long id){
-        Optional<Assignment> foundAssignment = assignmentRepository.findById(id);
-        if (foundAssignment.isPresent()){
-            return foundAssignment.get();
-        }else return null;
+    public void saveTags(Long assignmentID, List<Long> tagIds) {
+        Optional<Assignment> optionalAssignment = assignmentRepository.findById(assignmentID);
+        if (optionalAssignment.isPresent()) {
+            Assignment assignment = optionalAssignment.get();
+            List<Tag> tags = tagRepository.findAllById(tagIds);
+            assignment.setTags(new HashSet<>(tags));
+            assignmentRepository.save(assignment);
+        }
     }
-    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit, List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts, List<Boolean> maskSamples, Long level, String languageID, String solution, Boolean isCertificateQuestion) {
+    public Assignment getAssignmentById(Long id){
+        return assignmentRepository.findById(id).orElseThrow();
+    }
+    public void addAssignment(String title, String description, Integer timeLimit, Integer memoryLimit, List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts, List<Boolean> maskSamples, Long level, String languageID, String solution, Boolean isCertificateQuestion, List<Long> tags) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Language foundLanguage = null;
@@ -60,7 +71,6 @@ public class AssignmentService {
                 assignment.setSolution(solution);
             }
         }
-
         assignment.setDescription(description);
         assignment.setLevel(levelService.getLevelById(level));
         if (timeLimit!=null) {
@@ -71,7 +81,9 @@ public class AssignmentService {
         }else assignment.setMemoryLimit(0);
         assignment.setLecturer(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
-
+        if(!(tags.size() == 1 && tags.get(0) == 0)){
+            saveTags(assignment.getId(), tags);
+        }
         if(testCaseNames.size() == 1){
             TestCase testCase = new TestCase();
             testCase.setName(testCaseNames.get(0));
@@ -134,7 +146,6 @@ public class AssignmentService {
             foundLanguage.getAssignments().add(savedAssignment);
             languageService.save(foundLanguage);
         }
-
         assignmentRepository.save(savedAssignment);
     }
     public void updateAssignment(Assignment assignment, String description,List<String> testCaseNames, List<Integer> testCaseScores, List<String> testCaseInputs, List<String> testCaseOutPuts,List<Boolean> maskSamples){
@@ -230,13 +241,24 @@ public class AssignmentService {
     public Page<Assignment> listAssignmentByTopic(Long languageId, Pageable pageable){
         return assignmentRepository.findAssignmentByLanguageID(languageId, pageable);
     }
-    public Page<Assignment> filterAssignment(boolean easy, boolean medium, boolean hard, boolean solved, long userID, Pageable pageable){
-        return assignmentRepository.filterAssignment(easy, medium, hard, solved, userID, pageable);
+    public Page<Assignment> filterAssignmentDefault(boolean easy, boolean medium, boolean hard, Pageable pageable){
+        return assignmentRepository.filterAssignmentDefault(easy, medium, hard,  pageable);
     }
-    public Page<Assignment> filterAssignmentTopic(boolean easy, boolean medium, boolean hard, long languageId, boolean solved, long userID, Pageable pageable){
-        return assignmentRepository.filterAssignmentTopic(easy, medium, hard, languageId, solved, userID, pageable);
+    public Page<Assignment> filterAssignmentSolved(boolean easy, boolean medium, boolean hard, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignmentSolved(easy, medium, hard, userID, pageable);
     }
-
+    public Page<Assignment> filterAssignmentUnsolved(boolean easy, boolean medium, boolean hard, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignmentUnsolved(easy, medium, hard, userID, pageable);
+    }
+    public Page<Assignment> filterAssignmentTopicDefault(boolean easy, boolean medium, boolean hard, long languageId, Pageable pageable){
+        return assignmentRepository.filterAssignmentTopicDefault(easy, medium, hard, languageId, pageable);
+    }
+    public Page<Assignment> filterAssignmentTopicSolved(boolean easy, boolean medium, boolean hard, long languageId, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignmentTopicSolved(easy, medium, hard, languageId, userID, pageable);
+    }
+    public Page<Assignment> filterAssignmentTopicUnsolved(boolean easy, boolean medium, boolean hard, long languageId, long userID, Pageable pageable){
+        return assignmentRepository.filterAssignmentTopicUnsolved(easy, medium, hard, languageId, userID, pageable);
+    }
     public Page<Assignment> findProblemSolvingAssignments(Pageable pageable) {
         return assignmentRepository.findProblemSolvingAssignments(pageable);
     }
@@ -256,9 +278,6 @@ public class AssignmentService {
             return assignmentRepository.getRandomProblemSolving(level.getId(), numberOfRandomAssignment);
         }
         return assignmentRepository.getRandomAssignments(language.getId(), level.getId(), numberOfRandomAssignment);
-    }
-    public List<Assignment> getRandomAssignments(Integer numberOfRandomAssignment) {
-        return assignmentRepository.getRandomAssignments(numberOfRandomAssignment);
     }
 
     public List<Assignment> getAllAssignments() {

@@ -5,146 +5,43 @@
 <head>
    <meta charset="UTF-8">
    <title>Certify | Coder'sLab</title>
+   <style>
+      .redH{
+         color: #f44336 !important;
+      }
+      .current-page {
+         color: #ffffff !important;
+         background: #2b4eff !important;
+         border-color: #2b4eff !important;
+      }
+   </style>
+   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 <div layout:fragment="content">
-
-
       <!-- course area start -->
-      <section class="course__area pt-120 pb-120">
+      <section style="margin-top: 50px" class="course__area pt-120 pb-120">
          <div class="container">
             <div class="row">
                <div class="col-xxl-8 col-xl-8 col-lg-8">
-                  <div class="course__tab-inner grey-bg-2 mb-50 d-sm-flex justify-content-between align-items-center">
-                     <div class="course__tab-wrapper d-flex align-items-center">
-                        <div class="course__tab-btn">
-                           <ul class="nav nav-tabs" id="courseTab" role="tablist">
-                              <li class="nav-item" role="presentation">
-                                 <button class="nav-link active" id="grid-tab" data-bs-toggle="tab" data-bs-target="#grid" type="button" role="tab" aria-controls="grid" aria-selected="true">
-                                    <svg class="grid" viewBox="0 0 24 24">
-                                       <rect x="3" y="3" class="st0" width="7" height="7"/>
-                                       <rect x="14" y="3" class="st0" width="7" height="7"/>
-                                       <rect x="14" y="14" class="st0" width="7" height="7"/>
-                                       <rect x="3" y="14" class="st0" width="7" height="7"/>
-                                    </svg>
-                                 </button>
-                              </li>
-                              <li class="nav-item" role="presentation">
-                                 <button class="nav-link list" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab" aria-controls="list" aria-selected="false">
-                                    <svg class="list" viewBox="0 0 512 512">
-                                       <g>
-                                          <path class="st0" d="M448,69H192c-17.7,0-32,13.9-32,31s14.3,31,32,31h256c17.7,0,32-13.9,32-31S465.7,69,448,69z"/>
-                                          <circle class="st0" cx="64" cy="100" r="31"/>
-                                          <path class="st0" d="M448,225H192c-17.7,0-32,13.9-32,31s14.3,31,32,31h256c17.7,0,32-13.9,32-31S465.7,225,448,225z"/>
-                                          <circle class="st0" cx="64" cy="256" r="31"/>
-                                          <path class="st0" d="M448,381H192c-17.7,0-32,13.9-32,31s14.3,31,32,31h256c17.7,0,32-13.9,32-31S465.7,381,448,381z"/>
-                                          <circle class="st0" cx="64" cy="412" r="31"/>
-                                       </g>
-                                    </svg>
-                                 </button>
-                              </li>
-                           </ul>
-                        </div>
-                        <div class="course__view">
-                           <h4>Showing 1 - 9 of 84</h4>
-                        </div>
-                     </div>
-                     <div class="course__sort d-flex justify-content-sm-end">
-                        <div class="course__sort-inner">
-                           <select>
-                              <option>Default</option>
-                              <option>Option 1</option>
-                              <option>Option 2</option>
-                              <option>Option 3</option>
-                              <option>Option 4</option>
-                              <option>Option 5</option>
-                              <option>Option 6</option>
-                           </select>
-                        </div>
-                     </div>
-                  </div>
                   <div class="course__tab-conent">
                      <div class="tab-content" id="courseTabContent">
+                        <input id="userID" type="hidden" th:value="${UserID}">
                         <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
-                           <div class="row">
-                              <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6" th:each="assignment_kit : ${assignment_kits}">
-                                 <div class="course__item white-bg mb-30 fix">
-                                    <div class="course__content">
-                                       <div class="course__meta d-flex align-items-center justify-content-between">
-                                          <div class="course__lesson">
-                                             <span><i class="far fa-book-alt"></i>[[${assignment_kit.time}]] phút</span>
-                                          </div>
-                                          <div class="course__rating">
-                                             <span th:text="${assignment_kit.getAssignmentKitSubmissions().size()}+' tham gia'"></span>
-                                          </div>
-                                       </div>
-                                       <h3 style="margin-bottom: 0px;text-align: center" class="course__title"><a th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" th:text="${assignment_kit.title}"></a></h3>
-                                      <div class="mt-20">
-                                         <p>Số bài tập: [[${assignment_kit.numberOfAssignment}]]</p>
-                                         <p>Số câu hỏi trắc nghiệm: [[${assignment_kit.numberOfQuiz}]]</p>
-                                      </div>
-                                    </div>
-                                    <div class="course__more d-flex justify-content-between align-items-center">
-                                       <div class="course__status">
-                                          <span th:text="${assignment_kit.level.name}"></span>
-                                       </div>
-                                       <div class="course__btn">
-                                          <a  th:href="@{'/skills-verification/details/' + ${assignment_kit.id}}" class="link-btn">
-                                             Xem chi tiết
-                                             <i class="far fa-arrow-right"></i>
-                                             <i class="far fa-arrow-right"></i>
-                                          </a>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
+                           <div class="row" id="assignment_kits">
                            </div>
                         </div>
                      </div>
-                     <div class="row">
-                        <div class="col-xxl-12">
-                           <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
-                              <ul class="d-flex align-items-center">
-                                 <li class="prev">
-                                    <a href="course-grid.html" class="link-btn link-prev">
-                                       Prev
-                                       <i class="arrow_left"></i>
-                                       <i class="arrow_left"></i>
-                                    </a>
-                                 </li>
-                                 <li>
-                                    <a href="course-grid.html">
-                                       <span>1</span>
-                                    </a>
-                                 </li>
-                                 <li class="active">
-                                    <a href="course-grid.html">
-                                       <span>2</span>
-                                    </a>
-                                 </li>
-                                 <li>
-                                    <a href="product.html">
-                                       <span>3</span>
-                                    </a>
-                                 </li>
-                                 <li class="next">
-                                    <a href="course-grid.html" class="link-btn">
-                                       Next
-                                       <i class="arrow_right"></i>
-                                       <i class="arrow_right"></i>
-                                    </a>
-                                 </li>
-                              </ul>
-                           </div>
-                        </div>
+                     <div class="row" id="pagination">
+
                      </div>
                   </div>
                </div>
                <div class="col-xxl-4 col-xl-4 col-lg-4">
                   <div class="course__sidebar pl-70">
                      <div class="course__sidebar-search mb-50">
-                        <form action="#">
-                           <input type="text" placeholder="Tìm kiếm chứng chỉ...">
+                        <div>
+                           <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm chứng chỉ...">
                            <button type="submit">
                               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 584.4 584.4" style="enable-background:new 0 0 584.4 584.4;" xml:space="preserve">
                                     <g>
@@ -155,22 +52,22 @@
                                     </g>
                                  </svg>
                            </button>
-                        </form>
+                        </div>
                      </div>
                      <div class="course__sidebar-widget grey-bg">
                         <div class="course__sidebar-info">
-                           <h3 class="course__sidebar-title">Trạng Thái</h3>
+                           <h3 class="course__sidebar-title">STATUS</h3>
                            <ul>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-design">
-                                    <label class="m-check-label" for="m-design">Bài đã làm</label>
+                                    <input class="m-check-input" type="checkbox" id="solved">
+                                    <label class="m-check-label" for="solved">Solved (Đã làm)</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-math">
-                                    <label class="m-check-label" for="m-math">Bài chưa làm</label>
+                                    <input class="m-check-input" type="checkbox" id="unsolved">
+                                    <label class="m-check-label" for="unsolved">Unsolved (Chưa làm)</label>
                                  </div>
                               </li>
                            </ul>
@@ -178,36 +75,36 @@
                      </div>
                      <div class="course__sidebar-widget grey-bg">
                         <div class="course__sidebar-info">
-                           <h3 class="course__sidebar-title">Ngôn Ngữ</h3>
+                           <h3 class="course__sidebar-title">LANGUAGE</h3>
                            <ul>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-all">
-                                    <label class="m-check-label" for="m-all">Tuỳ chọn</label>
+                                    <input class="m-check-input" type="checkbox" id="option">
+                                    <label class="m-check-label" for="option">Option Languages</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-eng-2">
-                                    <label class="m-check-label" for="m-eng-2">Java</label>
+                                    <input class="m-check-input" type="checkbox" id="java">
+                                    <label class="m-check-label" for="java">Java</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox" id="m-russ">
-                                    <label class="m-check-label" for="m-russ">C#</label>
+                                    <input class="m-check-input" type="checkbox" id="csharp">
+                                    <label class="m-check-label" for="csharp">C#</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox">
-                                    <label class="m-check-label" for="m-russ">Python</label>
+                                    <input class="m-check-input" type="checkbox" id="python">
+                                    <label class="m-check-label" for="python">Python</label>
                                  </div>
                               </li>
                               <li>
                                  <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                    <input class="m-check-input" type="checkbox">
-                                    <label class="m-check-label" for="m-russ">C++</label>
+                                    <input class="m-check-input" type="checkbox" id="cplus">
+                                    <label class="m-check-label" for="cplus">C++</label>
                                  </div>
                               </li>
                            </ul>
@@ -218,6 +115,144 @@
             </div>
          </div>
       </section>
+   <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+   <script th:src="@{/client_assets/js/problemSolving.js}"></script>
+   <script th:src="@{/client_assets/js/certify.js}"></script>
+   <script th:inline="javascript">
+      $(document).ready(function (){
+         function fetchCertify(startPage) {
+            $.ajax({
+               type : "GET",
+               url : "/api/certify",
+               data: {
+                  page: startPage,
+                  size: 6
+               },
+               success: function(response){
+                  $('#assignment_kits').empty();
+                  if(response.content.length === 0){
+                     notFoundResultCertify();
+                  }else {
+                     // add table rows
+                     $.each(response.content, (i, assignment_kit) => {
+                        certifyContent((assignment_kit));
+                     });
+
+                     // Update pagination
+                     $('#pagination').empty()
+                     buildPagination(response)
+                  }
+               },
+               error : function(e) {
+                  alert(e);
+               }
+            });
+         }
+         fetchCertify(0);
+         $(document).on('click', '#pagination #page-fetch a', function () {
+            let page = $(this).data('page');
+            if (page !== undefined) {
+               fetchCertify(page);
+            }
+         });
+         //search
+         $("#keyword").keyup(function (){
+            var searchText = $("#keyword").val();
+            function showCertify(startPage) {
+               $.ajax({
+                  url:'/api/certify/search',
+                  type: 'GET',
+                  data: {
+                     page: startPage,
+                     size: 6,
+                     searchText: searchText
+                  },
+                  success: function (response){
+                     // alert(response.content);
+                     $('#assignment_kits').empty();
+                     // add table rows
+                     if(response.content.length === 0){
+                        notFoundResultCertify();
+                     }else {
+                        $.each(response.content, (i, assignment_kit) => {
+                           certifyContent(assignment_kit);
+                        });
+                        // Update pagination
+                        $('#pagination').empty();
+                        buildPaginationForSearch(response);
+                     }
+                  },
+                  error: function (){
+                     console.log("error");
+                  }
+               });
+            }
+            showCertify(0);
+            $(document).on('click', '#pagination #page-searchh a', function () {
+               let page = $(this).data('page');
+               if (page !== undefined) {
+                  showCertify(page);
+               }
+            });
+         });
+         //filter
+         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+               filterCertify();
+            });
+         });
+         function filterCertify(startPage) {
+            const solved = document.getElementById('solved').checked;
+            const unsolved = document.getElementById('unsolved').checked;
+            const option = document.getElementById('option').checked;
+            const java = document.getElementById('java').checked;
+            const csharp = document.getElementById('csharp').checked;
+            const python = document.getElementById('python').checked;
+            const cplus = document.getElementById('cplus').checked;
+            const userID = document.getElementById('userID').value;
+            $.ajax({
+               url:'/api/certify/filter',
+               type: 'GET',
+               data: {
+                  page: startPage,
+                  size: 8,
+                  option: option,
+                  java: java,
+                  csharp: csharp,
+                  python : python,
+                  cplus : cplus,
+                  solved: solved,
+                  unsolved: unsolved,
+                  userID: userID,
+               },
+               success: function (response){
+                  // alert(response.content);
+                  $('#assignment_kits').empty();
+                  if(response.content.length === 0) {
+                     notFoundResultCertify();
+                  }else {
+                     // add table rows
+                     $.each(response.content, (i, assignment_kit) => {
+                        certifyContent(assignment_kit)
+                     });
+                     // Update pagination
+                     $('#pagination').empty();
+                     buildPaginationForFilter(response)
+                  }
+               },
+               error: function (){
+                  console.log("error");
+               }
+            });
+         }
+         $(document).on('click', '#pagination #page-filter a', function () {
+            let page = $(this).data('page');
+            if (page !== undefined) {
+               filterCertify(page);
+            }
+         });
+      });
+   </script>
 </div>
 </body>
 </html>

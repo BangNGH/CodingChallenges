@@ -5,6 +5,8 @@ import com.example.coderlab.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +34,15 @@ public class CertifyController {
     private final LanguageService languageService;
     private final AssignmentService assignmentService;
     private final QuizService quizService;
+    public UserEntity getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userServices.findByEmail(email).orElseThrow();
+    }
     @GetMapping
     public String index(Model model, HttpSession session){
         clearSession(session);
+        model.addAttribute("UserID", getUser().getId());
         model.addAttribute("assignment_kits", assignmentKitService.getAllAssignmentsKit());
         return "client/certify/index";
     }
