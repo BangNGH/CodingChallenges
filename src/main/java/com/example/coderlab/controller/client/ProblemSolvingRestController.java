@@ -63,7 +63,7 @@ public class ProblemSolvingRestController {
                                                   @RequestParam("hardChecked") Boolean hard, @RequestParam("languageId") Long languageId,
                                                   @RequestParam("solved") Boolean solved, @RequestParam("unsolved") Boolean unsolved,
                                                   @RequestParam("userID") Long userID, Pageable pageable){
-        if(!easy && !medium && !hard && !solved){
+        if(!easy && !medium && !hard && !solved && !unsolved){
             return assignmentService.listAssignmentByTopic(languageId, pageable);
         }
         if(solved && !unsolved){
