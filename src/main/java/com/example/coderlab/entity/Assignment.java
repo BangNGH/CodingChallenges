@@ -60,7 +60,6 @@ public class Assignment {
     @ManyToMany(mappedBy = "assignments")
     private List<Contest> contest;
 
-
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Submission> submissions;

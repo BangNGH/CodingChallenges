@@ -283,4 +283,8 @@ public class AssignmentService {
     public List<Assignment> getAllAssignments() {
         return assignmentRepository.findAll();
     }
+
+    public List<Assignment> getRandomAssignments(Integer numberOfAssignment) {
+        return assignmentRepository.getRandomAssignments(numberOfAssignment);
+    }
 }
