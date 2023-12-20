@@ -41,7 +41,6 @@ public class TestCase {
     @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Assessment> assessments;
-
 }
 
 

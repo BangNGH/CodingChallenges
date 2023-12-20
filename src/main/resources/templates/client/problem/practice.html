@@ -287,12 +287,12 @@
                                                                     <pre class="line-numbers language-java">
                                                                         <code class="language-java"
                                                                               th:id="${'src_submission-'+submission.id}">
-
                                                                         </code>
                                                                     </pre>
 
                                                                     <script th:inline="javascript">
                                                                         decodeSubmission([[${submission.source_code}]], [[${submission.id}]]);
+                                                                    </script>
                                                                     </script>
                                                                 </div>
                                                             </div>

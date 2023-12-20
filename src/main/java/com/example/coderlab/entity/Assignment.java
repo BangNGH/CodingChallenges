@@ -1,6 +1,7 @@
 package com.example.coderlab.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,11 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.DecimalFormat;
-    import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -78,7 +78,23 @@ public class Assignment {
     @JsonIgnore
     private List<SolutionCheck> solutionChecks = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinTable(
+            name = "assignment_tags",
+            joinColumns = @JoinColumn(name = "assignment_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
+    @JsonProperty("tagNames")
+    public List<String> getTagNames() {
+        List<String> tagNames = new ArrayList<>();
+        for (Tag tag : tags) {
+            tagNames.add(tag.getName());
+        }
+        return tagNames;
+    }
     public Double getSuccessRate() {
         if (submissions == null || submissions.isEmpty()) {
             return 0.0;

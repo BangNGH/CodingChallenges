@@ -3,10 +3,7 @@ package com.example.coderlab.controller.admin;
 import com.example.coderlab.entity.Assignment;
 import com.example.coderlab.entity.AssignmentKit;
 import com.example.coderlab.entity.Level;
-import com.example.coderlab.service.AssignmentKitService;
-import com.example.coderlab.service.AssignmentService;
-import com.example.coderlab.service.LanguageService;
-import com.example.coderlab.service.LevelService;
+import com.example.coderlab.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +22,8 @@ public class Assignment_AdminController {
     private LanguageService languageService;
     @Autowired
     private LevelService levelService;
+    @Autowired
+    private TagService tagService;
     @GetMapping()
     public String index(Model model){
         if(model.containsAttribute("message")){
@@ -38,16 +37,17 @@ public class Assignment_AdminController {
         model.addAttribute("assignment", new Assignment());
         model.addAttribute("levels", levelService.getListLevel());
         model.addAttribute("languages", languageService.getAllLanguages());
+        model.addAttribute("tags", tagService.getListTag());
         return "admin/assignment/add";
     }
     @PostMapping("/add")
     public String addAssignment(@RequestParam("title") String title,@RequestParam("description") String description,
-                                @RequestParam("level") Long level,
+                                @RequestParam("level") Long level, @RequestParam("taqs[]") List<Long> tags,
                                 @RequestParam(value = "timeLimit", required=false) Integer timeLimit, @RequestParam(value = "memoryLimit", required=false) Integer memoryLimit,
                                 RedirectAttributes redirectAttributes, @RequestParam("TSName[]") List<String> TestCaseNames,
                                 @RequestParam("TSScore[]") List<Integer> TestCaseScores, @RequestParam("TSInput[]") List<String> TestCaseInputs,
                                 @RequestParam("TSOutput[]") List<String> TestCaseOutputs, @RequestParam(value = "check[]", required = false) List<Boolean> MaskSamples, @RequestParam(value = "language_option", required = false) String language_option, @RequestParam(value = "isCertificateQuestion", required = false) Boolean isCertificateQuestion, @RequestParam(value = "markdown_content", required = false) String solution) throws IOException {
-     assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level, language_option, solution, isCertificateQuestion);
+      assignmentService.addAssignment(title, description,timeLimit,memoryLimit,TestCaseNames, TestCaseScores, TestCaseInputs, TestCaseOutputs, MaskSamples, level, language_option, solution, isCertificateQuestion, tags);
       redirectAttributes.addFlashAttribute("message", "Save successfully!");
         return "redirect:/admin/assignment";
     }

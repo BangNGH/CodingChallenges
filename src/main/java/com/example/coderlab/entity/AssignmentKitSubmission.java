@@ -44,6 +44,4 @@ public class AssignmentKitSubmission {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserEntity user_submitted;
-
-
 }

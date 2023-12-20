@@ -200,32 +200,26 @@
                                 <ul>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-all-course">
-                                            <label class="m-check-label" for="m-all-course">Warmup</label>
+                                            <input class="m-check-input" type="checkbox" id="sort">
+                                            <label class="m-check-label" for="sort">Sort</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-free">
-                                            <label class="m-check-label" for="m-free">String</label>
+                                            <input class="m-check-input" type="checkbox" id="search">
+                                            <label class="m-check-label" for="search">Search</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-premium">
-                                            <label class="m-check-label" for="m-premium">Search</label>
+                                            <input class="m-check-input" type="checkbox" id="recursion">
+                                            <label class="m-check-label" for="recursion">Recursion</label>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-sort">
-                                            <label class="m-check-label" for="m-sort">Sort</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="course__sidebar-check mb-10 d-flex align-items-center">
-                                            <input class="m-check-input" type="checkbox" id="m-recursion">
-                                            <label class="m-check-label" for="m-sort">Recursion</label>
+                                            <input class="m-check-input" type="checkbox" id="graph">
+                                            <label class="m-check-label" for="graph">Graph Theory</label>
                                         </div>
                                     </li>
                                 </ul>
@@ -290,13 +284,17 @@
                         success: function (response){
                             // alert(response.content);
                             $('#assignments').empty();
-                            // add table rows
-                            $.each(response.content, (i, assignment) => {
-                                assignmentContent(assignment)
-                            });
-                            // Update pagination
-                            $('#pagination').empty();
-                            buildPaginationForSearch(response);
+                            if(response.content.length === 0) {
+                                notFoundResult();
+                            }else {
+                                // add table rows
+                                $.each(response.content, (i, assignment) => {
+                                    assignmentContent(assignment)
+                                });
+                                // Update pagination
+                                $('#pagination').empty();
+                                buildPaginationForSearch(response);
+                            }
                         },
                         error: function (){
                             console.log("error");
@@ -339,15 +337,18 @@
                         userID: userID,
                     },
                     success: function (response){
-                        // alert(response.content);
                         $('#assignments').empty();
-                        // add table rows
-                        $.each(response.content, (i, assignment) => {
-                            assignmentContent(assignment)
-                        });
-                        // Update pagination
-                        $('#pagination').empty();
-                        buildPaginationForFilter(response)
+                        if(response.content.length === 0) {
+                            notFoundResult();
+                        }else {
+                            // add table rows
+                            $.each(response.content, (i, assignment) => {
+                                assignmentContent(assignment)
+                            });
+                            // Update pagination
+                            $('#pagination').empty();
+                            buildPaginationForFilter(response)
+                        }
                     },
                     error: function (){
                         console.log("error");

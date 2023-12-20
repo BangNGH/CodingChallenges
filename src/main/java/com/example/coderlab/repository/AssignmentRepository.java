@@ -26,16 +26,34 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
     @Query("SELECT a from Assignment a where a.title like %?1% and a.language_option.id =?2")
     Page<Assignment> searchAssignmentTopicByName(String keyword ,Long languageId, Pageable pageable);
     @Query("SELECT a FROM Assignment a WHERE a.language_option IS NULL " +
-            "AND ((:solved = FALSE) OR (:solved = TRUE AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID))) " +
-            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3) OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND :solved = TRUE))")
-    Page<Assignment> filterAssignment(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard,
-                                      @Param("solved") boolean solved, @Param("userID") long userID,
-                                      Pageable pageable);
+          "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3))")
+    Page<Assignment> filterAssignmentDefault(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, Pageable pageable);
+    @Query("SELECT a FROM Assignment a WHERE a.language_option IS NULL " +
+            "AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID) " +
+            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3)" +
+            "OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID)))")
+    Page<Assignment> filterAssignmentSolved(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("userID") long userID, Pageable pageable);
+
+    @Query("SELECT a FROM Assignment a WHERE a.language_option IS NULL " +
+            "AND NOT EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID) " +
+            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3)" +
+            "OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND NOT EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID)))")
+    Page<Assignment> filterAssignmentUnsolved(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("userID") long userID, Pageable pageable);
+
+    @Query("SELECT a FROM Assignment a WHERE (a.language_option.id = :languageId)" +
+        "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3))")
+    Page<Assignment> filterAssignmentTopicDefault(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("languageId") long languageId, Pageable pageable);
+    @Query("SELECT a FROM Assignment a WHERE (a.language_option.id = :languageId) " +
+            "AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID) " +
+            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3)" +
+            "OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID)))")
+    Page<Assignment> filterAssignmentTopicSolved(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard,@Param("languageId") long languageId, @Param("userID") long userID, Pageable pageable);
 
     @Query("SELECT a FROM Assignment a WHERE (a.language_option.id = :languageId) " +
-            "AND ((:solved = FALSE) OR (:solved = TRUE AND EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID))) " +
-            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3) OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND :solved = TRUE))")
-    Page<Assignment> filterAssignmentTopic(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("languageId") long languageId,  @Param("solved") boolean solved, @Param("userID") long userID, Pageable pageable);
+            "AND NOT EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID) " +
+            "AND ((:easy = TRUE AND a.level.id = 1) OR (:medium = TRUE AND a.level.id = 2) OR (:hard = TRUE AND a.level.id = 3)" +
+            "OR (:easy = FALSE AND :medium = FALSE AND :hard = FALSE AND NOT EXISTS (SELECT s FROM Submission s WHERE s.assignment.id = a.id AND s.student.id = :userID)))")
+    Page<Assignment> filterAssignmentTopicUnsolved(@Param("easy") boolean easy, @Param("medium") boolean medium, @Param("hard") boolean hard, @Param("languageId") long languageId, @Param("userID") long userID, Pageable pageable);
     @Query(value = "SELECT * FROM assignments \n" +
             "WHERE language_id = ?1\n" +
             "AND mark_as_certification_question is not null\n" +

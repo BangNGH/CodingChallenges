@@ -35,14 +35,16 @@ public class ProblemSolvingController {
     public UserEntity getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+         Assignment assignment = new Assignment();
         return userServices.findByEmail(email).orElseThrow();
     }
     @GetMapping()
     public String index(Model model){
         model.addAttribute("UserID", getUser().getId());
+        Assignment assignment = assignmentService.getAssignmentById(53L);
+        var temp = assignment.getTags();
         return "client/problem/index";
     }
-
     @GetMapping("/topic/{id}")
     public String practiceByTopic(Model model, @PathVariable("id") Long id){
         model.addAttribute("UserID", getUser().getId());

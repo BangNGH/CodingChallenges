@@ -39,21 +39,43 @@ public class ProblemSolvingRestController {
                                              @RequestParam("mediumChecked") Boolean medium,
                                              @RequestParam("hardChecked") Boolean hard,
                                              @RequestParam("solved") Boolean solved ,
-                                            /* @RequestParam("unsolved") Boolean unsolved,*/
-                                             @RequestParam("userID") Long userID, Pageable pageable){
-        if(!easy && !medium && !hard && !solved){
+                                             @RequestParam("unsolved") Boolean unsolved,
+                                             @RequestParam("userID") Long userID,
+                                            Pageable pageable){
+        if(!easy && !medium && !hard && !solved && !unsolved){
             return assignmentService.findProblemSolvingAssignments(pageable);
         }
-        return assignmentService.filterAssignment(easy, medium, hard, solved, userID, pageable);
+        if(solved && !unsolved){
+            return assignmentService.filterAssignmentSolved(easy,medium,hard,userID,pageable);
+        }
+        if(!solved && unsolved){
+            return assignmentService.filterAssignmentUnsolved(easy,medium,hard,userID,pageable);
+        }
+        if(solved && unsolved && !easy && !medium && !hard){
+            return assignmentService.findProblemSolvingAssignments(pageable);
+        }else {
+            return assignmentService.filterAssignmentDefault(easy,medium,hard,pageable);
+        }
     }
     @GetMapping("/filterOfTopic")
     public Page<Assignment> filterAssignmentTopic(@RequestParam("easyChecked") Boolean easy,
                                                   @RequestParam("mediumChecked") Boolean medium,
                                                   @RequestParam("hardChecked") Boolean hard, @RequestParam("languageId") Long languageId,
-                                                  @RequestParam("solved") Boolean solved , @RequestParam("userID") Long userID, Pageable pageable){
+                                                  @RequestParam("solved") Boolean solved, @RequestParam("unsolved") Boolean unsolved,
+                                                  @RequestParam("userID") Long userID, Pageable pageable){
         if(!easy && !medium && !hard && !solved){
             return assignmentService.listAssignmentByTopic(languageId, pageable);
         }
-        return assignmentService.filterAssignmentTopic(easy,medium,hard,languageId, solved, userID, pageable);
+        if(solved && !unsolved){
+            return assignmentService.filterAssignmentTopicSolved(easy,medium,hard,languageId,userID,pageable);
+        }
+        if(!solved && unsolved){
+            return assignmentService.filterAssignmentTopicUnsolved(easy,medium,hard,languageId,userID,pageable);
+        }
+        if(solved && unsolved && !easy && !medium && !hard){
+            return assignmentService.listAssignmentByTopic(languageId,pageable);
+        }else {
+            return assignmentService.filterAssignmentTopicDefault(easy,medium,hard,languageId, pageable);
+        }
     }
 }

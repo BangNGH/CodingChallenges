@@ -1,4 +1,11 @@
 function assignmentContent(assignment){
+    let tagNames = assignment.tagNames ? assignment.tagNames : [];
+    let tagColors = ['yellow', 'sky-blue', 'blue-2', 'green'];
+    let tagElements = tagNames.map((tagName, index) => `<a style="margin-right: 3px" class="${tagColors[index % tagColors.length]}" href="#">${tagName}</a>`);
+    if (tagElements.length === 0) {
+        tagElements.push(`<a style="margin-right: 3px" class="yellow" href="#">Algorithm</a>`);
+    }
+
 
     let assignmentRow = `                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                                         <div class="course__item white-bg mb-30 fix">
@@ -6,7 +13,7 @@ function assignmentContent(assignment){
                                                 <a>
                                                 </a>
                                                 <div class="course__tag">
-                                                    <a class="yellow" href="#">Algorithm</a>
+                                                   ${tagElements.join('')}  
                                                 </div>
                                             </div>
                                             <div class="course__content">
@@ -42,6 +49,14 @@ function assignmentContent(assignment){
                                         </div>
                                     </div>`;
     $('#assignments').append(assignmentRow);
+}
+function notFoundResult(){
+    let result = " <div class=\"course__sidebar-widget grey-bg\">\n" +
+        "                            <div class=\"course__sidebar-info\">\n" +
+        "                                <h3 class=\"course__sidebar-title\">KHÔNG TÌM THẤY BÀI TẬP</h3>\n" +
+        "                            </div>\n" +
+        "                        </div>"
+    $('#assignments').append(result);
 }
 function getLevelClass(levelId) {
     if (levelId === 1) {
