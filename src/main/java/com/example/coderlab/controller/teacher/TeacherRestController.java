@@ -41,43 +41,22 @@ public class TeacherRestController {
     private SolutionCheckService solutionCheckService;
     @Autowired
     private QuizService quizService;
-    @PostMapping("/contest/edit")
-    public String add(@RequestBody ContestDTO contestDTO, Principal principal, RedirectAttributes redirectAttributes) {
-        Optional<Contest> foundContest = contestService.findById(contestDTO.getContest_id());
-        List<Assignment> assignmentSetssignments = new ArrayList<>();
-        List<Question> questionSet =new ArrayList<>();
+    @GetMapping("/remove-assignment")
+    public String postTest(@RequestParam(value = "contest_id") String contest_id, @RequestParam(value = "assignment_id") String assignment_id, Principal principal) {
         String email = principal.getName();
         UserEntity current_user = userServices.findByEmail(email).get();
-        if (foundContest.isPresent()) {
-            Contest contest = foundContest.get();
-            if (contestDTO.getIs_random()){
-                for (Long quiz_id:contestDTO.getSelected_questions_id()
-                ) {
-                    Question foundQuestion = quizService.findQuestionById(String.valueOf(quiz_id));
-                    if (foundQuestion != null) {
-                        questionSet.add(foundQuestion);
-                    }
-                }
-                for (Long assignment_id:contestDTO.getSelected_assignments_id()
-                ) {
-                    Assignment foundAssignment = assignmentService.getAssignmentById(assignment_id);
-                    if (foundAssignment!=null) {
-                        assignmentSetssignments.add(foundAssignment);
-                    }
-                }
-            }else{
-                assignmentSetssignments = assignmentService.getRandomAssignments(contestDTO.getNo_assignment());
-                questionSet = quizService.getRandomQuizs(contestDTO.getNo_quiz());
-            }
-            contest.setQuizQuestions(questionSet);
-            contest.setAssignments(assignmentSetssignments);
+        Optional<Contest> foundByIDContest = contestService.findById(Long.valueOf(contest_id));
+        Assignment foundAssignment = assignmentService.getAssignmentById(Long.valueOf(assignment_id));
+        if (foundByIDContest.isPresent()&&foundAssignment!=null) {
+            Contest foundContest = foundByIDContest.get();
+            foundContest.getAssignments().remove(foundAssignment);
             String lastedUpdate = "(ID:"+current_user.getId()+"): "+ current_user.getFullName();
-            contest.setLatestUserUpdate(lastedUpdate);
-            contestService.saveContest(contest);
-            redirectAttributes.addFlashAttribute("message", "Chỉnh sửa cuộc thi: "+contest.getId()+" thành công");
-        }else {
-            redirectAttributes.addFlashAttribute("message", "Xảy ra lỗi");
+            foundContest.setLatestUserUpdate(lastedUpdate);
+            contestService.saveContest(foundContest);
+            return "success";
+
         }
-        return "redirect:/teacher/contest";
+        return "error";
     }
+
 }

@@ -55,6 +55,7 @@ public class ContestController {
         contest.setEndTime(endTime);
         contest.setStartTime(startTime);
         contest.setCreatedBy(current_user);
+        contest.setIsRandomAssignment(true);
 
         for (String teacher_id : teachers_id
              ) {

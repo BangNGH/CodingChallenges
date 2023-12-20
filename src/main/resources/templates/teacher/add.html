@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/teacher_layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating coding question</title>
+    <link rel="stylesheet" href="/admin_assets/css/multi-step-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link th:href="@{/admin_assets/vendor/summernote/summernote-bs4.css}" rel="stylesheet">
+    <style>
+        .disabledbutton {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .modal-backdrop {
+            position: unset !important;
+        }
+
+        .modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .has-error, .help-block {
+            color: #a94442;
+            font-weight: 600;
+        }
+
+        .has-error {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-12">
+            <div style="background-color: #fff" class="card2">
+                <div class="row">
+                    <div class="col-md-12 mx-0">
+                        <form id="msform" th:action="@{/teacher/contest/edit}" th:object="${contest}" method="post">
+                            <input type="hidden" th:field="*{id}"/>
+                            <fieldset>
+                                <div class="form-card">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3">Cuộc Thi
+                                            <strong>(#[[${contest.id}]])</strong> :</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-validate" name="name" readonly th:field="*{contestName}"
+                                                   style="font-family: 'Montserrat'; margin-bottom: unset" type="text"
+                                                   placeholder="Tên cho cuộc thi này"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-10">
+                                        <label class="col-form-label col-sm-3">Số lượng bài tập:</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" min="1" name="no_assignment" id="no_assignment"
+                                                   th:field="*{numberOfAssignment}" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mt-10">
+                                        <label class="col-form-label col-sm-3">Chọn câu hỏi:</label>
+                                        <div class="col-sm-9">
+                                            <label class="switch size-sm">
+                                                <input th:if="${contest.isRandomAssignment==false}"
+                                                       th:id="random_question" name="isRandomQuestion" type="checkbox"
+                                                       checked onchange="myFunction()"/>
+                                                <input th:if="${contest.isRandomAssignment==true}"
+                                                       th:id="random_question" name="isRandomQuestion" type="checkbox"
+                                                       onchange="myFunction()"/>
+                                                <span class="slider round primary"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="select_assignment">
+                                        <div th:if="${chosenAssignment}" class="form-group row mt-10">
+                                            <label class="col-form-label col-sm-3">Bài đã chọn:</label>
+                                            <div class="col-sm-9">
+                                                <div class="card card-shadow mb-4">
+                                                    <div class="card-header border-0">
+                                                        <div class="custom-title-wrap bar-warning">
+                                                            <div class="custom-title">Chỉnh sửa lần cuối bởi
+                                                                [[${contest.latestUserUpdate}]] vào lúc [[${#dates.format(contest.latestUpdate, 'HH:mm dd-MM-yyyy')}]]
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">#ID</th>
+                                                                <th scope="col">Tên bài</th>
+                                                                <th scope="col">Điểm</th>
+                                                                <th scope="col">Xoá</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody style="color: black">
+                                                            <tr th:each="assignment:${chosenAssignment}">
+                                                                <th scope="row" th:text="${assignment.id}"></th>
+                                                                <td th:text="${assignment.title}"></td>
+                                                                <td th:text="${assignment.max_score}"></td>
+                                                                <td>
+                                                                    <a style="margin-left: 5px; cursor: pointer" th:data-contest-id="${contest.id}" th:data-assignment-id="${assignment.id}" onclick="removeAssignment(this)"
+                                                                       class="text-danger"><i style="font-size: 18px"
+                                                                                              class='fa fa-trash'></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-sm-3">Thêm bài mới:</label>
+                                            <div class="col-sm-9">
+                                                <div class="card card-shadow mb-4">
+                                                    <div class="card-header border-0">
+                                                        <div class="custom-title-wrap bar-primary">
+                                                            <div class="custom-title">Ngân hàng đề thi</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <form class="picker-form">
+                                                            <div class="form-group row mb-5">
+                                                                <div class="col-lg-8 col-md-9 col-sm-12">
+                                                                    <select name="assignments[]" class="multi-select"
+                                                                            multiple="" id="my_multi_select3"
+                                                                            th:field="*{assignments}">
+                                                                        <option th:each="assignment : ${assignments}"
+                                                                                th:value="${assignment.id}"
+                                                                                th:text="${assignment.title}"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        var checkBox = document.getElementById("random_question");
+                                        var select = document.getElementById("select_assignment");
+                                        if (checkBox.checked) {
+                                            select.classList.remove("disabledbutton");
+                                        } else {
+                                            select.classList.add("disabledbutton");
+                                        }
+                                    </script>
+                                    <script>
+                                        function myFunction() {
+                                            var checkBox = document.getElementById("random_question");
+                                            var select = document.getElementById("select_assignment");
+                                            if (checkBox.checked) {
+                                                select.classList.remove("disabledbutton");
+                                            } else {
+                                                select.classList.add("disabledbutton");
+                                            }
+                                        }
+
+                                        function removeAssignment(link) {
+                                            // Get the data attributes from the link element
+                                            var contestId = link.dataset.contestId;
+                                            var assignmentId = link.dataset.assignmentId;
+
+                                            // Do whatever you want with the values
+                                            console.log(contestId, assignmentId);
+                                              $.ajax({
+                                                type: 'GET',
+                                                url: '/api/teacher/remove-assignment',
+                                                data: {
+                                                    contest_id: contestId,
+                                                    assignment_id: assignmentId
+                                                },
+                                                success: function (response) {
+                                                    window.location.reload();
+                                                },
+                                                error: function (error) {
+                                                    console.error('Error getting content:', error);
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary"
+                                        style="float: right;margin-top: 20px;">Lưu chỉnh sửa
+                                </button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

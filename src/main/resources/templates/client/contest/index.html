@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Certify | Coder'sLab</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+
+      <!-- course area start -->
+      <section class="course__area pt-120 pb-120">
+         <div class="container">
+            <div class="row">
+               <div class="col-xxl-8 col-xl-8 col-lg-8">
+                  <div class="course__tab-conent">
+                     <div class="tab-content" id="courseTabContent">
+                        <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+                           <div class="row">
+                              <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6" th:each="contest : ${contests}">
+                                 <div class="course__item white-bg mb-30 fix">
+                                    <div class="course__content">
+                                       <div class="course__meta d-flex align-items-center justify-content-between mb-13">
+                                          <div class="course__lesson">
+                                             <span th:if="${contest.active==true}" class="text-success"><i class="far fa-clock"></i>Kết thúc sau [[${contest.timeRemain}]]</span>
+                                             <span th:unless="${contest.active==true}" class="text-danger"><i class="far fa-clock"></i>Đã kết thúc [[${contest.timeRemain}]]</span>
+                                          </div>
+                                          <div class="course__rating">
+                                             <span><i class="far fa-user-circle-o"></i></span>
+                                          </div>
+                                       </div>
+                                       <h3 style="margin-bottom: 0px;text-align: center;font-size: 16px;" class="course__title"><a th:text="${contest.contestName}"></a></h3>
+                                      <div class="mt-20">
+                                         <p class="mb-2"><strong>Bắt đầu</strong>: [[${#dates.format(contest.startTime, 'HH:mm dd-MM-yyyy')}]]</p>
+                                         <p><strong>Kết thúc</strong>: [[${#dates.format(contest.endTime, 'HH:mm dd-MM-yyyy')}]]</p>
+                                      </div>
+                                    </div>
+                                    <div class="course__more d-flex justify-content-between align-items-center">
+                                       <div class="course__status">
+                                          <span></span>
+                                       </div>
+                                       <div class="course__btn">
+                                        <a th:href="@{'/contest/details/' + ${contest.id}}" class="link-btn">
+                                             Xem chi tiết
+                                             <i class="far fa-arrow-right"></i>
+                                             <i class="far fa-arrow-right"></i>
+                                          </a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-xxl-12">
+                           <div class="basic-pagination wow fadeInUp mt-30" data-wow-delay=".2s">
+                              <ul class="d-flex align-items-center">
+                                 <li class="prev">
+                                    <a href="course-grid.html" class="link-btn link-prev">
+                                       Prev
+                                       <i class="arrow_left"></i>
+                                       <i class="arrow_left"></i>
+                                    </a>
+                                 </li>
+                                 <li>
+                                    <a href="course-grid.html">
+                                       <span>1</span>
+                                    </a>
+                                 </li>
+                                 <li class="active">
+                                    <a href="course-grid.html">
+                                       <span>2</span>
+                                    </a>
+                                 </li>
+                                 <li>
+                                    <a href="product.html">
+                                       <span>3</span>
+                                    </a>
+                                 </li>
+                                 <li class="next">
+                                    <a href="course-grid.html" class="link-btn">
+                                       Next
+                                       <i class="arrow_right"></i>
+                                       <i class="arrow_right"></i>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-xxl-4 col-xl-4 col-lg-4">
+                  <div class="course__sidebar pl-70">
+                     <div class="course__sidebar-search mb-50">
+                        <form action="#">
+                           <input type="text" placeholder="Tìm kiếm chứng chỉ...">
+                           <button type="submit">
+                              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 584.4 584.4" style="enable-background:new 0 0 584.4 584.4;" xml:space="preserve">
+                                    <g>
+                                       <g>
+                                          <path class="st0" d="M565.7,474.9l-61.1-61.1c-3.8-3.8-8.8-5.9-13.9-5.9c-6.3,0-12.1,3-15.9,8.3c-16.3,22.4-36,42.1-58.4,58.4    c-4.8,3.5-7.8,8.8-8.3,14.5c-0.4,5.6,1.7,11.3,5.8,15.4l61.1,61.1c12.1,12.1,28.2,18.8,45.4,18.8c17.1,0,33.3-6.7,45.4-18.8    C590.7,540.6,590.7,499.9,565.7,474.9z"/>
+                                          <path class="st1" d="M254.6,509.1c140.4,0,254.5-114.2,254.5-254.5C509.1,114.2,394.9,0,254.6,0C114.2,0,0,114.2,0,254.5    C0,394.9,114.2,509.1,254.6,509.1z M254.6,76.4c98.2,0,178.1,79.9,178.1,178.1s-79.9,178.1-178.1,178.1S76.4,352.8,76.4,254.5    S156.3,76.4,254.6,76.4z"/>
+                                       </g>
+                                    </g>
+                                 </svg>
+                           </button>
+                        </form>
+                     </div>
+                     <div class="course__sidebar-widget grey-bg">
+                        <div class="course__sidebar-info">
+                           <h3 class="course__sidebar-title">Trạng Thái</h3>
+                           <ul>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox" id="m-design">
+                                    <label class="m-check-label" for="m-design">Bài đã làm</label>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox" id="m-math">
+                                    <label class="m-check-label" for="m-math">Bài chưa làm</label>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="course__sidebar-widget grey-bg">
+                        <div class="course__sidebar-info">
+                           <h3 class="course__sidebar-title">Ngôn Ngữ</h3>
+                           <ul>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox" id="m-all">
+                                    <label class="m-check-label" for="m-all">Tuỳ chọn</label>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox" id="m-eng-2">
+                                    <label class="m-check-label" for="m-eng-2">Java</label>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox" id="m-russ">
+                                    <label class="m-check-label" for="m-russ">C#</label>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox">
+                                    <label class="m-check-label" for="m-russ">Python</label>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="course__sidebar-check mb-10 d-flex align-items-center">
+                                    <input class="m-check-input" type="checkbox">
+                                    <label class="m-check-label" for="m-russ">C++</label>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+</div>
+</body>
+</html>

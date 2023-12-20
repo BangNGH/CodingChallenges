@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coder'sLab</title>
+    <link rel="stylesheet" th:href="@{/client_assets/css/loading.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/lib/codemirror.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/3024-day.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/bespin.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/dracula.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/night.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/idea.css}">
+    <link rel="stylesheet" th:href="@{/client_assets/codemirror-5.65.15/theme/oceanic-next.css}">
+    <!--<link rel="stylesheet" th:href="@{/admin_assets/vendor/markdown/simplemde.min.css}">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <style>
+        @keyframes slide {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        #loadingText {
+            animation: slide 1.5s infinite;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea#editor {
+            width: 100%;
+            flex: 1;
+            padding: 0; /* Loại bỏ padding mặc định */
+            margin: 0; /* Loại bỏ margin mặc định */
+        }
+
+        .course__description,
+        .col {
+            padding: 20px;
+            overflow: auto;
+            box-sizing: border-box;
+            box-shadow: 0 6px 16px 0 rgba(0, 0, 0, .2);
+        }
+
+        .course__description {
+            background-color: #fcfcfc;
+            border-radius: 10px;
+            margin-bottom: 60px;
+        }
+
+        .col {
+            background-color: #fcfcfc;
+            border-radius: 10px;
+
+        }
+
+        .d-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- page title area start -->
+    <section class="page__title-area pt-120 pb-90">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <div class="course__wrapper">
+                        <div class="course__tab-content mb-95">
+                            <input type="hidden" id="number_of_assignments"
+                                   th:value="${assignment_kit.numberOfAssignment}">
+                            <input type="hidden" id="number_of_quiz"
+                                   th:value="${assignment_kit.numberOfQuiz}">
+                            <input type="hidden" id="assignment_kit_id" th:value="${assignment_kit.getId()}">
+                            <input type="hidden" id="duration" th:value="${assignment_kit.time}">
+                            <input type="hidden" id="idAssignments" th:value="${idAssignments}">
+                            <input type="hidden" id="idQuizs" th:value="${idQuizs}">
+
+
+                            <div class="tab-content" id="courseTabContent">
+                                <div class="tab-pane fade show active" id="description" role="tabpanel"
+                                     aria-labelledby="description-tab">
+                                    <div id="description_container" class="course__description">
+                                        <h3 style="text-align: center" th:text="'Bài Thi '+ ${assignment_kit.title}">
+                                        </h3>
+                                        <br>
+                                        <div style="text-align: center">
+                                            <p th:text="'Số câu bài tập: '+ ${assignment_kit.numberOfAssignment}"></p>
+                                            <p th:text="'Số câu hỏi trắc nghiệm: '+ ${assignment_kit.numberOfQuiz}"></p>
+                                            <p>Bạn có <span class="text-success"
+                                            >[[${assignment_kit.time}]] phút</span> để hoàn thành các câu hỏi bên dưới
+                                            </p>
+                                        </div>
+                                        <p class="mt-20"><span class="text-danger">Lưu ý(*)</span></p>
+                                        <p class="mt-20"><span class="text-danger">*</span> Bài thi sẽ đóng khi hết thời
+                                            gian. Trong trường hợp đó bạn sẽ bị xem như là thất bại. Vì thế vui lòng nộp
+                                            bài trước khi hết thời gian quy định.</p>
+                                        <p class="mt-20"><span class="text-danger">*</span> Trong trường hợp bạn trả lời
+                                            đúng các câu hỏi trong thời gian quy định, chứng chỉ sẽ được cấp ngay khi
+                                            bạn hoàn thành bài thi. Ngược lại bạn sẽ phải đợi 30 ngày nữa để làm lại bài
+                                            kiểm tra này.</p>
+                                    </div>
+
+                                </div>
+
+                                <th:block th:each="quiz : ${randomQuiz}">
+                                    <div class="tab-pane fade" th:id="${'quiz'+quiz.id}" role="tabpanel"
+                                         aria-labelledby="curriculum-tab">
+                                        <div class="course__description">
+                                            <h3>Câu hỏi trắc nghiệm</h3>
+                                            <!-- Card body -->
+                                            <div class="card-body">
+                                                <!-- text -->
+                                                <button type="button" th:id="'quiz_submitBtn_'+${quiz.id}" style="float: right" class="btn btn-outline-primary">Submit</button>
+                                                <div class="mt-5">
+                                                    <h3 class="mb-3 mt-1" th:text="${quiz.question}"></h3>
+                                                    <!-- list group -->
+                                                    <div class="list-group">
+                                                        <div class="list-group-item list-group-item-action "
+                                                             aria-current="true">
+                                                            <!-- form check -->
+                                                            <div class="form-check">
+                                                                <label>
+                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerA">
+                                                                    <span th:text="${quiz.answerA}" class="form-check-label stretched-link"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- list group -->
+                                                        <div class="list-group-item list-group-item-action">
+                                                            <!-- form check -->
+                                                            <div class="form-check">
+                                                                <label>
+                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerB">
+                                                                    <span th:text="${quiz.answerB}" class="form-check-label stretched-link"></span>
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- list group -->
+                                                        <div class="list-group-item list-group-item-action">
+                                                            <!-- form check -->
+                                                            <div class="form-check">
+                                                                <label>
+                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerC">
+                                                                    <span th:text="${quiz.answerC}" class="form-check-label stretched-link"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- list group -->
+                                                        <div class="list-group-item list-group-item-action">
+                                                            <!-- form check -->
+                                                            <div class="form-check">
+                                                                <label>
+                                                                    <input class="form-check-input" type="radio" th:name="'answer_radio_'+${quiz.id}" value="answerD">
+                                                                    <span th:text="${quiz.answerD}" class="form-check-label stretched-link"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                                <th:block th:each="assignment : ${randomAssignments}">
+                                    <div class="tab-pane fade" th:id="${'challenge'+assignment.id}" role="tabpanel"
+                                         aria-labelledby="curriculum-tab">
+                                        <div class="course__description">
+                                            <h3>Mô tả yêu cầu</h3>
+                                            <p th:utext="${assignment.description}"></p>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <div class="course__tab-2 mb-45">
+                                    <div style="display: none">
+                                        <input type="hidden" id="hidden_input" name="current_assignment">
+                                        <input type="hidden" id="current_quiz">
+                                    </div>
+                                    <ul class="nav nav-tabs" id="courseTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active"
+                                                    id="description-tab" data-bs-toggle="tab" name="quiztab"
+                                                    data-bs-target="#description" type="button" role="tab"
+                                                    aria-controls="description" aria-selected="true"><i
+                                                    class="icon_ribbon_alt"></i> <span>Description</span></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation"
+                                            th:each="assignment, itrStat  : ${randomAssignments}">
+                                            <button class="nav-link " th:id="${assignment.id}"
+                                                    data-bs-toggle="tab"
+                                                    th:data-bs-target="${'#challenge'+assignment.id}" type="button"
+                                                    role="tab"
+                                                    aria-controls="curriculum" aria-selected="false"><i
+                                                    class="icon_book_alt"></i> <span
+                                                    th:text="'Chanllenge 0'+${itrStat.index+1}"></span></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation"
+                                            th:each="quiz, itrStat  : ${randomQuiz}">
+                                            <button class="nav-link "
+                                                    th:id="'quizBtn_'+${quiz.id}" name="quiztab"
+                                                    data-bs-toggle="tab"
+                                                    th:data-bs-target="${'#quiz'+quiz.id}" type="button"
+                                                    role="tab"
+                                                    aria-selected="false"><i
+                                                    class="icon_book_alt"></i> <span
+                                                    th:text="'Quiz 0'+${itrStat.index+1}"></span></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button style="cursor: initial" id="countdown" class="nav-link "
+                                                    type="button"><i
+                                                    class="icon_clock_alt"></i><span class="text-success" id="timer">00:00</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="editor-div" class="col">
+                                    <div style="background-color: #f3f7f7"
+                                         class="d-flex justify-content-between mb-2 rounded p-2">
+                                        <div>
+                                            <th:block th:if="${assignment_kit.getLanguage()}">
+                                                <input type="hidden" id="language_mode"
+                                                       th:value="${assignment_kit.getLanguage().value}">
+                                                <label class="visually-hidden"
+                                                       th:for="inlineFormSelectPref">Preference</label>
+                                                <select style="cursor: pointer;" class="form-select"
+                                                        th:id="inlineFormSelectPref">
+                                                    <option th:each="language :${assignment_kit.getLanguage()}"
+                                                            th:text="${language.name}"
+                                                            th:value="${language.value}">
+                                                    </option>
+                                                </select>
+                                            </th:block>
+                                            <th:block th:unless="${assignment_kit.getLanguage()}">
+                                            <select style="cursor: pointer;" class="form-select"
+                                                    th:id="inlineFormSelectPref">
+                                                <option th:each="language :${languages}" th:text="${language.name}"
+                                                        th:value="${language.value}">
+                                                </option>
+                                            </select>
+                                            </th:block>
+                                        </div>
+                                        <div>
+                                            <!-- <label style="color: #fff;" for="theme">Theme</label> -->
+                                            <select style="cursor: pointer; width: 120%;" class="form-select"
+                                                    id="theme">
+                                                <option selected value="Dark">Dracula</option>
+                                                <option value="Light">Light</option>
+                                                <option value="Night">Night</option>
+                                                <option value="Idea">Idea</option>
+                                                <option value="Ocenaic">Ocenaic</option>
+
+                                            </select>
+                                        </div>
+                                        <button style="margin-left: 20px;cursor: pointer;background-color: #f3f7f7;color: black"
+                                                type="button" id="run" class="btn btn-success">Run
+                                            <i style="margin-left: 10px; font-size: 17px;"
+                                               class="bx bx-play"></i></button>
+                                        <button style="cursor: pointer;background-color: #00751f" type="button"
+                                                id="submit" class="btn btn-success">Submit<i style="font-size: 17px;"
+                                                                                             class="bx bx-play"></i>
+                                        </button>
+                                    </div>
+                                    <div style="border-color: #eee; border-style: solid; border-width: 5px;">
+                                                <textarea type="text" id="editor" class="form-control"
+                                                          aria-label="First name"></textarea>
+                                    </div>
+                                </div>
+
+                                <section id="excuting" style="display: none"
+                                         class="events__area pt-115 pb-120 p-relative">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-xxl-4 offset-xxl-4">
+                                                <div class="section__title-wrapper mb-60 text-center">
+                                                    <h2 class="section__title" id="loadingText">
+                                                                <span style="color: #002795"
+                                                                      class="yellow-bg yellow-bg-big"> đang thực thi...</span>
+                                                    </h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- events area start -->
+                                <section id="result" style="display: none"
+                                         class="events__area pt-115 pb-120 p-relative">
+                                    <div class="events__shape">
+                                        <img class="events-1-shape" alt="">
+                                    </div>
+                                    <div class="container">
+                                        <div class="row" id="test-cases-container">
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- events area end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- page title area end -->
+
+    <script type="text/javascript" th:src="@{/client_assets/compiler/jquery-172.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/lib/codemirror.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/mode/clike/clike.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/addon/edit/closebrackets.js}"></script>
+    <script th:src="@{/client_assets/codemirror-5.65.15/mode/python/python.js}"></script>
+    <script type="text/javascript" th:src="@{/client_assets/compiler/ddslick.js}"></script>
+    <script th:inline="javascript">
+        var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            mode: "text/x-c++src",
+            theme: "dracula",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+        })
+        editor.setSize("initial", "")
+        var option;
+        var langague_name;
+        $("#inlineFormSelectPref").ddslick({
+            onSelected: function (selectedData) {
+                if (selectedData.selectedData.value === "text/x-c++src") {
+                    editor.setOption("mode", "text/x-c++src")
+                    editor.setValue("#include<iostream>\n\nint main() {\n  std::cout << \"Hello world!\";\n\n  return 0;\n}")
+                    option = 54;
+                }
+                if (selectedData.selectedData.value === "text/x-java") {
+                    editor.setOption("mode", "text/x-java")
+                    editor.setValue('import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) {\n      System.out.println(\"Hello world!\");\n    }\n}')
+                    option = 91;
+                }
+                if (selectedData.selectedData.value === "text/x-csharp") {
+                    editor.setOption("mode", "text/x-csharp");
+                    editor.setValue("using System;\n\nclass Program {\n   static void Main() {\n     Console.WriteLine(\"Hello world!\");\n   }\n}");
+                    option = 51;
+
+                }
+                if (selectedData.selectedData.value === "text/x-python") {
+                    editor.setOption("mode", "text/x-python")
+                    editor.setValue("print('Hello world!')")
+                    option = 71;
+                }
+                langague_name = selectedData.selectedData.value;
+
+            }
+        });
+    </script>
+    <script type="module" th:src="@{/client_assets/compiler/certify.js}"></script>
+</div>
+</body>
+</html>

@@ -52,10 +52,6 @@ public class Question {
     @JoinColumn(name = "level_id")
     private Level level;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contest_id")
-    private Contest contest;
-
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Submission> submissions;

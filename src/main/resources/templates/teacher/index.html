@@ -10,18 +10,6 @@
 <body>
 <div layout:fragment="content">
     <!-- services area start -->
-    <span class="d-none" id="messageSuccess" th:text="${message}"></span>
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            var message = $('#messageSuccess').text();
-            toastr.options = {
-                "closeButton": true,
-            }
-            if (message !== '') {
-                toastr.success(message);
-            }
-        });
-    </script>
     <section class="services__area pt-115 pb-40">
         <div class="container">
             <div class="row">
@@ -42,6 +30,7 @@
                                         <th>Thời Gian</th>
                                         <th>Giáo viên Phụ Trách</th>
                                         <th>Tạo Bỡi</th>
+                                        <th>Chỉnh sửa lần cuối</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -55,8 +44,14 @@
                                         </td>
                                         <td th:text="${contest.createdBy.fullName}"></td>
                                         <td>
+                                            <p>[[${contest.latestUserUpdate}]]</p>
+                                            <p>Vào lúc [[${#dates.format(contest.latestUpdate, 'HH:mm dd-MM-yyyy')}]]</p>
+
+                                        </td>
+                                        <td>
                                             <a th:href="@{/teacher/contest/add-assignment/{id}(id=${contest.id})}" title="Edit" class="text-success"><i style="font-size: 18px" class='bx bxs-edit-alt'></i></a>
                                         </td>
+
                                     </tr>
                                     </tbody>
                                 </table>

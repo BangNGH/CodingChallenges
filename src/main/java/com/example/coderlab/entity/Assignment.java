@@ -57,9 +57,8 @@ public class Assignment {
     @JoinColumn(name = "level_id")
     private Level level;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contest_id")
-    private Contest contest;
+    @ManyToMany(mappedBy = "assignments")
+    private List<Contest> contest;
 
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)

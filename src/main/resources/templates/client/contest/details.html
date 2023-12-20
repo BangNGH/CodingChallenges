@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout}"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate | Coder'sLab</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- page title area start -->
+    <section class="page__title-area pt-120 pb-90">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-8 col-xl-8 col-lg-8">
+                    <div class="course__wrapper">
+                        <div class="page__title-content mb-25">
+                            <h5 class="page__title-3" th:text="${assignment_kit.title}"></h5>
+                        </div>
+                        <div class="course__meta-2 d-sm-flex mb-30">
+                            <div class="course__teacher-3 d-flex align-items-center mr-70">
+                                <div class="course__teacher-info-3">
+                                    <p><a href="#">Tham gia Bài kiểm tra Chứng nhận và khoe kiến thức của bạn như một nhà phát triển để nhận được chứng chỉ được xác minh bởi Coder's Lab.</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${already_tested}" class="course__img w-img mb-30">
+                            <img th:if="${is_passed}"
+                                 th:src="@{'/certify-images/' + ${#authentication.principal.getID()} + '/certify_' + ${assignment_kit.id} + '.png'}"
+                                 alt="">
+                        </div>
+                        <div class="course__tab-content mb-95">
+                            <div class="tab-content" id="courseTabContent">
+                                <div class="tab-pane fade show active" id="description" role="tabpanel"
+                                     aria-labelledby="description-tab">
+                                    <div class="course__description-list mb-45">
+                                        <h4>Vui lòng đọc hướng dẫn bên dưới</h4>
+                                        <ol>
+                                            <li>1. Đây là một bài kiểm tra có giới hạn thời gian. Vui lòng đảm bảo bạn không bị gián đoạn trong quá trình làm bài, vì bộ đếm giờ không thể tạm dừng khi đã bắt đầu hoặc bạn sẽ thất bại nếu hết thời gian
+                                            </li>
+                                            <li>2. Vui lòng đảm bảo bạn có kết nối internet ổn định.</li>
+                                            <li>3. Chúng tôi khuyên bạn nên thử bài tập mẫu trước khi vào làm bài kiểm tra này.
+                                            </li>
+                                            <li>4. Trước khi làm bài, vui lòng xem qua các câu hỏi thường gặp để giải quyết các thắc mắc liên quan đến bài kiểm tra. Kỹ năng quan trọng hơn bằng cấp Chứng minh Kỹ năng của bạn Gây ấn tượng với các công ty Ai cũng có cơ hội để thăng tiến
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="course__description-list mb-45">
+                                        <h4>Kỹ năng quan trọng hơn bằng cấp</h4>
+                                        <ul>
+                                            <li><i class="icon_check"></i> Chứng minh Kỹ năng của bạn</li>
+                                            <li><i class="icon_check"></i> Gây ấn tượng với các công ty </li>
+                                            <li><i class="icon_check"></i> Cơ hội phát triển sẻ đến với mọi người
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4">
+                    <div class="course__sidebar pl-70 p-relative">
+                        <div class="course__shape">
+                            <img class="course-dot" src="assets/img/course/course-dot.png" alt="">
+                        </div>
+                        <div class="course__sidebar-widget-2 white-bg mb-20">
+                            <div class="course__video">
+                                <div class="course__video-content mb-35">
+                                    <ul>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                                                     xml:space="preserve">
+
+                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
+                                                    <path class="st0"
+                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Tổng số câu hỏi :</span>[[${assignment_kit.numberOfQuiz + assignment_kit.numberOfAssignment}]]
+                                                    </h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;"
+                                                     xml:space="preserve">
+                                             <circle class="st0" cx="8" cy="8" r="6.7"/>
+                                                    <polyline class="st0" points="8,4 8,8 10.7,9.3 "/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Thời gian hoàn thành :</span>[[${assignment_kit.time}]] phút</h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg>
+                                                    <path class="st0"
+                                                          d="M13.3,14v-1.3c0-1.5-1.2-2.7-2.7-2.7H5.3c-1.5,0-2.7,1.2-2.7,2.7V14"/>
+                                                    <circle class="st0" cx="8" cy="4.7" r="2.7"/>
+                                                </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Đã tham gia :</span>
+                                                    [[${assignment_kit.assignmentKitSubmissions.size()}]] </h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg>
+                                                    <circle class="st0" cx="8" cy="8" r="6.7"/>
+                                                    <line class="st0" x1="1.3" y1="8" x2="14.7" y2="8"/>
+                                                    <path class="st0"
+                                                          d="M8,1.3c1.7,1.8,2.6,4.2,2.7,6.7c-0.1,2.5-1,4.8-2.7,6.7C6.3,12.8,5.4,10.5,5.3,8C5.4,5.5,6.3,3.2,8,1.3z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5 th:if="${assignment_kit.language}"><span>Ngôn ngữ :</span> [[${assignment_kit.language.name}]]</h5>
+                                                <h5 th:unless="${assignment_kit.language}"><span>Ngôn ngữ :</span> Tuỳ chọn</h5>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="course__video-icon">
+                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
+                                                     xml:space="preserve">
+
+                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
+                                                    <path class="st0"
+                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
+                                          </svg>
+                                            </div>
+                                            <div class="course__video-info">
+                                                <h5><span>Độ khó :</span>[[${assignment_kit.level.name}]]</h5>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div th:if="${already_tested}" class="course__enroll-btn">
+                                    <a th:if="${is_passed}" style="background-color: #39732f"
+                                       class="e-btn e-btn-7 w-100">Passed <i class="far fa-check"></i></a>
+                                    <th:block th:unless="${is_passed}">
+                                        <th:block th:if="${retake}">
+                                            <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}" class="e-btn e-btn-7 w-100">Làm lại <i class="far fa-arrow-right"></i></a>
+                                            <p class="mt-10"><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
+                                            </p>
+                                        </th:block>
+                                        <th:block th:unless="${retake}">
+                                            <a style="background-color: #e07900" class="e-btn e-btn-7 w-100">Làm lại bài này sau 30 ngày <i class="far fa-arrow-right"></i></a>
+                                            <p><span class="text-danger">*</span> Lần thi gần đây <strong>[[${last_attempt}]]</strong>
+                                            </p>
+                                            <p><span class="text-danger">*</span> Cảm ơn bạn đã dành thời gian cho bài thi này. Chúng tôi rất tiếc rằng bạn không vượt qua bài kiểm tra này trước đó. <strong>Bạn vẫn có thể thử lại bài thi này khi bạn sẳn sàng.</strong>
+                                            </p>
+                                        </th:block>
+                                    </th:block>
+                                </div>
+
+                                <div th:unless="${already_tested}" class="course__enroll-btn">
+                                    <a th:href="@{'/skills-verification/test/' + ${assignment_kit.id}}"
+                                       class="e-btn e-btn-7 w-100">Tham gia <i class="far fa-arrow-right"></i></a>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- page title area end -->
+
+</div>
+</body>
+</html>

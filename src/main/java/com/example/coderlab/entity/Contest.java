@@ -9,6 +9,9 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -26,14 +29,18 @@ public class Contest {
     private Long id;
 
     private String contestName;
+    private Boolean isRandomAssignment;
+    private Integer numberOfAssignment;
 
-    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
+    @JoinTable(
+            name = "contest_assignments",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "assignment_id")
+    )
     private List<Assignment> assignments;
-
-    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Question> quizQuestions;
 
     @Column(name = "start_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -49,8 +56,7 @@ public class Contest {
     private Date latestUpdate;
 
     private String latestUserUpdate;
-
-
+    private Boolean active=true;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -64,4 +70,26 @@ public class Contest {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_user_id")
     private UserEntity createdBy;
+
+    // Hàm tính khoảng thời gian giữa startTime và endTime
+    public String timeRemain() {
+        LocalDateTime start = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime end = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(start, end);
+        return (convertSecondsToDaysOrHours(duration.toSeconds()));
+
+    }
+    public String convertSecondsToDaysOrHours(long seconds) {
+        Duration duration = Duration.ofSeconds(seconds);
+        long seconds_per_day = 86400L;
+        if (seconds >= seconds_per_day) {
+            long days = duration.toDays();
+            return days + " ngày";
+        } else {
+            long hours = duration.toHours();
+            return hours + " giờ";
+        }
+    }
+
+
 }

@@ -13,8 +13,9 @@ import java.util.Optional;
 public class ContestService {
     private final ContestRepository contestRepository;
 
-    public void saveContest(Contest contest) {
+    public Contest saveContest(Contest contest) {
         contestRepository.save(contest);
+        return contest;
     }
 
     public List<Contest> getContests() {
