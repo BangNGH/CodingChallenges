@@ -24,11 +24,13 @@
                                     <div class="course__content">
                                        <div class="course__meta d-flex align-items-center justify-content-between mb-13">
                                           <div class="course__lesson">
+                                             <th:block th:if="${contest.activeStatus==true}">
                                              <span th:if="${contest.active==true}" class="text-success"><i class="far fa-clock"></i>Kết thúc sau [[${contest.timeRemain}]]</span>
-                                             <span th:unless="${contest.active==true}" class="text-danger"><i class="far fa-clock"></i>Đã kết thúc [[${contest.timeRemain}]]</span>
+                                             <span th:if="${contest.active==false}" class="text-danger"><i class="far fa-clock"></i>Đã kết thúc</span>
+                                             </th:block>
                                           </div>
                                           <div class="course__rating">
-                                             <span><i class="far fa-user-circle-o"></i></span>
+                                             <span><i class="fa fa-user"></i> [[${contest.contestSubmissions.size()}]]</span>
                                           </div>
                                        </div>
                                        <h3 style="margin-bottom: 0px;text-align: center;font-size: 16px;" class="course__title"><a th:text="${contest.contestName}"></a></h3>

@@ -8,7 +8,6 @@
 </head>
 <body>
 <div layout:fragment="content">
-
     <!-- page title area start -->
     <section class="page__title-area pt-120 pb-90">
         <div class="container">
@@ -16,6 +15,19 @@
                 <div class="col-xxl-8 col-xl-8 col-lg-8">
                     <div class="course__wrapper">
                         <div class="page__title-content mb-25">
+                            <div th:if="${contestEnded}" class="progress mb-4">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
+                                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                            </div>
+                            <div th:unless="${contestEnded}" class="progress mb-4">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                            </div>
+                            <div class="d-flex">
+                                <p>Thời gian bắt đầu: [[${#dates.format(contest.startTime, 'HH:mm dd-MM-yyyy')}]]</p>
+                                <p style="margin-left: 250px;">Thời gian kết thúc: [[${#dates.format(contest.endTime,
+                                    'HH:mm dd-MM-yyyy')}]]</p>
+                            </div>
                             <h5 class="page__title-3" th:text="${contest.contestName}"></h5>
                         </div>
                         <div class="course__tab-content mb-95">
@@ -36,15 +48,19 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col">Tên bài</th>
+                                                              <!--  <th scope="col">Giới hạn bộ nhớ</th>
+                                                                <th scope="col">Giới hạn thời gian</th>-->
                                                                 <th scope="col">Điểm</th>
-                                                                <th scope="col">Tỉ lệ thành công</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody style="color: black">
-                                                            <tr th:each="assignment:${contest.assignments}">
+                                                            <tr th:each="assignment:${assignments}">
                                                                 <td th:text="${assignment.title}"></td>
+                                                           <!--     <td th:if="${assignment.memoryLimit==0}">Không giới hạn</td>
+                                                                <td th:unless="${assignment.memoryLimit==0}">[[${assignment.memoryLimit}]]</td>
+                                                                <td th:if="${assignment.timeLimit==0}">Không giới hạn</td>
+                                                                <td th:unless="${assignment.timeLimit==0}">[[${assignment.timeLimit}]]</td>-->
                                                                 <td th:text="${assignment.max_score}"></td>
-                                                                <td>[[${assignment.getSuccessRate()}]]%</td>
                                                             </tr>
                                                             </tbody>
                                                         </table>
@@ -56,14 +72,18 @@
                                     <div class="course__description-list">
                                         <h4>Vui lòng đọc hướng dẫn bên dưới</h4>
                                         <ol>
-                                            <li>1. Đây là một bài kiểm tra có giới hạn thời gian. Vui lòng đảm bảo bạn không bị gián đoạn trong quá trình làm bài, vì bộ đếm giờ không thể tạm dừng khi đã bắt đầu hoặc bạn sẽ thất bại nếu hết thời gian
+                                            <li>1. Đây là một bài kiểm tra có giới hạn thời gian. Vui lòng đảm bảo bạn
+                                                không bị gián đoạn trong quá trình làm bài, vì bộ đếm giờ không thể tạm
+                                                dừng khi đã bắt đầu hoặc bạn sẽ thất bại nếu hết thời gian
                                             </li>
                                             <li>2. Vui lòng đảm bảo bạn có kết nối internet ổn định.</li>
                                             <li>3. Mỗi bài có số điểm tối đa nhất định.
                                             </li>
-                                            <li>4. Điểm của một thí sinh phụ thuộc vào số testcase mà thí sinh giải đúng.
+                                            <li>4. Điểm của một thí sinh phụ thuộc vào số testcase mà thí sinh giải
+                                                đúng.
                                             </li>
-                                            <li>5. Xếp hạng thí sinh theo điểm đạt được. Nếu 2 thí sinh cùng số điểm thì thí sinh có giải thuật hơn, lời giải sớm hơn, sẽ đạt hạng cao hơn.
+                                            <li>5. Xếp hạng thí sinh theo điểm đạt được. Nếu 2 thí sinh cùng số điểm thì
+                                                thí sinh có giải thuật hơn, lời giải sớm hơn, sẽ đạt hạng cao hơn.
                                             </li>
                                             <li>6. Bạn chỉ có thể tham gia và giải bi 1 lần duy nhất
                                             </li>
@@ -82,10 +102,12 @@
                         </div>
                         <div class="course__sidebar-widget-2 white-bg mb-20">
                             <div class="course__video" th:if="${already_tested}">
-                                <p class="text-success"><span class="text-danger">*</span>Cảm ơn bạn đã dành thời gian cho bài thi này. Dưới đây là <strong>kết quả</strong> bài thi của bạn
+                                <p style="color: black"><span class="text-danger">*</span>Cảm ơn bạn đã dành thời gian
+                                    cho bài thi này. Dưới đây là <strong class="text-success">kết quả</strong> bài thi
+                                    của bạn
                                 </p>
                                 <div class="course__video-content mb-35">
-                                  <ul>
+                                    <ul>
                                         <li class="d-flex align-items-center">
                                             <div class="course__video-icon">
                                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -99,11 +121,11 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Số câu đúng :</span>[[${contest.assignments.size()}]]/[[${contest.assignments.size()}]]
-                                                    </h5>
+                                                <h5><span>Số câu đúng :</span>[[${correctAnswer}]]/[[${contest.numberOfAssignment}]]
+                                                </h5>
                                             </div>
                                         </li>
-                                        <li class="d-flex align-items-center">
+                                        <li th:if="${contest.isRandomAssignment==false}" class="d-flex align-items-center">
                                             <div class="course__video-icon">
                                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                                      xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -116,16 +138,15 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Điểm đạt:</span>[[${contest.maxScore()}]]/[[${contest.maxScore()}]]
-                                                </h5>
+                                                <h5><span>Điểm đạt:</span>[[${myTestScore}]]/[[${contest.maxScore()}]]</h5>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
 
-
                                 <div class="course__enroll-btn">
-                                    <a style="background-color: #e07900" th:href="@{'/contest/leader-board/' + ${contest.id}}"
+                                    <a style="background-color: #e07900"
+                                       th:href="@{'/contest/rank/' + ${contest.id}}"
                                        class="e-btn e-btn-7 w-100">Xem bảng xếp hạng <i class="far fa-arrow-right"></i></a>
                                 </div>
                             </div>
@@ -145,8 +166,8 @@
                                           </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Số câu hỏi :</span>[[${contest.assignments.size()}]]
-                                                    </h5>
+                                                <h5><span>Số câu hỏi :</span>[[${contest.numberOfAssignment}]]
+                                                </h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -158,8 +179,8 @@
                                                 </svg>
                                             </div>
                                             <div class="course__video-info">
-                                                <h5><span>Đã tham gia :</span>
-                                                    </h5>
+                                                <h5><span>Đã tham gia : [[${contest.contestSubmissions.size()}]]</span>
+                                                </h5>
                                             </div>
                                         </li>
                                         <li class="d-flex align-items-center">
@@ -175,26 +196,14 @@
                                                 <h5><span>Ngôn ngữ :</span> Tuỳ chọn</h5>
                                             </div>
                                         </li>
-                                        <li class="d-flex align-items-center">
-                                            <div class="course__video-icon">
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                                     viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;"
-                                                     xml:space="preserve">
-
-                                             <path class="st0" d="M4,19.5C4,18.1,5.1,17,6.5,17H20"/>
-                                                    <path class="st0"
-                                                          d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"/>
-                                          </svg>
-                                            </div>
-                                            <div class="course__video-info">
-                                                <h5><span>Tổng Điểm :</span>[[${contest.maxScore()}]]
-                                                </h5>
-                                            </div>
-                                        </li>
                                     </ul>
                                 </div>
-                                <div class="course__enroll-btn">
+                                <div th:if="${contestEnded}" class="course__enroll-btn">
+                                    <a style="background-color: #e07900"
+                                       th:href="@{'/contest/rank/' + ${contest.id}}"
+                                       class="e-btn e-btn-7 w-100">Xem bảng xếp hạng <i class="far fa-arrow-right"></i></a>
+                                </div>
+                                <div th:unless="${contestEnded}" class="course__enroll-btn">
                                     <a th:href="@{'/contest/join/' + ${contest.id}}"
                                        class="e-btn e-btn-7 w-100">Bắt đầu thi <i class="far fa-arrow-right"></i></a>
                                 </div>

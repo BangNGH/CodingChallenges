@@ -1,5 +1,7 @@
 package com.example.coderlab.controller.client;
 
+import com.example.coderlab.dto.AssignmentLeaderBoardDTO;
+import com.example.coderlab.dto.ContestLeaderBoardDTO;
 import com.example.coderlab.entity.*;
 import com.example.coderlab.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -12,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -34,9 +37,32 @@ public class UserContestController {
 
     @GetMapping
     public String index(Model model, HttpSession session) {
-        clearSession(session);
         model.addAttribute("contests", contestService.getContests());
         return "client/contest/index";
+    }
+    @GetMapping("/rank/{id}")
+    public String rank(@PathVariable("id") Long id, Model model) {
+        Optional<Contest> foundContestByID = contestService.findById(id);
+        Contest foundContest = foundContestByID.get();
+        List<Object[]> rankByAssignment = contestSubmissionService.rank(foundContest);
+        List<ContestLeaderBoardDTO> rankList = new ArrayList<ContestLeaderBoardDTO>();
+        for (Object[] result : rankByAssignment) {
+            ContestLeaderBoardDTO contestLeaderBoardDTO = new ContestLeaderBoardDTO();
+            Long rank = (Long) result[0];
+            contestLeaderBoardDTO.setRank(rank);
+            Long userId = (Long) result[1];
+            Optional<UserEntity> foundUser = userServices.findById(userId);
+            if (foundUser!=null) {
+                contestLeaderBoardDTO.setUser(foundUser.get());
+                Long solved_assignments = (Long) result[2];
+                contestLeaderBoardDTO.setSolvedAssignments(solved_assignments);
+            }
+            rankList.add(contestLeaderBoardDTO);
+        }
+
+        model.addAttribute("rankList", rankList);
+        model.addAttribute("title", foundContest.getContestName());
+        return "client/contest/rank";
     }
 
     @GetMapping("/details/{id}")
@@ -50,29 +76,34 @@ public class UserContestController {
 
             List<ContestSubmission> findContestSubmissions = contestSubmissionService.getContestSubmissions(foundContest, current_user);
             if (!findContestSubmissions.isEmpty()) {
-                List<ContestSubmission> contestSubmissions = contestSubmissionService.getCorrectContestAnswer(foundContest, current_user);
-               if (contestSubmissions.size()==0) {
-                   model.addAttribute("correctAnswer", 0);
-                   model.addAttribute("myTestScore", 0);
-               }else {
-                   Integer correctAnswer = contestSubmissions.size();
+                ContestSubmission contestSubmission = contestSubmissionService.getContestSubmission(foundContest, current_user);
                    Integer myTestScore = 0;
-                   for (ContestSubmission contestSubmission : contestSubmissions
+                   for (Submission submission : contestSubmission.getSubmissions()
                    ) {
-                       for (Submission submission : contestSubmission.getSubmissions()
-                       ) {
-                           myTestScore+=submission.getTotal_score();
-                       }
-                       contestSubmission.getSubmissions();
+                       myTestScore+=submission.getTotal_score();
                    }
-                   model.addAttribute("correctAnswer", correctAnswer);
+                   model.addAttribute("correctAnswer", contestSubmission.getCorrectAnswer());
                    model.addAttribute("myTestScore", myTestScore);
-               }
-                model.addAttribute("already_tested", true);
 
+                model.addAttribute("already_tested", true);
             } else {
                 model.addAttribute("already_tested", false);
             }
+            if (foundContest.getAssignments().size() > 0) {
+                model.addAttribute("assignments", foundContest.getAssignments());
+            }else {
+                model.addAttribute("assignments", assignmentService.getRandomAssignments(foundContest.getNumberOfAssignment()));
+            }
+
+                LocalDateTime end = LocalDateTime.ofInstant(foundContest.getEndTime().toInstant(), ZoneId.systemDefault());
+                LocalDateTime now = LocalDateTime.now();
+                if (now.isAfter(end)) {
+                    foundContest.setActive(false);
+                   contestService.saveContest(foundContest);
+                    model.addAttribute("contestEnded", true);
+                }else   model.addAttribute("contestEnded", false);
+
+
 
             model.addAttribute("contest", foundContest);
 
@@ -90,6 +121,11 @@ public class UserContestController {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
             Contest foundContest = foundContestByID.get();
+
+            List<ContestSubmission> findContestSubmissions = contestSubmissionService.getContestSubmissions(foundContest, current_user);
+            if (!findContestSubmissions.isEmpty()) {
+                return "redirect:/contest/details/"+foundContest.getId();
+            }else {
             List<Assignment> assignments = new ArrayList<>();
             if (foundContest.getIsRandomAssignment()) {
                 assignments = assignmentService.getRandomAssignments(foundContest.getNumberOfAssignment());
@@ -105,7 +141,7 @@ public class UserContestController {
             model.addAttribute("contest", foundContest);
             model.addAttribute("user_id", current_user.getId());
             model.addAttribute("languages", languageService.getAllLanguages());
-            return "client/contest/join_contest";
+            return "client/contest/join_contest";  }
         }
         redirectAttributes.addFlashAttribute("message", "Not found certify with ID: " + id);
         return "redirect:/contest";

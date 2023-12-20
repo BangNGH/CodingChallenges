@@ -15,6 +15,17 @@ public interface ContestSubmissionRepository extends JpaRepository<ContestSubmis
     @Query("SELECT p FROM ContestSubmission p WHERE p.contest = ?1 AND p.user_submitted = ?2")
     List<ContestSubmission> getContestSubmissions(Contest foundContest, UserEntity currentUser);
 
-    @Query("SELECT p FROM ContestSubmission p WHERE p.contest = ?1 AND p.user_submitted = ?2 and p.is_success=true")
-    List<ContestSubmission> getCorrectContestAnswer(Contest foundContest, UserEntity currentUser);
+    @Query("SELECT p FROM ContestSubmission p WHERE p.contest = ?1 AND p.user_submitted = ?2")
+    ContestSubmission getContestSubmission(Contest foundContest, UserEntity currentUser);
+
+    @Query("SELECT ROW_NUMBER() OVER (ORDER BY t.solved_assignments DESC) AS top, t.student_id as student_id, t.solved_assignments as solved_assignments\n" +
+            "FROM (\n" +
+            "  SELECT s.user_submitted.id as student_id, COUNT(DISTINCT s.contest.id) as solved_assignments\n" +
+            "  FROM ContestSubmission as s\n" +
+            "  WHERE s.is_success = true and s.contest=?1\n" +
+            "  GROUP BY s.user_submitted.id\n" +
+            ") AS t\n" +
+            "ORDER BY t.solved_assignments DESC\n"+
+            "LIMIT 100\n")
+    List<Object[]> contestRank(Contest foundContest);
 }

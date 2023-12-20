@@ -11,8 +11,31 @@ const languageMode = document.getElementById('language_mode');
 const submission_id_4assignment_list = [];
 let submitCheck = false;
 
-$(document).ready(function () {
+var seconds = 0;
+var timer;
+function startTimer() {
+    seconds++;
+}
 
+// Hàm để dừng bộ đếm thời gian
+function stopTimer() {
+    // Xóa đối tượng setInterval
+    clearInterval(timer);
+}
+
+function getTimerValue() {
+    // Trả về một chuỗi thời gian
+    return seconds;
+}
+
+// Hàm để xử lý sự kiện khi trang được mở
+window.onload = function () {
+    // Bắt đầu bộ đếm thời gian với khoảng thời gian là 1 giây
+    timer = setInterval(startTimer, 1000);
+};
+
+
+$(document).ready(function () {
     document.getElementById('courseTab').addEventListener('show.bs.tab', function (event) {
         const activeTab = event.target; // Tab đang active
         const previousTab = event.relatedTarget; // Tab trước đó
@@ -314,12 +337,17 @@ $(document).ready(function () {
 });
 
 async function submitTest() {
+    stopTimer();
+    var timerValue = getTimerValue();
     const submission_id_4assignments = document.querySelectorAll('input[name="submission_id_4assignment"]');
-
     submission_id_4assignments.forEach(input => {
         let submission_kit_to_list = input.value;
         submission_id_4assignment_list.push(submission_kit_to_list);
     });
+    const timer = [];
+    let timer_value = timerValue;
+    timer.push(timer_value);
+
     console.log(JSON.stringify(submission_id_4assignment_list));
     const response = await fetch('/api/submissions/submit-contest', {
         method: 'POST',
@@ -328,7 +356,7 @@ async function submitTest() {
         },
         body: JSON.stringify({
             submissions_id_ofAssignment: (submission_id_4assignment_list),
-            submissions_id_ofQuiz: null,
+            submissions_id_ofQuiz: timer,
             assignment_kit_id:contest_idElement.value
         })
     });

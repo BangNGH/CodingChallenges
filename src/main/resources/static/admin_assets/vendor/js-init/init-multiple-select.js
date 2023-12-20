@@ -7,8 +7,8 @@ $(function(){
     });
 
     $('#my_multi_select3').multiSelect({
-        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm bài tập code...'>",
-        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm câu đã chọn...'>",
+        selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm kiếm...'>",
+        selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='tìm kiếm...'>",
         afterInit: function (ms) {
             var that = this,
                 $selectableSearch = that.$selectableUl.prev(),

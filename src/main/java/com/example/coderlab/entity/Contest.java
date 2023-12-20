@@ -56,7 +56,7 @@ public class Contest {
     private Date latestUpdate;
 
     private String latestUserUpdate;
-    private Boolean active=true;
+    private Boolean active = true;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -75,21 +75,39 @@ public class Contest {
     @JsonIgnore
     private List<ContestSubmission> contestSubmissions;
 
-    public String timeRemain() {
-        LocalDateTime start = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault());
+    public Boolean activeStatus() {
         LocalDateTime end = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault());
-        Duration duration = Duration.between(start, end);
-        return (convertSecondsToDaysOrHours(duration.toSeconds()));
-
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(end)) {
+            active = false;
+        }
+        return true;
     }
-//    public Integer maxScore() {
-//       Integer maxScore = 0;
-//        for (Assignment assignment : assignments
-//             ) {
-//            maxScore = maxScore + assignment.getMax_score();
-//        }
-//        return maxScore;
-//    }
+
+    public String timeRemain() {
+        LocalDateTime end = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault());
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(end)) {
+            System.out.println("Cuộc thi đã kết thúc");
+            active = false;
+            return "Cuộc thi đã kết thúc";
+        } else {
+            LocalDateTime start = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault());
+            Duration duration = Duration.between(start, end);
+            return (convertSecondsToDaysOrHours(duration.toSeconds()));
+        }
+    }
+
+    public Integer maxScore() {
+        Integer maxScore = 0;
+        for (Assignment assignment : assignments
+        ) {
+            maxScore = maxScore + assignment.getMax_score();
+            System.out.println(assignment.getMax_score()+" ID:"+assignment.getId());
+        }
+        return maxScore;
+    }
+
     public String convertSecondsToDaysOrHours(long seconds) {
         Duration duration = Duration.ofSeconds(seconds);
         long seconds_per_day = 86400L;

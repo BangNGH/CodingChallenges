@@ -26,8 +26,9 @@ public class ContestSubmissionService {
         Optional<Contest> foundContestByID = contestService.findById(Long.valueOf(submissionsId.getAssignment_kit_id()));
         Boolean is_passed = true;
         if (foundContestByID.isPresent()) {
+            Integer numberAnswerCorrect = 0;
+            Integer contest_score = 0;
             Contest contest = foundContestByID.get();
-
             ContestSubmission contestSubmission = new ContestSubmission();
             contestSubmission.setContest(contest);
             contestSubmission.setUser_submitted(currentUser);
@@ -43,12 +44,17 @@ public class ContestSubmissionService {
                 found_submission.setContestSubmission(savedContestSubmission);
                 if (found_submission.getIs_success() == false) {
                     is_passed = false;
+                }else {
+                    numberAnswerCorrect++;
                 }
+                contest_score+=found_submission.getTotal_score();
                 submissionService.saveSubmission(found_submission);
                 submissions.add(found_submission);
             }
 
             savedContestSubmission.setIs_success(is_passed);
+            savedContestSubmission.setTotalScore(contest_score);
+            savedContestSubmission.setCorrectAnswer(numberAnswerCorrect);
             savedContestSubmission.setSubmissions(submissions);
             contestSubmissionRepository.save(savedContestSubmission);
 
@@ -62,7 +68,11 @@ public class ContestSubmissionService {
         return contestSubmissionRepository.getContestSubmissions(foundContest, currentUser);
     }
 
-    public List<ContestSubmission> getCorrectContestAnswer(Contest foundContest, UserEntity currentUser) {
-        return contestSubmissionRepository.getCorrectContestAnswer(foundContest, currentUser);
+    public ContestSubmission getContestSubmission(Contest foundContest, UserEntity currentUser) {
+        return contestSubmissionRepository.getContestSubmission(foundContest, currentUser);
+    }
+
+    public List<Object[]> rank(Contest foundContest) {
+        return contestSubmissionRepository.contestRank(foundContest);
     }
 }
