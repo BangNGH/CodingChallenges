@@ -27,6 +27,8 @@ public class ContestSubmission {
 
     private Integer correctAnswer;
     private Integer totalScore;
+    private Integer totalTime;
+
     @Column(name = "submitted_at")
     @CreationTimestamp
     @DateTimeFormat(pattern = "dd/MM/yyyy")

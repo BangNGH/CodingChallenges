@@ -256,7 +256,15 @@ $(document).ready(function () {
         submitCheck = false;
         saveContent(editor.getValue());
     });
+    const editorDiv = document.getElementById('editor-div');
     var buttonActive = document.querySelector('button.nav-link.active');
+    if (buttonActive.id === "description-tab") {
+        editorDiv.style.display = 'none';
+        submit.setAttribute("disabled", "");
+    } else {
+        editorDiv.style.display = 'block';
+        submit.removeAttribute("disabled");
+    }
     if (buttonActive.name !== "quiztab") {
         console.log("GET CONTENT");
         $.ajax({
@@ -348,7 +356,7 @@ async function submitTest() {
     let timer_value = timerValue;
     timer.push(timer_value);
 
-    console.log(JSON.stringify(submission_id_4assignment_list));
+    console.log(JSON.stringify(timer));
     const response = await fetch('/api/submissions/submit-contest', {
         method: 'POST',
         headers: {

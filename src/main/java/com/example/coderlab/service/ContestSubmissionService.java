@@ -32,12 +32,12 @@ public class ContestSubmissionService {
             ContestSubmission contestSubmission = new ContestSubmission();
             contestSubmission.setContest(contest);
             contestSubmission.setUser_submitted(currentUser);
+            contestSubmission.setTotalTime(Integer.valueOf(submissionsId.getSubmissions_id_ofQuiz().get(0).toString()));
             ContestSubmission savedContestSubmission = contestSubmissionRepository.save(contestSubmission);
 
 
             List<Submission> submissions = new ArrayList<>();
             List<String> submissions_id = submissionsId.getSubmissions_id_ofAssignment();
-            System.out.println(submissions_id);
             for (String submission_id : submissions_id
             ) {
                 Submission found_submission = submissionService.getSubmission(Long.parseLong(submission_id)).get();
