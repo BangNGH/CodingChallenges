@@ -37,16 +37,10 @@
                     <th>Email</th>
                     <th>Tài Khoản</th>
                     <th>Số Bài Giải</th>
+                    <th>Thời gian làm bài</th>
+                    <th>Điểm Đạt Được</th>
                   </tr>
                   </thead>
-                  <tfoot>
-                  <tr>
-                    <th>#Rank</th>
-                    <th>Email</th>
-                    <th>Tài Khoản</th>
-                    <th>Số Bài Giải</th>
-                  </tr>
-                  </tfoot>
                   <tbody>
                   <tr th:each="rank :${rankList}">
                   <td th:if="${rank.rank == 1}"><i class="ti-medall" style="color: gold;font-size: 30px"></i>[[${rank.rank}]]</td>
@@ -55,7 +49,9 @@
                     <td th:if="${rank.rank != 3 && rank.rank != 2 && rank.rank != 1}">[[${rank.rank}]]</td>
                     <td th:text="${rank.user.email}"></td>
                     <td th:text="${rank.user.fullName}"></td>
-                    <td th:text="${rank.solvedAssignments}"></td>
+                    <td>[[${rank.correct_answer}]]/[[${numberOfAssignment}]]</td>
+                    <td>[[${rank.total_time}]]</td>
+                    <td>[[${rank.total_score}]]</td>
                   </tr>
                   </tbody>
                 </table>

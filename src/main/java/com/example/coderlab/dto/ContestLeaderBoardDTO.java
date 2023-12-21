@@ -13,14 +13,7 @@ import lombok.Setter;
 public class ContestLeaderBoardDTO {
     Long rank;
     UserEntity user;
-    Long solvedAssignments;
-
-    @Override
-    public String toString() {
-        return "AssignmentLeaderBoardDTO{" +
-                "rank=" + rank +
-                ", user=" + user +
-                ", solvedAssignments=" + solvedAssignments +
-                '}';
-    }
+    Integer correct_answer;
+    Integer total_score;
+    Integer total_time;
 }

@@ -72,7 +72,7 @@ public class ContestSubmissionService {
         return contestSubmissionRepository.getContestSubmission(foundContest, currentUser);
     }
 
-    public List<Object[]> rank(Contest foundContest) {
+    public List<Object[]> rankContest(Contest foundContest) {
         return contestSubmissionRepository.contestRank(foundContest);
     }
 }

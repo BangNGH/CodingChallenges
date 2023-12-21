@@ -44,7 +44,7 @@ public class UserContestController {
     public String rank(@PathVariable("id") Long id, Model model) {
         Optional<Contest> foundContestByID = contestService.findById(id);
         Contest foundContest = foundContestByID.get();
-        List<Object[]> rankByAssignment = contestSubmissionService.rank(foundContest);
+        List<Object[]> rankByAssignment = contestSubmissionService.rankContest(foundContest);
         List<ContestLeaderBoardDTO> rankList = new ArrayList<ContestLeaderBoardDTO>();
         for (Object[] result : rankByAssignment) {
             ContestLeaderBoardDTO contestLeaderBoardDTO = new ContestLeaderBoardDTO();
@@ -54,13 +54,18 @@ public class UserContestController {
             Optional<UserEntity> foundUser = userServices.findById(userId);
             if (foundUser!=null) {
                 contestLeaderBoardDTO.setUser(foundUser.get());
-                Long solved_assignments = (Long) result[2];
-                contestLeaderBoardDTO.setSolvedAssignments(solved_assignments);
+                Integer correct_answer = (Integer) result[2];
+                contestLeaderBoardDTO.setCorrect_answer(correct_answer);
+                Integer total_score = (Integer) result[3];
+                contestLeaderBoardDTO.setTotal_score(total_score);
+                Integer total_time = (Integer) result[4];
+                contestLeaderBoardDTO.setTotal_time(total_time);
             }
             rankList.add(contestLeaderBoardDTO);
         }
 
         model.addAttribute("rankList", rankList);
+        model.addAttribute("numberOfAssignment", foundContest.getNumberOfAssignment());
         model.addAttribute("title", foundContest.getContestName());
         return "client/contest/rank";
     }
