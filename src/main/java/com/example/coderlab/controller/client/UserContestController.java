@@ -89,6 +89,7 @@ public class UserContestController {
                    }
                    model.addAttribute("correctAnswer", contestSubmission.getCorrectAnswer());
                    model.addAttribute("myTestScore", myTestScore);
+                   model.addAttribute("totalTime", contestSubmission.getTotalTime());
 
                 model.addAttribute("already_tested", true);
             } else {
