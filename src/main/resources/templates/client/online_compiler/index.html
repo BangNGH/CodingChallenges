@@ -90,6 +90,10 @@
                 <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
             </div>
         </div>
+        <div>
+            <label for="Input" class="text-light mt-4 mb-2"></label>
+            <textarea type="text" id="input" name="input" placeholder="Nhập input (nếu có)" class="form-control h-75"></textarea>
+        </div>
         <section id="excuting" style="display: none"
                  class="events__area pt-115 pb-120 p-relative">
             <div class="container">
@@ -105,10 +109,20 @@
                 </div>
             </div>
         </section>
-        <div>
-                <label for="Input" class="text-light mt-4 mb-2"></label>
-                <textarea type="text" id="input" placeholder="Nhập input (nếu có)" class="form-control h-75" aria-label="Last name"></textarea>
-        </div>
+        <!-- events area start -->
+        <section id="result" style="display: none"
+                 class="events__area pt-115 pb-120 p-relative">
+            <div class="events__shape">
+                <img class="events-1-shape" alt="">
+            </div>
+            <div class="container">
+                <div class="row" id="test-cases-container">
+
+                </div>
+            </div>
+        </section>
+        <!-- events area end -->
+
     </div>
     <!-- page title area end -->
     <button class="chatbot-toggler">

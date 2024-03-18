@@ -25,7 +25,7 @@ const generateResponse = async (chatElement) => {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
-            'X-RapidAPI-Key': 'f6166b0d6dmsh0b4b3260913831ep173798jsnfaedc18c2ed9',
+            'X-RapidAPI-Key': '3d3cc8c0e5msh687819131cec01ep1cab2cjsn05148c7f621e',
             'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
         },
         body: JSON.stringify({
