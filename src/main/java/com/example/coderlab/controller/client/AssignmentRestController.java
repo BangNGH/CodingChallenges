@@ -68,7 +68,7 @@ public class AssignmentRestController {
             String email = principal.getName();
             UserEntity current_user = userServices.findByEmail(email).get();
             Boolean status = submissionKitService.saveSubmissions(submissions_id, current_user);
-          clearSession(session);
+            clearSession(session);
             if (status) {
                 return "passed";
             }
@@ -84,7 +84,7 @@ public class AssignmentRestController {
             UserEntity current_user = userServices.findByEmail(email).get();
             Boolean status = contestSubmissionService.save(submissions_id, current_user);
 
-          clearSession(session);
+            clearSession(session);
             if (status) {
                 return "passed";
             }
