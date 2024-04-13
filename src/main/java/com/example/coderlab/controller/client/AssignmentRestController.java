@@ -258,41 +258,41 @@ public class AssignmentRestController {
                     e.printStackTrace();
                 }
             }
-//            //docker build -t csharp -f csharp/Dockerfile .
-//            else if ("csharp".equals(submission.getLanguage())) {
-//                String execFilePath = tmpDirectory + File.separator + "Main.cs";
-//                writeSourceCodeNInputFile(submission.getSource_code(), submission.getStdin(), execFilePath, inputFilePath, expect_outputFilePath, submission.getExpected_output());
-//
-//                try {
-//                    String absoluteFilePathToExecute = tmpDirectory + ":/tmp";
-//                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "docker", "run", "--rm", "-e", "COMPILER=mcs", "-e", "FILE=/tmp/Main.cs", "-e", action, "-v", absoluteFilePathToExecute, "csharp");
-//                    pb.directory(new File(resourceDirectory));
-//                    pb.inheritIO();
-//                    // Bắt đầu tiến trình
-//                    Process process = pb.start();
-//
-//                    // Đợi tiến trình kết thúc và in ra kết quả nếu cần
-//                    process.waitFor();
-//
-//                    //nếu main.exe note exists => lấy result.json
-//                    File mainExeFile = new File(tmpDirectory, "Main.exe");
-//                    if (!mainExeFile.exists()) {
-//                        System.out.println("Compile error Main.cs.");
-//                    } else {
-//                        ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", "docker", "run", "--rm", "-e", "COMPILER=mono", "-e", "FILE=/tmp/Main.exe", "-e", action, "-v", absoluteFilePathToExecute, "csharp");
-//                        pb2.directory(new File(resourceDirectory));
-//                        pb2.inheritIO();
-//                        // Bắt đầu tiến trình
-//                        Process process2 = pb2.start();
-//                        process2.waitFor();
-//                        mainExeFile.delete();
-//                    }
-//
-//
-//                } catch (IOException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            //docker build -t csharp -f csharp/Dockerfile .
+            else if ("csharp".equals(submission.getLanguage())) {
+                String execFilePath = tmpDirectory + File.separator + "Main.cs";
+                writeSourceCodeNInputFile(submission.getSource_code(), submission.getStdin(), execFilePath, inputFilePath, expect_outputFilePath, submission.getExpected_output());
+
+                try {
+                    String absoluteFilePathToExecute = tmpDirectory + ":/tmp";
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "docker", "run", "--rm", "-e", "COMPILER=mcs", "-e", "FILE=/tmp/Main.cs", "-e", action, "-v", absoluteFilePathToExecute, "csharp");
+                    pb.directory(new File(resourceDirectory));
+                    pb.inheritIO();
+                    // Bắt đầu tiến trình
+                    Process process = pb.start();
+
+                    // Đợi tiến trình kết thúc và in ra kết quả nếu cần
+                    process.waitFor();
+
+                    //nếu main.exe note exists => lấy result.json
+                    File mainExeFile = new File(tmpDirectory, "Main.exe");
+                    if (!mainExeFile.exists()) {
+                        System.out.println("Compile error Main.cs.");
+                    } else {
+                        ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", "docker", "run", "--rm", "-e", "COMPILER=mono", "-e", "FILE=/tmp/Main.exe", "-e", action, "-v", absoluteFilePathToExecute, "csharp");
+                        pb2.directory(new File(resourceDirectory));
+                        pb2.inheritIO();
+                        // Bắt đầu tiến trình
+                        Process process2 = pb2.start();
+                        process2.waitFor();
+                        mainExeFile.delete();
+                    }
+
+
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             else return "Other Language";
         }
         return returnJson(tmpDirectory, tmpFolder);
