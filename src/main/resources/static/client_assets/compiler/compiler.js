@@ -153,7 +153,7 @@ run.addEventListener("click", async function () {
 
     console.log(submissions);
 
-    const postURL = 'http://localhost:9999/submissions/batch';
+    const postURL = 'http://localhost:8080/api/submissions/batch';
     const options = {
         method: 'POST',
         headers: {
