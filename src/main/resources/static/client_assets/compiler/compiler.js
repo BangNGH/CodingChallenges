@@ -5,7 +5,6 @@ const excuting = document.getElementById('excuting');
 const testCasesContainer = document.getElementById('test-cases-container');
 const resultSection = document.getElementById('result');
 const inputElement = document.getElementById('input');
-//api connect sever
 $(document).ready(function () {
     editor.on('change', function () {
         saveContent(editor.getValue().trim());
@@ -28,13 +27,13 @@ $(document).ready(function () {
                     dSelectedText.innerHTML = "C++";
                 }
                 if (mode_receive === "text/x-java") {
-                    dSelectedText.innerHTML = "JAVA";
+                    dSelectedText.innerHTML = "Java";
                 }
                 if (mode_receive === "text/x-csharp") {
                     dSelectedText.innerHTML = "C#";
                 }
                 if (mode_receive === "text/x-python") {
-                    dSelectedText.innerHTML = "PYTHON";
+                    dSelectedText.innerHTML = "Python";
                 }
 
                 if (input_to_change) {
